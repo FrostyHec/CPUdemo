@@ -48,6 +48,9 @@ Thumbs.db
 /mvnw.cmd
 /mvnw
 
+#PyCharm difftest cache
+/simulation/obj_dir/*
+
 
 #########################################################################################################
 ##	This is an example .gitignore file for Vivado, please treat it as an example as
