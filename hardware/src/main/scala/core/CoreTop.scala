@@ -41,7 +41,7 @@ class CoreTop extends Module {
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
-  pc.io.nextAddr := nextPCGen.io.nextPC
+  pc.io.next_addr := nextPCGen.io.nextPC
   insMem.io.addr := pc.io.addr
 
   //ins decode wire
