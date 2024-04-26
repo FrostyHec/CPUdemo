@@ -49,7 +49,7 @@ Thumbs.db
 /mvnw
 
 #PyCharm difftest cache
-/simulation/obj_dir/*
+/simulation/obj_dir/
 
 
 #########################################################################################################
