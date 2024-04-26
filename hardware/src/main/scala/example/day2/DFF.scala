@@ -1,4 +1,4 @@
-package day2
+package example.day2
 
 import Chisel._
 import chisel3.PrintableHelper
