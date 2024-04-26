@@ -6,7 +6,7 @@ import core.config._
 * PC register
 */
 class PC extends Module{
-  val io=Module(new Bundle() {
+  val io=IO(new Bundle {
     val cpu_state=Input(CPUStateType.getWidth)
 
     val nextAddr =Input(UInt(32.W))
