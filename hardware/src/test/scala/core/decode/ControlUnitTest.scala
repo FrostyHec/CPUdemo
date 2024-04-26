@@ -1,7 +1,6 @@
 package core.decode
 
 import chiseltest._
-import core.decode.ControlUnit
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 class ControlUnitTest extends FlatSpec with ChiselScalatestTester with Matchers {
