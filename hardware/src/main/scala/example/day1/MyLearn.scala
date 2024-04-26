@@ -1,4 +1,4 @@
-package day1
+package example.day1
 
 object MyLearn {
   def main(args: Array[String]) = {

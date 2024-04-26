@@ -1,7 +1,8 @@
-import org.scalatest._
+package example
+
 import chisel3._
 import chiseltest._
-import day2.DFF
+import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 
 class DFFTester extends FlatSpec with ChiselScalatestTester with Matchers {
