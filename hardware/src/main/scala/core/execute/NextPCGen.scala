@@ -11,6 +11,8 @@ class NextPCGen extends Module{
     val pc=Input(UInt(32.W))
 
     val nextPC=Output(UInt(32.W))
+    val pc4=Output(UInt(32.W))
+    val pcImm=Output(UInt(32.W))
   })
   //TODO pc Gen
 }
