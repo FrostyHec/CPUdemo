@@ -211,5 +211,89 @@ class ALUTest extends FlatSpec with ChiselScalatestTester with Matchers {
         "h_ff_ff_ff_f1".U
       )
     }
+    test(new ALU) {ALUTest =>
+      inputs(
+        ALUTest,
+        "h_f0_ff_ff_f1".U,
+        "h_ff_ff_00_f0".U,
+        ALUType.SRL.getUInt,
+        false.B
+      )
+      ALUTest.clock.step()
+      outputs(
+        ALUTest,
+        "h_00_00_f0_ff".U,
+      )
+    }
+    test(new ALU) {ALUTest =>
+      inputs(
+        ALUTest,
+        "h_ff_ff_ff_f1".U,
+        "h_ff_ff_00_ff".U,
+        ALUType.SRL.getUInt,
+        false.B
+      )
+      ALUTest.clock.step()
+      outputs(
+        ALUTest,
+        "h_00_00_00_01".U,
+      )
+    }
+    test(new ALU) {ALUTest =>
+      inputs(
+        ALUTest,
+        "h_ff_ff_ff_f1".U,
+        "h_ff_ff_00_ff".U,
+        ALUType.SLL.getUInt,
+        false.B
+      )
+      ALUTest.clock.step()
+      outputs(
+        ALUTest,
+        "h_80_00_00_00".U,
+      )
+    }
+    test(new ALU) {ALUTest =>
+      inputs(
+        ALUTest,
+        "h_ff_ff_ff_ff".U,
+        "h_ff_ff_00_ff".U,
+        ALUType.SLL.getUInt,
+        false.B
+      )
+      ALUTest.clock.step()
+      outputs(
+        ALUTest,
+        "h_80_00_00_00".U,
+      )
+    }
+    test(new ALU) {ALUTest =>
+      inputs(
+        ALUTest,
+        "h_ff_ff_ff_f1".U,
+        "h_ff_ff_00_ff".U,
+        ALUType.SRA.getUInt,
+        false.B
+      )
+      ALUTest.clock.step()
+      outputs(
+        ALUTest,
+        "h_ff_ff_ff_ff".U,
+      )
+    }
+    test(new ALU) {ALUTest =>
+      inputs(
+        ALUTest,
+        "h_0f_ff_ff_f1".U,
+        "h_ff_ff_00_f0".U,
+        ALUType.SRA.getUInt,
+        false.B
+      )
+      ALUTest.clock.step()
+      outputs(
+        ALUTest,
+        "h_00_00_0f_ff".U,
+      )
+    }
   }
 }

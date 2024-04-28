@@ -39,7 +39,7 @@ class ALU extends Module {
       }
     }
     is(ALUType.SRL.getUInt) { // shift right logical
-      io.result := (io.operand1.asSInt >> io.operand2(4, 0).asUInt).asUInt
+      io.result := (io.operand1 >> io.operand2(4, 0)).asUInt
     }
   }
 }
