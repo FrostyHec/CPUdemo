@@ -6,5 +6,6 @@ class ValueUtils {
 
 }
 object ValueUtils {
-  final val ignoreVal: UInt = 0.U
+  final val ignoreUInt: UInt = 0.U
+  final val ignoreVal:Int =0
 }

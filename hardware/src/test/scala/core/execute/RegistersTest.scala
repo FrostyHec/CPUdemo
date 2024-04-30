@@ -57,7 +57,7 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
         CPUStateType.sWriteRegs.getUInt,
         true.B,
         0.U,
-        ignoreVal,
+        ignoreUInt,
         0.U,
         100.U
       )
@@ -65,7 +65,7 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
       outputs(
         registers,
         0.U,
-        ignoreVal
+        ignoreUInt
       )
     }
   }
@@ -76,7 +76,7 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
         CPUStateType.sWritePC.getUInt,
         true.B,
         3.U,
-        ignoreVal,
+        ignoreUInt,
         3.U,
         100.U
       )
@@ -84,7 +84,7 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
       outputs(
         registers,
         0.U,
-        ignoreVal
+        ignoreUInt
       )
     }
   }
@@ -96,7 +96,7 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
         CPUStateType.sWriteRegs.getUInt,
         false.B,
         3.U,
-        ignoreVal,
+        ignoreUInt,
         3.U,
         100.U
       )
@@ -104,7 +104,7 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
       outputs(
         registers,
         0.U,
-        ignoreVal
+        ignoreUInt
       )
     }
   }
@@ -116,8 +116,8 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
         registers,
         CPUStateType.sWriteRegs.getUInt,
         true.B,
-        ignoreVal,
-        ignoreVal,
+        ignoreUInt,
+        ignoreUInt,
         3.U,
         100.U
       )//3->100
@@ -126,8 +126,8 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
         registers,
         CPUStateType.sWriteRegs.getUInt,
         true.B,
-        ignoreVal,
-        ignoreVal,
+        ignoreUInt,
+        ignoreUInt,
         31.U,
         10.U
       )//31->10
@@ -139,8 +139,8 @@ class RegistersTest extends FlatSpec with ChiselScalatestTester with Matchers {
         true.B,
         3.U,
         31.U,
-        ignoreVal,
-        ignoreVal
+        ignoreUInt,
+        ignoreUInt
       )
       outputs(
         registers,
