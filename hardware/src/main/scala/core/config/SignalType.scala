@@ -13,7 +13,7 @@ object NextPCType extends ExtendEnum{
   val PC4,Branch,BranchFromALU = Value
 }
 object ImmWidthType extends ExtendEnum{
-  val Five,Eleven,Twelve,Twenty= Value
+  val Eleven,Twelve,Twenty,ThirtyOne = Value
 }
 object Operand2Type extends ExtendEnum{
   val Imm,Reg2 = Value
