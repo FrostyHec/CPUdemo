@@ -1,4 +1,4 @@
-package utils
+package configs
 
 import chisel3._
 
@@ -14,10 +14,11 @@ case class GenConfig(
                       insEnd:UInt="h0000ffff".U,
                       dataBegin: UInt="h00010000".U,
                       dataEnd:UInt="h0001ffff".U,
-                      _MMIOConfig: MMIOConfig=MMIOConfig.selected
+                      _MMIO: MMIOConfig=MMIOConfig.selected,
+                      board:BoardConfig=BoardConfig.selected
                          )
 object GenConfig {
-  def selected = onBoard
+  def s = onBoard
   private def onBoard = GenConfig(
     debugMode = false,
     useIPMemory = false

@@ -2,6 +2,7 @@ package core.utils
 
 import chisel3._
 import chiseltest._
+import configs.GenConfig
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import utils._
@@ -26,9 +27,9 @@ class RAMTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
   it should "correctly store value" in {
     test(new RAM(
-      GenConfig.selected.addressWidth,
-      GenConfig.selected.dataWidth,
-      GenConfig.selected.insMemSize
+      GenConfig.s.addressWidth,
+      GenConfig.s.dataWidth,
+      GenConfig.s.insMemSize
     )) { ram =>
       inputs(ram,
         write = true,
@@ -51,9 +52,9 @@ class RAMTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
     //testing if 64kb position of the memory can be accessed
     test(new RAM(
-      GenConfig.selected.addressWidth,
-      GenConfig.selected.dataWidth,
-      GenConfig.selected.insMemSize
+      GenConfig.s.addressWidth,
+      GenConfig.s.dataWidth,
+      GenConfig.s.insMemSize
     )) { ram =>
 
       inputs(ram,
@@ -77,9 +78,9 @@ class RAMTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
     //test that the memory should be written only after one posedge
     test(new RAM(
-      GenConfig.selected.addressWidth,
-      GenConfig.selected.dataWidth,
-      GenConfig.selected.insMemSize
+      GenConfig.s.addressWidth,
+      GenConfig.s.dataWidth,
+      GenConfig.s.insMemSize
     )) { ram =>
       inputs(ram,
         write = true,

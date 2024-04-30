@@ -1,17 +1,18 @@
 package core.memory
 
 import chisel3._
+import configs.GenConfig
 import utils._
 
 class DataRAM extends Module {
   val io = IO(new RWMemoryPort(
-    GenConfig.selected.addressWidth,
-    GenConfig.selected.dataWidth
+    GenConfig.s.addressWidth,
+    GenConfig.s.dataWidth
   ))
   private val dataRAM = Module(new RAM(
-    GenConfig.selected.addressWidth,
-    GenConfig.selected.dataWidth,
-    GenConfig.selected.dataMemSize
+    GenConfig.s.addressWidth,
+    GenConfig.s.dataWidth,
+    GenConfig.s.dataMemSize
   ))
    io <> dataRAM.io
 }

@@ -1,16 +1,16 @@
 package core
 
 import chisel3._
-
 import core.memory._
 import core.insFetch._
 import core.writeBack._
 import core.execute._
 import core.decode._
-
+import device.MMIOOutBundle
 class CoreTop extends Module {
   val io = IO(new Bundle {
     // TODO: Add IO
+    val external=Flipped(new MMIOOutBundle())
   })
   //Memory
   val memory=Module(new MemoryDispatch())

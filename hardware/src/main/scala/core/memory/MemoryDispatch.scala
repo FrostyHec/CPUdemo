@@ -2,8 +2,9 @@ package core.memory
 
 import chisel3.util._
 import chisel3._
+import configs.GenConfig
 import core.config._
-import utils.GenConfig
+import utils.Utils
 
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
@@ -84,8 +85,8 @@ class MemoryDispatch extends Module {
   //第二套io:各个RAM的读写操作
   //第二个RAM读
   data_out:=DontCare
-  when(GenConfig.selected.insBegin <= io.data_addr
-    && io.data_addr <= GenConfig.selected.insEnd) { //insMem
+  when(GenConfig.s.insBegin <= io.data_addr
+    && io.data_addr <= GenConfig.s.insEnd) { //insMem
     when(io.write_data) {
       insRAM.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
@@ -93,10 +94,10 @@ class MemoryDispatch extends Module {
     }.otherwise {
       //do nothing
     }
-  }.elsewhen(GenConfig.selected.dataBegin <= io.data_addr
-    && io.data_addr <= GenConfig.selected.dataEnd) { //dataMem
+  }.elsewhen(GenConfig.s.dataBegin <= io.data_addr
+    && io.data_addr <= GenConfig.s.dataEnd) { //dataMem
     //需要处理伪哈佛架构的地址偏移
-    val havard_mem = (io.data_addr - GenConfig.selected.dataBegin) >> 2
+    val havard_mem = (io.data_addr - GenConfig.s.dataBegin) >> 2
     when(io.write_data) {
       dataRAM.io.write_addr := havard_mem
       dataRAM.io.write := is_write_clk && io.write_data
@@ -106,8 +107,8 @@ class MemoryDispatch extends Module {
     }.otherwise {
       //do nothing
     }
-  }.elsewhen(GenConfig.selected._MMIOConfig.begin <= io.data_addr
-    && io.data_addr <= GenConfig.selected._MMIOConfig.end) { //outRegs
+  }.elsewhen(GenConfig.s._MMIO.begin <= io.data_addr
+    && io.data_addr <= GenConfig.s._MMIO.end) { //outRegs
     when(io.write_data) {
       outRegisters.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
@@ -155,4 +156,14 @@ class MemoryDispatch extends Module {
       io.data_out := data_out
     }
   }
+}
+object MemoryDispatch extends App {
+  println(
+    new(chisel3.stage.ChiselStage).emitVerilog(
+      new MemoryDispatch(),//use your module class
+      Array(
+        "--target-dir", "generated_dut/"
+      )
+    )
+  )
 }

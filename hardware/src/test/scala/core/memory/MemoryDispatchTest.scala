@@ -4,6 +4,7 @@ import testutils.ValueUtils.{ignoreUInt, ignoreVal}
 import chisel3._
 import core.config._
 import chiseltest._
+import configs.GenConfig
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import utils._
@@ -105,7 +106,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = false,
         write_data = true,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = 10,
         withStep = true
       )
@@ -117,7 +118,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
@@ -138,7 +139,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = false,
         write_data = true,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataEnd,
+        data_addr = GenConfig.s.dataEnd,
         data_write = 10,
         withStep = true
       )
@@ -150,7 +151,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataEnd,
+        data_addr = GenConfig.s.dataEnd,
         data_write = ignoreVal,
         withStep = false
       )
@@ -174,7 +175,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = false,
         write_data = true,
         data_width = DataWidth.Byte,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = 0x0000ffff,
         withStep = true
       )
@@ -186,7 +187,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
@@ -207,7 +208,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = false,
         write_data = true,
         data_width = DataWidth.HalfWord,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = 0x0fffffff,
         withStep = true
       )
@@ -219,7 +220,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
@@ -240,7 +241,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = false,
         write_data = true,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = 0x0fffffff,
         withStep = true
       )
@@ -254,7 +255,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
           read_data = true,
           write_data = false,
           data_width = loadType,
-          data_addr = GenConfig.selected.dataBegin,
+          data_addr = GenConfig.s.dataBegin,
           data_write = ignoreVal,
           withStep = false
         )
@@ -281,7 +282,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = false,
         write_data = true,
         data_width = DataWidth.Byte,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = 0x0000ffff, //the ffff will be truncated to ff
         withStep = true
       )
@@ -294,7 +295,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Byte,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
@@ -311,7 +312,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Byte,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
@@ -328,7 +329,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.HalfWord,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
@@ -345,7 +346,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         read_data = true,
         write_data = false,
         data_width = DataWidth.Word,
-        data_addr = GenConfig.selected.dataBegin,
+        data_addr = GenConfig.s.dataBegin,
         data_write = ignoreVal,
         withStep = false
       )
