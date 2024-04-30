@@ -1,23 +1,25 @@
 package core
 
 import chisel3._
-
-import core.dataAccess._
+import core.memory._
 import core.insFetch._
 import core.writeBack._
 import core.execute._
 import core.decode._
-
+import device.MMIOOutBundle
 class CoreTop extends Module {
   val io = IO(new Bundle {
     // TODO: Add IO
+    val external=Flipped(new MMIOOutBundle())
   })
+  //Memory
+  val memory=Module(new MemoryDispatch())
+
   //clock FSM
   val state = Module(new CPUState())
 
   //ins fetch
   val pc = Module(new PC())
-  val insMem = Module(new InstructionMemory())
 
   //ins decode
   val insDecode = Module(new InstructionDecoder())
@@ -32,7 +34,6 @@ class CoreTop extends Module {
   val nextPCGen = Module(new NextPCGen())
 
   //data access
-  val dataMem = Module(new MemoryDispatch())
 
   //write back
   val writeDataSelector = Module(new WriteDataSelector())
@@ -42,10 +43,10 @@ class CoreTop extends Module {
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
   pc.io.next_addr := nextPCGen.io.nextPC
-  insMem.io.addr := pc.io.addr
+  memory.io.ins_addr := pc.io.addr
 
   //ins decode wire
-  insDecode.io.instruction := insMem.io.instruction
+  insDecode.io.instruction := memory.io.ins_out
   CU.io.opcode := insDecode.io.opcode
   CU.io.func3 := insDecode.io.func3
   CU.io.func7 := insDecode.io.func7
@@ -55,7 +56,7 @@ class CoreTop extends Module {
   CU.io.raw_imm := insDecode.io.raw_imm
 
   //execute wire
-  //regster
+  //register
   regs.io.cpu_state := state.io.cpu_state
   regs.io.rs1 := CU.io.rs1_out
   regs.io.rs2 := CU.io.rs2_out
@@ -93,12 +94,13 @@ class CoreTop extends Module {
   nextPCGen.io.nextPC_type := CU.io.nextPC_type
 
   //data access wire
-  dataMem.io.cpu_state := state.io.cpu_state
-  dataMem.io.addr := ALU.io.result
-  dataMem.io.write_data := regs.io.rs2_val
-  dataMem.io.data_width := CU.io.data_width
-  dataMem.io.mem_write := CU.io.memory_write
-  dataMem.io.mem_read := CU.io.memory_read
+  memory.io.cpu_state := state.io.cpu_state
+  memory.io.data_addr := ALU.io.result
+  memory.io.data_write := regs.io.rs2_val
+  memory.io.data_width := CU.io.data_width
+  memory.io.write_data := CU.io.memory_write
+  memory.io.read_data := CU.io.memory_read
+  memory.io.unsigned:= CU.io.unsigned
 
   //write back wire
   //au selector
@@ -107,7 +109,7 @@ class CoreTop extends Module {
 
   //WriteData
   writeDataSelector.io.imm := immGen.io.real_imm
-  writeDataSelector.io.mem_out := dataMem.io.mem_out
+  writeDataSelector.io.mem_out := memory.io.data_out
   writeDataSelector.io.au_out := auSelector.io.au_out
   writeDataSelector.io.pc4 := nextPCGen.io.pc4
   writeDataSelector.io.pcImm := nextPCGen.io.pcImm
