@@ -1,29 +1,32 @@
 package core.config
 
+import chisel3.experimental.EnumType
 import utils.ExtendEnum
 
 object ALUType extends ExtendEnum{
-  val ADD,SUB,XOR,OR,AND,SLL,SRL,SRA,None = Value
+  val ADD,SUB,XOR,OR,AND,SLL,SRL,SRA = Value
 }
 object CMPType extends ExtendEnum{
-  val LT,GE,EQ,NE,None = Value
+  val LT,GE,EQ,NE = Value
 }
 object NextPCType extends ExtendEnum{
   val PC4,Branch,BranchFromALU = Value
 }
 object ImmWidthType extends ExtendEnum{
-  val Five,Eleven,Twelve,Twenty,None = Value
+  val Eleven,Twelve,Twenty,ThirtyOne = Value
 }
 object Operand2Type extends ExtendEnum{
   val Imm,Reg2 = Value
 }
 object AUType extends ExtendEnum{
-  val ALU,CMP,None= Value
+  val ALU,CMP= Value
 }
 object WriteBackType extends ExtendEnum{
-  val AU,Mem,PC4,ImmGen,None=Value
+  val AU,Mem,PC4,ImmGen=Value
 }
-object DataWidth extends ExtendEnum{
-  val Byte,HalfWord,Word,None=Value
+object DataWidth extends ExtendEnum {
+  val Byte, HalfWord, Word = Value
 }
-
+object CPUStateType extends ExtendEnum {
+  val sWritePC, sWriteRegs = Value
+}

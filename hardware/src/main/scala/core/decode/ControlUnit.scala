@@ -27,7 +27,7 @@ class ControlUnit extends Module {
     val imm_width_type=Output(ImmWidthType.getWidth)
     val operand2_type=Output(Operand2Type.getWidth)
     val au_type=Output(AUType.getWidth)
-    val wd_type=Output(WriteBackType.getWidth)
+    val write_back_type=Output(WriteBackType.getWidth)
     val memory_read=Output(Bool())
     val memory_write=Output(Bool())
     val data_width=Output(DataWidth.getWidth)
