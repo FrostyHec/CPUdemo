@@ -5,7 +5,6 @@ import chisel3._
 import configs.GenConfig
 import core.config._
 import device._
-
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
@@ -27,6 +26,7 @@ class MemoryDispatch extends Module {
     //连接board需要external连接outregs
     val external = Flipped(new MMIOOutBundle())
   })
+
   //32读取深度导致的
   val rw_mem_addr = io.data_addr >> 2
   val read_ins_addr = io.ins_addr >> 2

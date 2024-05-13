@@ -1,19 +1,23 @@
 package core
 
 import chisel3._
+import configs.GenConfig
+import core.config._
 import core.memory._
 import core.insFetch._
 import core.writeBack._
 import core.execute._
 import core.decode._
 import device.MMIOOutBundle
+
+
 class CoreTop extends Module {
   val io = IO(new Bundle {
     // TODO: Add IO
-    val external=Flipped(new MMIOOutBundle())
+    val external = Flipped(new MMIOOutBundle())
   })
   //Memory
-  val memory=Module(new MemoryDispatch())
+  val memory = Module(new MemoryDispatch())
 
   //clock FSM
   val state = Module(new CPUState())
@@ -73,6 +77,7 @@ class CoreTop extends Module {
   operandSelector.io.rs1_val := regs.io.rs1_val
   operandSelector.io.rs2_val := regs.io.rs2_val
   operandSelector.io.real_imm := immGen.io.real_imm
+  operandSelector.io.operand2Type := CU.io.operand2_type
 
   //ALU
   ALU.io.operand1 := operandSelector.io.operand1
@@ -100,13 +105,14 @@ class CoreTop extends Module {
   memory.io.data_width := CU.io.data_width
   memory.io.write_data := CU.io.memory_write
   memory.io.read_data := CU.io.memory_read
-  memory.io.unsigned:= CU.io.unsigned
-  memory.io.external := io.external //board
+  memory.io.unsigned := CU.io.unsigned
+  memory.io.external <> io.external //board
 
   //write back wire
   //au selector
   auSelector.io.alu_result := ALU.io.result
   auSelector.io.cmp_result := CMP.io.result
+  auSelector.io.au_type := CU.io.au_type
 
   //WriteData
   writeDataSelector.io.imm := immGen.io.real_imm
@@ -119,4 +125,37 @@ class CoreTop extends Module {
   //regs
   regs.io.write := CU.io.regs_write
   regs.io.write_data := writeDataSelector.io.write_data
+
+
+  //--------------------debugging code----------------------------
+  // expose reg value to outside
+  val debug_io = if (GenConfig.s.debugMode) Some(IO(new CoreDebugIO)) else None
+  debug_io.foreach(coe_dbg =>
+    regs.debug_io.foreach(reg_dbg =>
+      coe_dbg.reg_vals <> reg_dbg
+    )
+  )
+  if(GenConfig.s.logDetails){
+    //print all output signal for each module
+    printf(s"---State %d\n",state.io.cpu_state)
+    printf("pc: %d\n",pc.io.addr)
+    printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d" +
+      "alu_type : " +
+      "\n",
+      CU.io.rs1_out,
+      CU.io.rs2_out,
+      CU.io.rd_out,
+      CU.io.raw_imm_out)
+  }
+}
+
+object CoreTop extends App {
+  println(
+    new(chisel3.stage.ChiselStage).emitVerilog(
+      new CoreTop,
+      Array(
+        "--target-dir", "generated_dut/"
+      )
+    )
+  )
 }

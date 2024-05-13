@@ -8,7 +8,7 @@ class CPUState extends Module {
   val io = IO(new Bundle{
     val cpu_state = Output(CPUStateType.getWidth)
   })
-  val state = RegInit(CPUStateType.sWritePC.getUInt)
+  val state = RegInit(CPUStateType.sWriteRegs.getUInt)
   io.cpu_state := state
   when(state === CPUStateType.sWritePC.getUInt) {
     state := CPUStateType.sWriteRegs.getUInt

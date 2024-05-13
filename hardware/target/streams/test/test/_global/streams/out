@@ -1,65 +1,23 @@
-[debug] Running TaskDef(core.execute.ALUTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(example.DFFTester, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.writeBack.AUSelectorTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.ImmGenTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.insFetch.PCTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.memory.MemoryDispatchTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.decode.ControlUnitTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.CMPTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.RegistersTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.writeBack.WriteDataSelectorTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.OperandSelectorTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.NextPCGenTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
-[debug] Running TaskDef(core.utils.RAMTest, org.scalatest.tools.Framework$$anon$1@35b65de7, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.ImmGenTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.utils.RAMTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.memory.MemoryDispatchTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(example.DFFTester, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.NextPCGenTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.decode.InstructionDecoderTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.writeBack.WriteDataSelectorTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.insFetch.PCTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.ALUTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.writeBack.AUSelectorTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.OperandSelectorTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.CMPTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.decode.ControlUnitTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.RegistersTest, org.scalatest.tools.Framework$$anon$1@5419bccf, false, [SuiteSelector])
 [info] WriteDataSelectorTest:
 [info] WriteDataSelector
-[info] - should correctly do sth *** FAILED ***
-[info]   firrtl.passes.CheckInitialization$RefNotInitializedException: : [module WriteDataSelector]  Reference io is not fully initialized.
-[info]    : io.write_data <= VOID
-[info]   ...
+[info] - should correctly do sth
 [info] ControlUnitTest:
 [info] ALU
-[info] - should correctly do sth *** FAILED ***
-[info]   firrtl.passes.PassExceptions: firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.rd_out <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.cmp_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.data_width <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.memory_read <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.imm_width_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.rs1_out <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.unsigned <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.write_back_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.rs2_out <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.raw_imm_out <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.operand2_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.au_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.memory_write <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.nextPC_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.alu_type <= VOID
-[info] firrtl.passes.CheckInitialization$RefNotInitializedException:  : [module ControlUnit]  Reference io is not fully initialized.
-[info]    : io.regs_write <= VOID
-[info] firrtl.passes.PassException: 16 errors detected!
-[info]   ...
-[info] DFFTester:
-[info] DFF
-[info] - should correctly store input value
-[info] RAMTest:
-[info] RAM
-[info] - should correctly store value
+[info] - should correctly do sth
 [info] PCTest:
 [info] PCTest
 [info] - should be zero at initial
@@ -67,10 +25,15 @@
 [info] - should avoid change value at other state
 [info] AUSelectorTest:
 [info] AUSelector
-[info] - should correctly do sth *** FAILED ***
-[info]   firrtl.passes.CheckInitialization$RefNotInitializedException: : [module AUSelector]  Reference io is not fully initialized.
-[info]    : io.au_out <= VOID
-[info]   ...
+[info] - should correctly do sth
+[info] RAMTest:
+[info] RAM
+[info] - should correctly store value
+[info] InstructionDecoderTest:
+[info] InstructionDecoder
+[info] - should correctly decode R-type instructions
+[info] - should correctly decode I-type instructions
+[info] - should correctly decode U-type instructions with zero extension
 [info] OperandSelectorTest:
 [info] OperandSelector
 [info] - should correctly select the Operand
@@ -82,6 +45,9 @@
 [info] - should avoid write in non-write stage
 [info] - should avoid write when write is not enable
 [info] - should correctly output rs1_val and rs2_val
+[info] DFFTester:
+[info] DFF
+[info] - should correctly store input value
 [info] NextPCGenTest:
 [info] NextPCGen
 [info] - should correctly perform pc + 4
@@ -110,24 +76,23 @@
 [info] - should compare correctly in greater or equal(GE) mode
 [info] - should compare correctly in equal(EQ) mode
 [info] - should compare correctly in not equal(NE) mode
-[info] Run completed in 32 seconds, 638 milliseconds.
-[info] Total number of tests run: 33
-[info] Suites: completed 13, aborted 0
-[info] Tests: succeeded 30, failed 3, canceled 0, ignored 0, pending 0
-[info] *** 3 TESTS FAILED ***
+[info] Run completed in 32 seconds, 275 milliseconds.
+[info] Total number of tests run: 36
+[info] Suites: completed 14, aborted 0
+[info] Tests: succeeded 36, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
 [debug] Passed tests:
 [debug] 	core.memory.MemoryDispatchTest
 [debug] 	core.execute.ImmGenTest
 [debug] 	core.execute.OperandSelectorTest
 [debug] 	core.execute.CMPTest
+[debug] 	core.decode.InstructionDecoderTest
 [debug] 	core.execute.ALUTest
+[debug] 	core.writeBack.AUSelectorTest
 [debug] 	example.DFFTester
+[debug] 	core.writeBack.WriteDataSelectorTest
 [debug] 	core.execute.RegistersTest
 [debug] 	core.insFetch.PCTest
 [debug] 	core.utils.RAMTest
 [debug] 	core.execute.NextPCGenTest
-[error] Failed tests:
-[error] 	core.writeBack.AUSelectorTest
-[error] 	core.writeBack.WriteDataSelectorTest
-[error] 	core.decode.ControlUnitTest
-[error] (Test / test) sbt.TestsFailedException: Tests unsuccessful
+[debug] 	core.decode.ControlUnitTest

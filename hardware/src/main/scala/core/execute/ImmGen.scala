@@ -12,7 +12,6 @@ class ImmGen extends Module{
 
     val real_imm: UInt = Output(UInt(32.W))
   })
-
   io.real_imm := DontCare
   switch(io.imm_width){
     is(ImmWidthType.Eleven.getUInt){
@@ -26,8 +25,10 @@ class ImmGen extends Module{
       when(io.unsigned){
         io.real_imm := Cat(Fill(19, 0.U), io.raw_imm(11), io.raw_imm(0), io.raw_imm(10, 1), 0.U)
       }.otherwise{
-        io.real_imm := Cat(Fill(20, io.raw_imm(11)), io.raw_imm(0), io.raw_imm(10, 1), 0.U)
+        io.real_imm := Cat(Fill(20, io.raw_imm(11)), io.raw_imm(11, 0), 0.U)
+        //        io.real_imm := Cat(Fill(20, io.raw_imm(11)), io.raw_imm(0), io.raw_imm(10, 1), 0.U)
       }
+//      printf("real imm: %d\n", Cat(Fill(20, io.raw_imm(11)), io.raw_imm(11, 0), 0.U))
     }
     is(ImmWidthType.Twenty.getUInt){
       when(io.unsigned){
