@@ -1,16 +1,16 @@
 #Successful Tests
-#Mon May 13 15:50:41 CST 2024
-core.writeBack.WriteDataSelectorTest=1715586617954
-core.execute.OperandSelectorTest=1715586623083
-core.execute.ALUTest=1715586632813
-example.DFFTester=1715586617953
-core.memory.MemoryDispatchTest=1715586630972
-core.execute.NextPCGenTest=1715586628295
-core.execute.RegistersTest=1715586624402
-core.decode.InstructionDecoderTest=1715586621905
-core.insFetch.PCTest=1715586621767
-core.decode.ControlUnitTest=1715586617954
-core.utils.RAMTest=1715586621746
-core.writeBack.AUSelectorTest=1715586617953
-core.execute.CMPTest=1715586641681
-core.execute.ImmGenTest=1715586631914
+#Tue May 14 01:41:06 CST 2024
+core.writeBack.WriteDataSelectorTest=1715622052800
+core.execute.OperandSelectorTest=1715622056246
+core.execute.ALUTest=1715622062361
+example.DFFTester=1715622052800
+core.memory.MemoryDispatchTest=1715622061395
+core.execute.NextPCGenTest=1715622059529
+integrate.CoreTopTest=1715622056874
+core.execute.RegistersTest=1715622057067
+core.decode.InstructionDecoderTest=1715622055316
+core.insFetch.PCTest=1715622055240
+core.decode.ControlUnitTest=1715622052800
+core.utils.RAMTest=1715622056249
+core.writeBack.AUSelectorTest=1715622052800
+core.execute.CMPTest=1715622066829

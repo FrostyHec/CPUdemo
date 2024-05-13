@@ -80,7 +80,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //      NEXT:
     //            addi x3,x0,10
     //            -> x3=10,x4=1,x5=1
-
     load_instructions("jump2.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 7)
