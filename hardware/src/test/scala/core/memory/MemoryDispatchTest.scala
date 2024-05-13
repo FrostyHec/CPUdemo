@@ -7,7 +7,6 @@ import chiseltest._
 import configs.GenConfig
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
-import utils._
 
 class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior of "MemoryDispatch"

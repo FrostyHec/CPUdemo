@@ -10,10 +10,14 @@ class InsRAM extends Module {
     GenConfig.s.addressWidth,
     GenConfig.s.dataWidth
   ))
-  private val insRAM = Module(new RAM(
+  val insRAM = Module(new RAM(
     GenConfig.s.addressWidth,
     GenConfig.s.dataWidth,
-    GenConfig.s.insMemSize
+    GenConfig.s.insMemSize,
+    GenConfig.s.insMemIPCoreName,
+    GenConfig.s.initInsFile //debugging,support ins initialize
   ))
   io <> insRAM.io
+
+
 }

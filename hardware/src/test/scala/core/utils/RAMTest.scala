@@ -102,4 +102,26 @@ class RAMTest extends FlatSpec with ChiselScalatestTester with Matchers {
       )
     }
   }
+
+  it should "correctly load file" in {
+    test(new RAM(
+      GenConfig.s.addressWidth,
+      GenConfig.s.dataWidth,
+      GenConfig.s.insMemSize,
+      None,
+      Option("/src/test/scala/core/utils/file.txt")
+    )) { ram =>
+      inputs(ram,
+        write = false,
+        read_addr = 0,
+        write_addr = ignoreVal,
+        write_data = ignoreVal,
+        withStep = false
+      )
+      outputs(
+        ram,
+        read_data = 3
+      )
+    }
+  }
 }

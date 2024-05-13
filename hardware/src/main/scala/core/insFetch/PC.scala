@@ -1,6 +1,7 @@
 package core.insFetch
 
 import chisel3._
+import configs.GenConfig
 import core.config._
 /*
 * PC register
@@ -20,6 +21,12 @@ class PC extends Module{
   }.otherwise{
     //do nothing
   }
+  //--------------------debugging code----------------------------
+//  if(GenConfig.s.logDetails){
+//    printf("----In PC, cpu_state : %d--- \n", io.cpu_state)
+//    printf("input values next_addr: %d \n", io.next_addr)
+//    printf("current pc states: %d \n", io.addr)
+//  }
 }
 object PC extends App {//name had better to be same as class name, put under the class file
   // These lines generate the Verilog output

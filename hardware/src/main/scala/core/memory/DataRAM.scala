@@ -9,10 +9,11 @@ class DataRAM extends Module {
     GenConfig.s.addressWidth,
     GenConfig.s.dataWidth
   ))
-  private val dataRAM = Module(new RAM(
+  val dataRAM = Module(new RAM(
     GenConfig.s.addressWidth,
     GenConfig.s.dataWidth,
-    GenConfig.s.dataMemSize
+    GenConfig.s.dataMemSize,
+    GenConfig.s.dataMemIPCoreName,
   ))
    io <> dataRAM.io
 }
