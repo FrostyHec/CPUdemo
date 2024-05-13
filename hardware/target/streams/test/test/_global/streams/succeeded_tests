@@ -1,0 +1,12 @@
+#Successful Tests
+#Mon May 13 15:32:19 CST 2024
+core.execute.OperandSelectorTest=1715585519389
+core.execute.ALUTest=1715585531534
+core.insFetch.PCTest=1715585518067
+example.DFFTester=1715585513916
+core.utils.RAMTest=1715585517920
+core.execute.NextPCGenTest=1715585526002
+core.memory.MemoryDispatchTest=1715585529373
+core.execute.CMPTest=1715585539004
+core.execute.RegistersTest=1715585520972
+core.execute.ImmGenTest=1715585530584

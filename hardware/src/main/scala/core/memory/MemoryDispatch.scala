@@ -4,7 +4,7 @@ import chisel3.util._
 import chisel3._
 import configs.GenConfig
 import core.config._
-import utils.Utils
+import device._
 
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
@@ -16,7 +16,7 @@ class MemoryDispatch extends Module {
     // data mem io
     val read_data = Input(Bool())
     val write_data = Input(Bool()) // the write signal will 屏蔽 the read signal
-    val unsigned=Input(Bool())
+    val unsigned = Input(Bool())
     val data_width = Input(DataWidth.getWidth)
 
     val data_addr = Input(UInt(32.W))
@@ -25,7 +25,7 @@ class MemoryDispatch extends Module {
     val data_out = Output(UInt(32.W))
 
     //连接board需要external连接outregs
-
+    val external = Flipped(new MMIOOutBundle())
   })
   //32读取深度导致的
   val rw_mem_addr = io.data_addr >> 2
@@ -45,7 +45,7 @@ class MemoryDispatch extends Module {
 
 
   //依据位宽生成data_in
-  data_in:=DontCare
+  data_in := DontCare
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
       data_in := io.data_write(7, 0)
@@ -74,17 +74,18 @@ class MemoryDispatch extends Module {
     write_data = data_in,
     read_data = DontCare
   )
-  outRegisters.io.assign(
+  outRegisters.io.mem.assign(
     write = false.B,
     read_addr = rw_mem_addr,
     write_addr = rw_mem_addr,
     write_data = data_in,
     read_data = DontCare
   )
+  outRegisters.io.external <> io.external
 
   //第二套io:各个RAM的读写操作
   //第二个RAM读
-  data_out:=DontCare
+  data_out := DontCare
   when(GenConfig.s.insBegin <= io.data_addr
     && io.data_addr <= GenConfig.s.insEnd) { //insMem
     when(io.write_data) {
@@ -110,9 +111,12 @@ class MemoryDispatch extends Module {
   }.elsewhen(GenConfig.s._MMIO.begin <= io.data_addr
     && io.data_addr <= GenConfig.s._MMIO.end) { //outRegs
     when(io.write_data) {
-      outRegisters.io.write := is_write_clk && io.write_data
+      outRegisters.io.mem.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-      data_out := outRegisters.io.read_data
+      data_out := outRegisters.io.mem.read_data
+//      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
+//      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
+//      printf("DATA OUT%d\n",data_out)
     }.otherwise {
       //do nothing
     }
@@ -121,10 +125,10 @@ class MemoryDispatch extends Module {
   }
   //最后，依据data_width对读到的结果做处理
   //不支持非对齐内存
-  io.data_out:=DontCare
+  io.data_out := DontCare
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
-      val high_bit=Fill(24, Mux(io.unsigned,0.U,data_out(7)))
+      val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(7)))
       switch(read_ins_addr(1, 0)) {
         is("b00".U) {
           io.data_out := Cat(high_bit, data_out(7, 0))
@@ -142,7 +146,7 @@ class MemoryDispatch extends Module {
     }
     is(DataWidth.HalfWord.getUInt) {
       //doesn't support unaligned memory access
-      val high_bit=Fill(16, Mux(io.unsigned,0.U,data_out(15)))
+      val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
       switch(read_ins_addr(1, 0)) {
         is("b00".U) {
           io.data_out := Cat(high_bit, data_out(15, 0))
@@ -157,10 +161,11 @@ class MemoryDispatch extends Module {
     }
   }
 }
+
 object MemoryDispatch extends App {
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
-      new MemoryDispatch(),//use your module class
+      new MemoryDispatch(), //use your module class
       Array(
         "--target-dir", "generated_dut/"
       )

@@ -8,7 +8,7 @@ class MMIOLedBundle extends Bundle {
 }
 
 class BoardLedBundle extends Bundle {
-  val led = Input(UInt(GenConfig.s.board.ledWidth.W))
+  val led = Output(UInt(GenConfig.s.board.ledWidth.W))
 }
 
 class Led extends Module {

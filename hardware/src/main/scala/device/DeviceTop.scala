@@ -7,7 +7,7 @@ class MMIOOutBundle extends Bundle{
 
   //cpu input devices
   val btn=new MMIOButtonBundle
-  val switch=new MMIOSwitchBundle
+  val switches=new MMIOSwitchBundle
 }
 class BoardBundle extends Bundle{
   //output devices
@@ -26,16 +26,16 @@ class DeviceTop extends Module{
   val led=new Led
   val seg7=new Seg7
   val btn=new Button
-  val switch=new Switch
+  val switches=new Switches
   //mmio
   led.io.mmio<>io.mmio.led
   seg7.io.mmio<>io.mmio.seg7
   btn.io.mmio<>io.mmio.btn
-  switch.io.mmio<>io.mmio.switch
+  switches.io.mmio<>io.mmio.switches
 
   //board
   led.io.board<>io.board.led
   seg7.io.board<>io.board.seg7
   btn.io.board<>io.board.btn
-  switch.io.board<>io.board.switch
+  switches.io.board<>io.board.switch
 }
