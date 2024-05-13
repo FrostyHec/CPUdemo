@@ -6,7 +6,7 @@
 /bin/
 
 ##ignore test/verify file
-/hardware/generate_dut/
+/hardware/generated_dut/
 /hardware/test_run_dir/
 
 
