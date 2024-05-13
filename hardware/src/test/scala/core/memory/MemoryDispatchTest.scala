@@ -359,6 +359,123 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
   }
 
   it should "correctly mapping the mmio result" in {
-    //TODO MMIO
+    //read from btn
+    test(new MemoryDispatch) { memoryDispatch =>
+      println("_______________test begin_____________")
+      memoryDispatch.io.external.btn.button.poke(1.U)
+      memoryDispatch.clock.step()
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = 0.U,
+        unsigned = true,
+        read_data = true,
+        write_data = false,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s._MMIO.btnAddr,
+        data_write = 10,
+        withStep = true
+      )
+      data_outputs(
+        memoryDispatch,
+        data_out = 1.U
+      )
+      println("_______________test finish_____________")
+    }
+    //read from switch
+    test(new MemoryDispatch) { memoryDispatch =>
+      println("_______________test begin_____________")
+      memoryDispatch.io.external.switches.switches.poke(1.U)
+      memoryDispatch.clock.step()
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = 0.U,
+        unsigned = true,
+        read_data = true,
+        write_data = false,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s._MMIO.switchAddr,
+        data_write = 10,
+        withStep = true
+      )
+      data_outputs(
+        memoryDispatch,
+        data_out = 1.U
+      )
+      println("_______________test finish_____________")
+    }
+    //store into led
+    test(new MemoryDispatch) { memoryDispatch =>
+      println("_______________test begin_____________")
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = 0.U,
+        unsigned = true,
+        read_data = false,
+        write_data = true,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s._MMIO.ledAddr,
+        data_write = 10,
+        withStep = true
+      )
+      memoryDispatch.io.external.led.led.expect(10.U)
+      println("_______________test finish_____________")
+    }
+    //store into seg7
+    test(new MemoryDispatch) { memoryDispatch =>
+      println("_______________test begin_____________")
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = 0.U,
+        unsigned = true,
+        read_data = false,
+        write_data = true,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s._MMIO.seg7Addr,
+        data_write = 10,
+        withStep = true
+      )
+      memoryDispatch.io.external.seg7.seg7.expect(10.U)
+      println("_______________test finish_____________")
+    }
+  }
+
+  it should "correctly avoid writing into non-writable reg(for cpu side)" in{
+    //avoid write btn
+    test(new MemoryDispatch) { memoryDispatch =>
+      println("_______________test begin_____________")
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = 0.U,
+        unsigned = true,
+        read_data = false,
+        write_data = true,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s._MMIO.btnAddr,
+        data_write = 10,
+        withStep = true
+      )
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = 0.U,
+        unsigned = true,
+        read_data = true,
+        write_data = false,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s._MMIO.btnAddr,
+        data_write = 10,
+        withStep = false
+      )
+      data_outputs(
+        memoryDispatch,
+        data_out = 0.U
+      )
+      println("_______________test finish_____________")
+    }
   }
 }

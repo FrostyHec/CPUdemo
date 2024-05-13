@@ -101,6 +101,7 @@ class CoreTop extends Module {
   memory.io.write_data := CU.io.memory_write
   memory.io.read_data := CU.io.memory_read
   memory.io.unsigned:= CU.io.unsigned
+  memory.io.external := io.external //board
 
   //write back wire
   //au selector
