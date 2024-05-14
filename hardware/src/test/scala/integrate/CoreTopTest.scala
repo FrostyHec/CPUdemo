@@ -88,4 +88,9 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegs(cpu, 5, 1.U)
     }
   }
+  //TODO MINIMUM TESTING INSTRUCTIONS:
+  // lb,sb,lw,sw
+  // bgeu,blt
+  // jalr,jal,lui,auipc
+
 }

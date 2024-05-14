@@ -1,170 +1,30 @@
 [debug] [zinc] IncrementalCompile -----------
 [debug] IncrementalCompile.incrementalCompile
-[debug] previous = Stamps for: 124 products, 34 sources, 4 libraries
+[debug] previous = Stamps for: 128 products, 35 sources, 6 libraries
 [debug] current source = Set(${BASE}/src/main/scala/core/config/SignalType.scala, ${BASE}/src/main/scala/example/day2/DFF.scala, ${BASE}/src/main/scala/configs/BoardConfig.scala, ${BASE}/src/main/scala/utils/ExtendEnum.scala, ${BASE}/src/main/scala/utils/Utils.scala, ${BASE}/src/main/scala/configs/GenConfig.scala, ${BASE}/src/main/scala/core/writeBack/AUSelector.scala, ${BASE}/src/main/scala/core/execute/NextPCGen.scala, ${BASE}/src/main/scala/core/CoreTop.scala, ${BASE}/src/main/scala/core/config/DebugIO.scala, ${BASE}/src/main/scala/core/decode/InstructionDecoder.scala, ${BASE}/src/main/scala/core/CPUState.scala, ${BASE}/src/main/scala/core/execute/ALU.scala, ${BASE}/src/main/scala/core/execute/OperandSelector.scala, ${BASE}/src/main/scala/device/Seg7.scala, ${BASE}/src/main/scala/Top.scala, ${BASE}/src/main/scala/device/Button.scala, ${BASE}/src/main/scala/example/day1/HelloWorld.scala, ${BASE}/src/main/scala/core/memory/InsRAM.scala, ${BASE}/src/main/scala/utils/MemoryPacket.scala, ${BASE}/src/main/scala/core/execute/Registers.scala, ${BASE}/src/main/scala/example/day1/MyLearn.scala, ${BASE}/src/main/scala/core/memory/MemoryDispatch.scala, ${BASE}/src/main/scala/configs/MMIOConfig.scala, ${BASE}/src/main/scala/core/decode/ControlUnit.scala, ${BASE}/src/main/scala/core/writeBack/WriteDataSelector.scala, ${BASE}/src/main/scala/core/memory/DataRAM.scala, ${BASE}/src/main/scala/device/DeviceTop.scala, ${BASE}/src/main/scala/core/execute/ImmGen.scala, ${BASE}/src/main/scala/core/config/CoreConfig.scala, ${BASE}/src/main/scala/core/insFetch/PC.scala, ${BASE}/src/main/scala/core/memory/OutRegisters.scala, ${BASE}/src/main/scala/device/Switches.scala, ${BASE}/src/main/scala/core/execute/CMP.scala, ${BASE}/src/main/scala/device/Led.scala)
-[debug] > initialChanges = InitialChanges(Changes(added = Set(${BASE}/src/main/scala/core/config/DebugIO.scala), removed = Set(), changed = Set(${BASE}/src/main/scala/core/insFetch/PC.scala, ${BASE}/src/main/scala/core/memory/MemoryDispatch.scala, ${BASE}/src/main/scala/core/CPUState.scala, ${BASE}/src/main/scala/core/execute/NextPCGen.scala, ${BASE}/src/main/scala/core/memory/InsRAM.scala, ${BASE}/src/main/scala/utils/MemoryPacket.scala, ${BASE}/src/main/scala/core/decode/InstructionDecoder.scala, ${BASE}/src/main/scala/configs/GenConfig.scala, ${BASE}/src/main/scala/core/memory/DataRAM.scala, ${BASE}/src/main/scala/utils/ExtendEnum.scala, ${BASE}/src/main/scala/core/execute/ImmGen.scala, ${BASE}/src/main/scala/core/CoreTop.scala, ${BASE}/src/main/scala/core/execute/Registers.scala), unmodified = ...),Set(${BASE}/target/scala-2.12/classes/utils/RAM.class, ${BASE}/target/scala-2.12/classes/core/execute/NextPCGen$.class, ${BASE}/target/scala-2.12/classes/utils/ExtendEnum$RichEnumValue.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC$delayedInit$body.class, ${BASE}/target/scala-2.12/classes/core/decode/InstructionDecoder$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/execute/ImmGen$delayedInit$body.class, ${BASE}/target/scala-2.12/classes/configs/GenConfig$.class, ${BASE}/target/scala-2.12/classes/core/memory/MemoryDispatch.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC$.class, ${BASE}/target/scala-2.12/classes/core/CoreTop$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/CoreTop.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers$delayedInit$body.class, ${BASE}/target/scala-2.12/classes/core/execute/NextPCGen.class, ${BASE}/target/scala-2.12/classes/core/execute/ImmGen.class, ${BASE}/target/scala-2.12/classes/core/memory/InsRAM.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/CPUState.class, ${BASE}/target/scala-2.12/classes/utils/RWMemoryPort.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers$.class, ${BASE}/target/scala-2.12/classes/utils/RAM$.class, ${BASE}/target/scala-2.12/classes/configs/GenConfig.class, ${BASE}/target/scala-2.12/classes/utils/ExtendEnum.class, ${BASE}/target/scala-2.12/classes/core/memory/DataRAM.class, ${BASE}/target/scala-2.12/classes/core/execute/ImmGen$.class, ${BASE}/target/scala-2.12/classes/core/decode/InstructionDecoder.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC.class, ${BASE}/target/scala-2.12/classes/core/memory/MemoryDispatch$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers.class, ${BASE}/target/scala-2.12/classes/core/execute/NextPCGen$delayedInit$body.class),Set(),API Changes: Set())
+[debug] Invalidating '${BASE}/target/scala-2.12/classes/core/config/RegDebugIO.class' because ${BASE}/target/scala-2.12/classes/core/config/RegDebugIO.class (farm(804f757997fa1ad2)) != ${BASE}/target/scala-2.12/classes (absent)
+[debug] Invalidating '${BASE}/target/scala-2.12/classes/core/config/CoreDebugIO.class' because ${BASE}/target/scala-2.12/classes/core/config/CoreDebugIO.class (farm(3d55b76db24ae8e1)) != ${BASE}/target/scala-2.12/classes (absent)
+[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(),Set(${BASE}/target/scala-2.12/classes/core/config/CoreDebugIO.class, ${BASE}/target/scala-2.12/classes/core/config/RegDebugIO.class),API Changes: Set())
 [debug] 
 [debug] Initial source changes:
 [debug] 	removed: Set()
-[debug] 	added: Set(${BASE}/src/main/scala/core/config/DebugIO.scala)
-[debug] 	modified: Set(${BASE}/src/main/scala/utils/ExtendEnum.scala, ${BASE}/src/main/scala/configs/GenConfig.scala, ${BASE}/src/main/scala/core/execute/NextPCGen.scala, ${BASE}/src/main/scala/core/CoreTop.scala, ${BASE}/src/main/scala/core/decode/InstructionDecoder.scala, ${BASE}/src/main/scala/core/CPUState.scala, ${BASE}/src/main/scala/core/memory/InsRAM.scala, ${BASE}/src/main/scala/utils/MemoryPacket.scala, ${BASE}/src/main/scala/core/execute/Registers.scala, ${BASE}/src/main/scala/core/memory/MemoryDispatch.scala, ${BASE}/src/main/scala/core/memory/DataRAM.scala, ${BASE}/src/main/scala/core/execute/ImmGen.scala, ${BASE}/src/main/scala/core/insFetch/PC.scala)
-[debug] Invalidated products: Set(${BASE}/target/scala-2.12/classes/utils/RAM.class, ${BASE}/target/scala-2.12/classes/core/execute/NextPCGen$.class, ${BASE}/target/scala-2.12/classes/utils/ExtendEnum$RichEnumValue.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC$delayedInit$body.class, ${BASE}/target/scala-2.12/classes/core/decode/InstructionDecoder$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/execute/ImmGen$delayedInit$body.class, ${BASE}/target/scala-2.12/classes/configs/GenConfig$.class, ${BASE}/target/scala-2.12/classes/core/memory/MemoryDispatch.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC$.class, ${BASE}/target/scala-2.12/classes/core/CoreTop$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/CoreTop.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers$delayedInit$body.class, ${BASE}/target/scala-2.12/classes/core/execute/NextPCGen.class, ${BASE}/target/scala-2.12/classes/core/execute/ImmGen.class, ${BASE}/target/scala-2.12/classes/core/memory/InsRAM.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/CPUState.class, ${BASE}/target/scala-2.12/classes/utils/RWMemoryPort.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers$.class, ${BASE}/target/scala-2.12/classes/utils/RAM$.class, ${BASE}/target/scala-2.12/classes/configs/GenConfig.class, ${BASE}/target/scala-2.12/classes/utils/ExtendEnum.class, ${BASE}/target/scala-2.12/classes/core/memory/DataRAM.class, ${BASE}/target/scala-2.12/classes/core/execute/ImmGen$.class, ${BASE}/target/scala-2.12/classes/core/decode/InstructionDecoder.class, ${BASE}/target/scala-2.12/classes/core/insFetch/PC.class, ${BASE}/target/scala-2.12/classes/core/memory/MemoryDispatch$$anon$1.class, ${BASE}/target/scala-2.12/classes/core/execute/Registers.class, ${BASE}/target/scala-2.12/classes/core/execute/NextPCGen$delayedInit$body.class)
+[debug] 	added: Set()
+[debug] 	modified: Set()
+[debug] Invalidated products: Set()
 [debug] External API changes: API Changes: Set()
-[debug] Modified binary dependencies: Set()
-[debug] Initial directly invalidated classes: Set(core.decode.InstructionDecoder, utils.ExtendEnum, utils.ExtendEnum.RichEnumValue, core.memory.InsRAM, core.CoreTop, utils.RAM, core.execute.ImmGen, utils.RWMemoryPort, core.CPUState, core.execute.NextPCGen, core.memory.DataRAM, core.memory.MemoryDispatch, core.execute.Registers, core.insFetch.PC, configs.GenConfig)
+[debug] Modified binary dependencies: Set(${BASE}/target/scala-2.12/classes/core/config/CoreDebugIO.class, ${BASE}/target/scala-2.12/classes/core/config/RegDebugIO.class)
+[debug] Initial directly invalidated classes: Set()
 [debug] Sources indirectly invalidated by:
-[debug] 	product: Set(${BASE}/src/main/scala/utils/ExtendEnum.scala, ${BASE}/src/main/scala/configs/GenConfig.scala, ${BASE}/src/main/scala/core/execute/NextPCGen.scala, ${BASE}/src/main/scala/core/CoreTop.scala, ${BASE}/src/main/scala/core/decode/InstructionDecoder.scala, ${BASE}/src/main/scala/core/CPUState.scala, ${BASE}/src/main/scala/core/memory/InsRAM.scala, ${BASE}/src/main/scala/utils/MemoryPacket.scala, ${BASE}/src/main/scala/core/execute/Registers.scala, ${BASE}/src/main/scala/core/memory/MemoryDispatch.scala, ${BASE}/src/main/scala/core/memory/DataRAM.scala, ${BASE}/src/main/scala/core/execute/ImmGen.scala, ${BASE}/src/main/scala/core/insFetch/PC.scala)
-[debug] 	binary dep: Set()
+[debug] 	product: Set()
+[debug] 	binary dep: Set(${BASE}/src/main/scala/core/CoreTop.scala)
 [debug] 	external source: Set()
-[debug] All initially invalidated classes: Set(core.decode.InstructionDecoder, utils.ExtendEnum, utils.ExtendEnum.RichEnumValue, core.memory.InsRAM, core.CoreTop, utils.RAM, core.execute.ImmGen, utils.RWMemoryPort, core.CPUState, core.execute.NextPCGen, core.memory.DataRAM, core.memory.MemoryDispatch, core.execute.Registers, core.insFetch.PC, configs.GenConfig)
-[debug] All initially invalidated sources:Set(${BASE}/src/main/scala/utils/ExtendEnum.scala, ${BASE}/src/main/scala/configs/GenConfig.scala, ${BASE}/src/main/scala/core/execute/NextPCGen.scala, ${BASE}/src/main/scala/core/CoreTop.scala, ${BASE}/src/main/scala/core/config/DebugIO.scala, ${BASE}/src/main/scala/core/decode/InstructionDecoder.scala, ${BASE}/src/main/scala/core/CPUState.scala, ${BASE}/src/main/scala/core/memory/InsRAM.scala, ${BASE}/src/main/scala/utils/MemoryPacket.scala, ${BASE}/src/main/scala/core/execute/Registers.scala, ${BASE}/src/main/scala/core/memory/MemoryDispatch.scala, ${BASE}/src/main/scala/core/memory/DataRAM.scala, ${BASE}/src/main/scala/core/execute/ImmGen.scala, ${BASE}/src/main/scala/core/insFetch/PC.scala)
-[debug] Initial set of included nodes: core.decode.InstructionDecoder, utils.ExtendEnum, utils.ExtendEnum.RichEnumValue, core.memory.InsRAM, core.CoreTop, utils.RAM, core.execute.ImmGen, utils.RWMemoryPort, core.CPUState, core.execute.NextPCGen, core.memory.DataRAM, core.memory.MemoryDispatch, core.execute.Registers, core.insFetch.PC, configs.GenConfig
-[debug] Including core.config.CPUStateType by utils.ExtendEnum
-[debug] Including core.config.ImmWidthType by utils.ExtendEnum
-[debug] Including core.config.NextPCType by utils.ExtendEnum
-[debug] Including core.config.CMPType by utils.ExtendEnum
-[debug] Including core.config.WriteBackType by utils.ExtendEnum
-[debug] Including core.config.AUType by utils.ExtendEnum
-[debug] Including core.config.DataWidth by utils.ExtendEnum
-[debug] Including core.config.Operand2Type by utils.ExtendEnum
-[debug] Including core.config.ALUType by utils.ExtendEnum
+[debug] All initially invalidated classes: Set()
+[debug] All initially invalidated sources:Set(${BASE}/src/main/scala/core/CoreTop.scala)
+[debug] Initial set of included nodes: 
 [debug] compilation cycle 1
-[info] compiling 14 Scala sources to D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\classes ...
+[info] compiling 1 Scala source to D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\classes ...
 [debug] Getting org.scala-sbt:compiler-bridge_2.12:1.9.5:compile for Scala 2.12.12
-[debug] [zinc] Running cached compiler 3d9df63d for Scala compiler version 2.12.12
-[debug] [zinc] The Scala compiler is invoked with:
-[debug] 	-Xplugin:C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\chisel3-plugin_2.12.12\3.5.4\chisel3-plugin_2.12.12-3.5.4.jar
-[debug] 	-bootclasspath
-[debug] 	C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.12.12\scala-library-2.12.12.jar
-[debug] 	-classpath
-[debug] 	D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\classes;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\chisel3_2.12\3.5.4\chisel3_2.12-3.5.4.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\chisel3-macros_2.12\3.5.4\chisel3-macros_2.12-3.5.4.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\chisel3-core_2.12\3.5.4\chisel3-core_2.12-3.5.4.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-reflect\2.12.12\scala-reflect-2.12.12.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\lihaoyi\os-lib_2.12\0.8.0\os-lib_2.12-0.8.0.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\firrtl_2.12\1.5.4\firrtl_2.12-1.5.4.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\lihaoyi\geny_2.12\0.7.0\geny_2.12-0.7.0.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\antlr\antlr4-runtime\4.9.3\antlr4-runtime-4.9.3.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\google\protobuf\protobuf-java\3.18.0\protobuf-java-3.18.0.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\github\scopt\scopt_2.12\3.7.1\scopt_2.12-3.7.1.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\net\jcazevedo\moultingyaml_2.12\0.4.2\moultingyaml_2.12-0.4.2.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\json4s\json4s-native_2.12\3.6.12\json4s-native_2.12-3.6.12.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\apache\commons\commons-text\1.9\commons-text-1.9.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\io\github\alexarchambault\data-class_2.12\0.2.5\data-class_2.12-0.2.5.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\github\nscala-time\nscala-time_2.12\2.22.0\nscala-time_2.12-2.22.0.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\yaml\snakeyaml\1.26\snakeyaml-1.26.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\json4s\json4s-core_2.12\3.6.12\json4s-core_2.12-3.6.12.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\apache\commons\commons-lang3\3.11\commons-lang3-3.11.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\joda-time\joda-time\2.10.1\joda-time-2.10.1.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\joda\joda-convert\2.2.0\joda-convert-2.2.0.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\json4s\json4s-ast_2.12\3.6.12\json4s-ast_2.12-3.6.12.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\json4s\json4s-scalap_2.12\3.6.12\json4s-scalap_2.12-3.6.12.jar;C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\thoughtworks\paranamer\paranamer\2.8\paranamer-2.8.jar
-[debug] Invalidating (transitively) by inheritance from core.config.RegDebugIO...
-[debug] Initial set of included nodes: core.config.RegDebugIO
-[debug] Invalidated by transitive inheritance dependency: Set(core.config.RegDebugIO)
-[debug] The following member ref dependencies of core.config.RegDebugIO are invalidated:
-[debug] 	core.CoreTop
-[debug] 	core.execute.Registers
-[debug] Change NamesChange(core.config.RegDebugIO,ModifiedNames(changes = UsedName(finalize,[Default]), UsedName(bindingToString,[Default]), UsedName(className,[Default]), UsedName(binding,[Default]), UsedName(_elementsImpl,[Default]), UsedName(_circuit,[Default]), UsedName(_parent,[Default]), UsedName($init$,[Default]), UsedName(connectFromBits,[Default]), UsedName(litValue,[Default]), UsedName(##,[Default]), UsedName(direction_=,[Default]), UsedName(ref,[Default]), UsedName(getOptionRef,[Default]), UsedName(RegDebugIO,[Default]), UsedName(getElements,[Default]), UsedName(ne,[Default]), UsedName(:=,[Default]), UsedName(_makeLit,[Default]), UsedName(getRef,[Default]), UsedName(setRef,[Default]), UsedName(eq,[Default]), UsedName(==,[Default]), UsedName(width,[Default]), UsedName(core;config;RegDebugIO;init;,[Default]), UsedName(!=,[Default]), UsedName(forceFinalName,[Default]), UsedName(<>,[Default]), UsedName(isLit,[Default]), UsedName(topBinding,[Default]), UsedName(specifiedDirection_=,[Default]), UsedName(direction,[Default]), UsedName(suggestName,[Default]), UsedName(reifyParent,[Default]), UsedName(asInstanceOf,[Default]), UsedName(circuitName,[Default]), UsedName(_bindingToString,[Default]), UsedName(badConnect,[Default]), UsedName(addSuggestPostnameHook,[Default]), UsedName(cloneType,[Default]), UsedName(widthOption,[Default]), UsedName(do_asTypeOf,[Default]), UsedName(notifyAll,[Default]), UsedName(autoSeed,[Default]), UsedName(_id,[Default]), UsedName(asUInt,[Default]), UsedName(_computeName,[Default]), UsedName(clone,[Default]), UsedName(toPrintable,[Default]), UsedName(bind$default$2,[Default]), UsedName(toAbsoluteTarget,[Default]), UsedName(wait,[Default]), UsedName(hasAutoSeed,[Default]), UsedName(connect,[Default]), UsedName(getClass,[Default]), UsedName(parentPathName,[Default]), UsedName(isSynthesizable,[Default]), UsedName(toNamed,[Default]), UsedName(isInstanceOf,[Default]), UsedName(parentModName,[Default]), UsedName(legacyConnect,[Default]), UsedName(seedOpt,[Default]), UsedName(stringAccessor,[Default]), UsedName(earlyName,[Default]), UsedName(forceAutoSeed,[Default]), UsedName(do_asUInt,[Default]), UsedName(_assignCompatibilityExplicitDirection,[Default]), UsedName(setAllParents,[Default]), UsedName(instanceName,[Default]), UsedName(pathName,[Default]), UsedName(reg_vals,[Default]), UsedName(toString,[Default]), UsedName(asTypeOf,[Default]), UsedName(getWidth,[Default]), UsedName(lref,[Default]), UsedName(isWidthKnown,[Default]), UsedName(toTarget,[Default]), UsedName(elements,[Default]), UsedName(synchronized,[Default]), UsedName(typeEquivalent,[Default]), UsedName(parentNameOpt,[Default]), UsedName(topBindingOpt,[Default]), UsedName(equals,[Default]), UsedName(notify,[Default]), UsedName(_onModuleClose,[Default]), UsedName(hasSeed,[Default]), UsedName(reifyTarget,[Default]), UsedName(ignoreSeq,[Default]), UsedName(hashCode,[Default]), UsedName(addAutoPostnameHook,[Default]), UsedName(bind,[Default]), UsedName(litOption,[Default]), UsedName(cloneTypeFull,[Default]), UsedName(flatten,[Default]), UsedName(binding_=,[Default]), UsedName(compileOptions,[Implicit]), UsedName(_suggestNameCheck,[Default]), UsedName(getPublicFields,[Default]), UsedName(_cloneTypeImpl,[Default]), UsedName(_usingPlugin,[Default]), UsedName(allElements,[Default]), UsedName(bulkConnect,[Default]), UsedName(toPrintableHelper,[Default]), UsedName(specifiedDirection,[Default]), UsedName(forceName,[Default]))) invalidates 3 classes due to The core.config.RegDebugIO has the following implicit definitions changed:
-[debug] 	UsedName(compileOptions,[Implicit]).
-[debug]   > by transitive inheritance: Set(core.config.RegDebugIO)
-[debug]   > 
-[debug]   > by member reference: Set(core.CoreTop, core.execute.Registers)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from core.execute.Registers...
-[debug] Initial set of included nodes: core.execute.Registers
-[debug] Invalidated by transitive inheritance dependency: Set(core.execute.Registers)
-[debug] The following modified names cause invalidation of core.CoreTop: [UsedName(debug_io,[Default])]
-[debug] Change NamesChange(core.execute.Registers,ModifiedNames(changes = UsedName(debug_io,[Default]))) invalidates 2 classes due to The core.execute.Registers has the following regular definitions changed:
-[debug] 	UsedName(debug_io,[Default]).
-[debug]   > by transitive inheritance: Set(core.execute.Registers)
-[debug]   > 
-[debug]   > by member reference: Set(core.CoreTop)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from core.memory.InsRAM...
-[debug] Initial set of included nodes: core.memory.InsRAM
-[debug] Invalidated by transitive inheritance dependency: Set(core.memory.InsRAM)
-[debug] The following modified names cause invalidation of core.memory.MemoryDispatch: [UsedName(insRAM,[Default])]
-[debug] Change NamesChange(core.memory.InsRAM,ModifiedNames(changes = UsedName(insRAM,[Default]))) invalidates 2 classes due to The core.memory.InsRAM has the following regular definitions changed:
-[debug] 	UsedName(insRAM,[Default]).
-[debug]   > by transitive inheritance: Set(core.memory.InsRAM)
-[debug]   > 
-[debug]   > by member reference: Set(core.memory.MemoryDispatch)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from utils.RAM...
-[debug] Initial set of included nodes: utils.RAM
-[debug] Invalidated by transitive inheritance dependency: Set(utils.RAM)
-[debug] The following modified names cause invalidation of core.memory.InsRAM: [UsedName(utils;RAM;init;,[Default])]
-[debug] The following modified names cause invalidation of core.memory.DataRAM: [UsedName(utils;RAM;init;,[Default]), UsedName(<init>$default$5,[Default])]
-[debug] Change NamesChange(utils.RAM,ModifiedNames(changes = UsedName(utils;RAM;init;,[Default]), UsedName(<init>$default$5,[Default]))) invalidates 3 classes due to The utils.RAM has the following regular definitions changed:
-[debug] 	UsedName(utils;RAM;init;,[Default]), UsedName(<init>$default$5,[Default]).
-[debug]   > by transitive inheritance: Set(utils.RAM)
-[debug]   > 
-[debug]   > by member reference: Set(core.memory.InsRAM, core.memory.DataRAM)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from configs.GenConfig...
-[debug] Initial set of included nodes: configs.GenConfig
-[debug] Invalidated by transitive inheritance dependency: Set(configs.GenConfig)
-[debug] The following modified names cause invalidation of core.decode.InstructionDecoder: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of device.BoardSwitchBundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.memory.InsRAM: [UsedName(initInsFile,[Default]), UsedName(insMemIPCoreName,[Default]), UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of device.BoardLedBundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.CoreTop: [UsedName(apply,[Default]), UsedName(logDetails,[Default])]
-[debug] The following modified names cause invalidation of device.MMIOButtonBundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of device.MMIOSeg7Bundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of device.MMIOLedBundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.memory.OutRegisters: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.memory.DataRAM: [UsedName(dataMemIPCoreName,[Default]), UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of device.MMIOSwitchBundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.memory.MemoryDispatch: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of device.BoardButtonBundle: [UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.execute.Registers: [UsedName(logDetails,[Default]), UsedName(apply,[Default])]
-[debug] The following modified names cause invalidation of core.insFetch.PC: [UsedName(apply,[Default])]
-[debug] Change NamesChange(configs.GenConfig,ModifiedNames(changes = UsedName(apply$default$13,[Default]), UsedName(copy$default$14,[Default]), UsedName(insMemIPCoreName,[Default]), UsedName(copy$default$13,[Default]), UsedName(copy$default$16,[Default]), UsedName(<init>$default$6,[Default]), UsedName(apply$default$11,[Default]), UsedName(configs;GenConfig;init;,[Default]), UsedName(apply$default$10,[Default]), UsedName(apply,[Default]), UsedName(<init>$default$11,[Default]), UsedName(<init>$default$13,[Default]), UsedName(<init>$default$2,[Default]), UsedName(apply$default$2,[Default]), UsedName(copy$default$10,[Default]), UsedName(apply$default$6,[Default]), UsedName(initInsFile,[Default]), UsedName(copy$default$12,[Default]), UsedName(apply$default$16,[Default]), UsedName(logDetails,[Default]), UsedName(apply$default$12,[Default]), UsedName(<init>$default$12,[Default]), UsedName(unapply,[Default]), UsedName(<init>$default$15,[Default]), UsedName(copy$default$11,[Default]), UsedName(copy$default$15,[Default]), UsedName(copy,[Default]), UsedName(<init>$default$16,[Default]), UsedName(apply$default$15,[Default]), UsedName(copy$default$2,[Default]), UsedName(dataMemIPCoreName,[Default]), UsedName(<init>$default$10,[Default]), UsedName(copy$default$6,[Default]))) invalidates 16 classes due to The configs.GenConfig has the following regular definitions changed:
-[debug] 	UsedName(apply$default$13,[Default]), UsedName(copy$default$14,[Default]), UsedName(insMemIPCoreName,[Default]), UsedName(copy$default$13,[Default]), UsedName(copy$default$16,[Default]), UsedName(<init>$default$6,[Default]), UsedName(apply$default$11,[Default]), UsedName(configs;GenConfig;init;,[Default]), UsedName(apply$default$10,[Default]), UsedName(apply,[Default]), UsedName(<init>$default$11,[Default]), UsedName(<init>$default$13,[Default]), UsedName(<init>$default$2,[Default]), UsedName(apply$default$2,[Default]), UsedName(copy$default$10,[Default]), UsedName(apply$default$6,[Default]), UsedName(initInsFile,[Default]), UsedName(copy$default$12,[Default]), UsedName(apply$default$16,[Default]), UsedName(logDetails,[Default]), UsedName(apply$default$12,[Default]), UsedName(<init>$default$12,[Default]), UsedName(unapply,[Default]), UsedName(<init>$default$15,[Default]), UsedName(copy$default$11,[Default]), UsedName(copy$default$15,[Default]), UsedName(copy,[Default]), UsedName(<init>$default$16,[Default]), UsedName(apply$default$15,[Default]), UsedName(copy$default$2,[Default]), UsedName(dataMemIPCoreName,[Default]), UsedName(<init>$default$10,[Default]), UsedName(copy$default$6,[Default]).
-[debug]   > by transitive inheritance: Set(configs.GenConfig)
-[debug]   > 
-[debug]   > by member reference: Set(core.decode.InstructionDecoder, device.BoardSwitchBundle, core.memory.InsRAM, device.BoardLedBundle, core.CoreTop, device.MMIOButtonBundle, device.MMIOSeg7Bundle, device.MMIOLedBundle, core.memory.OutRegisters, core.memory.DataRAM, device.MMIOSwitchBundle, core.memory.MemoryDispatch, device.BoardButtonBundle, core.execute.Registers, core.insFetch.PC)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from core.memory.DataRAM...
-[debug] Initial set of included nodes: core.memory.DataRAM
-[debug] Invalidated by transitive inheritance dependency: Set(core.memory.DataRAM)
-[debug] The following modified names cause invalidation of core.memory.MemoryDispatch: [UsedName(dataRAM,[Default])]
-[debug] Change NamesChange(core.memory.DataRAM,ModifiedNames(changes = UsedName(dataRAM,[Default]))) invalidates 2 classes due to The core.memory.DataRAM has the following regular definitions changed:
-[debug] 	UsedName(dataRAM,[Default]).
-[debug]   > by transitive inheritance: Set(core.memory.DataRAM)
-[debug]   > 
-[debug]   > by member reference: Set(core.memory.MemoryDispatch)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from core.config.CoreDebugIO...
-[debug] Initial set of included nodes: core.config.CoreDebugIO
-[debug] Invalidated by transitive inheritance dependency: Set(core.config.CoreDebugIO)
-[debug] The following member ref dependencies of core.config.CoreDebugIO are invalidated:
-[debug] 	core.CoreTop
-[debug] Change NamesChange(core.config.CoreDebugIO,ModifiedNames(changes = UsedName(finalize,[Default]), UsedName(bindingToString,[Default]), UsedName(className,[Default]), UsedName(binding,[Default]), UsedName(_elementsImpl,[Default]), UsedName(_circuit,[Default]), UsedName(_parent,[Default]), UsedName($init$,[Default]), UsedName(connectFromBits,[Default]), UsedName(litValue,[Default]), UsedName(##,[Default]), UsedName(direction_=,[Default]), UsedName(ref,[Default]), UsedName(getOptionRef,[Default]), UsedName(getElements,[Default]), UsedName(ne,[Default]), UsedName(:=,[Default]), UsedName(_makeLit,[Default]), UsedName(getRef,[Default]), UsedName(setRef,[Default]), UsedName(eq,[Default]), UsedName(==,[Default]), UsedName(width,[Default]), UsedName(!=,[Default]), UsedName(forceFinalName,[Default]), UsedName(<>,[Default]), UsedName(isLit,[Default]), UsedName(topBinding,[Default]), UsedName(specifiedDirection_=,[Default]), UsedName(direction,[Default]), UsedName(core;config;CoreDebugIO;init;,[Default]), UsedName(suggestName,[Default]), UsedName(reifyParent,[Default]), UsedName(asInstanceOf,[Default]), UsedName(circuitName,[Default]), UsedName(_bindingToString,[Default]), UsedName(badConnect,[Default]), UsedName(addSuggestPostnameHook,[Default]), UsedName(cloneType,[Default]), UsedName(widthOption,[Default]), UsedName(do_asTypeOf,[Default]), UsedName(notifyAll,[Default]), UsedName(autoSeed,[Default]), UsedName(_id,[Default]), UsedName(asUInt,[Default]), UsedName(_computeName,[Default]), UsedName(clone,[Default]), UsedName(toPrintable,[Default]), UsedName(bind$default$2,[Default]), UsedName(toAbsoluteTarget,[Default]), UsedName(wait,[Default]), UsedName(hasAutoSeed,[Default]), UsedName(connect,[Default]), UsedName(getClass,[Default]), UsedName(parentPathName,[Default]), UsedName(isSynthesizable,[Default]), UsedName(toNamed,[Default]), UsedName(isInstanceOf,[Default]), UsedName(parentModName,[Default]), UsedName(legacyConnect,[Default]), UsedName(seedOpt,[Default]), UsedName(stringAccessor,[Default]), UsedName(earlyName,[Default]), UsedName(forceAutoSeed,[Default]), UsedName(do_asUInt,[Default]), UsedName(_assignCompatibilityExplicitDirection,[Default]), UsedName(setAllParents,[Default]), UsedName(instanceName,[Default]), UsedName(pathName,[Default]), UsedName(reg_vals,[Default]), UsedName(toString,[Default]), UsedName(asTypeOf,[Default]), UsedName(getWidth,[Default]), UsedName(lref,[Default]), UsedName(isWidthKnown,[Default]), UsedName(toTarget,[Default]), UsedName(elements,[Default]), UsedName(synchronized,[Default]), UsedName(typeEquivalent,[Default]), UsedName(CoreDebugIO,[Default]), UsedName(parentNameOpt,[Default]), UsedName(topBindingOpt,[Default]), UsedName(equals,[Default]), UsedName(notify,[Default]), UsedName(_onModuleClose,[Default]), UsedName(hasSeed,[Default]), UsedName(reifyTarget,[Default]), UsedName(ignoreSeq,[Default]), UsedName(hashCode,[Default]), UsedName(addAutoPostnameHook,[Default]), UsedName(bind,[Default]), UsedName(litOption,[Default]), UsedName(cloneTypeFull,[Default]), UsedName(flatten,[Default]), UsedName(binding_=,[Default]), UsedName(compileOptions,[Implicit]), UsedName(_suggestNameCheck,[Default]), UsedName(getPublicFields,[Default]), UsedName(_cloneTypeImpl,[Default]), UsedName(_usingPlugin,[Default]), UsedName(allElements,[Default]), UsedName(bulkConnect,[Default]), UsedName(toPrintableHelper,[Default]), UsedName(specifiedDirection,[Default]), UsedName(forceName,[Default]))) invalidates 2 classes due to The core.config.CoreDebugIO has the following implicit definitions changed:
-[debug] 	UsedName(compileOptions,[Implicit]).
-[debug]   > by transitive inheritance: Set(core.config.CoreDebugIO)
-[debug]   > 
-[debug]   > by member reference: Set(core.CoreTop)
-[debug]         
-[debug] Invalidating (transitively) by inheritance from core.CoreTop...
-[debug] Initial set of included nodes: core.CoreTop
-[debug] Invalidated by transitive inheritance dependency: Set(core.CoreTop)
-[debug] Change NamesChange(core.CoreTop,ModifiedNames(changes = UsedName(finalize,[Default]), UsedName(debug_io,[Default]), UsedName($init$,[Default]), UsedName(##,[Default]), UsedName(main,[Default]), UsedName(ne,[Default]), UsedName(eq,[Default]), UsedName(==,[Default]), UsedName(!=,[Default]), UsedName(executionStart,[Default]), UsedName(asInstanceOf,[Default]), UsedName(notifyAll,[Default]), UsedName(clone,[Default]), UsedName(wait,[Default]), UsedName(getClass,[Default]), UsedName(isInstanceOf,[Default]), UsedName(CoreTop,[Default]), UsedName(args,[Default]), UsedName(toString,[Default]), UsedName(synchronized,[Default]), UsedName(delayedInit,[Default]), UsedName(equals,[Default]), UsedName(notify,[Default]), UsedName(hashCode,[Default]))) invalidates 1 classes due to The core.CoreTop has the following regular definitions changed:
-[debug] 	UsedName(finalize,[Default]), UsedName(debug_io,[Default]), UsedName($init$,[Default]), UsedName(##,[Default]), UsedName(main,[Default]), UsedName(ne,[Default]), UsedName(eq,[Default]), UsedName(==,[Default]), UsedName(!=,[Default]), UsedName(executionStart,[Default]), UsedName(asInstanceOf,[Default]), UsedName(notifyAll,[Default]), UsedName(clone,[Default]), UsedName(wait,[Default]), UsedName(getClass,[Default]), UsedName(isInstanceOf,[Default]), UsedName(CoreTop,[Default]), UsedName(args,[Default]), UsedName(toString,[Default]), UsedName(synchronized,[Default]), UsedName(delayedInit,[Default]), UsedName(equals,[Default]), UsedName(notify,[Default]), UsedName(hashCode,[Default]).
-[debug]   > by transitive inheritance: Set(core.CoreTop)
-[debug]   > 
-[debug]   > 
-[debug]         
-[debug] New invalidations:
-[debug] 	core.decode.InstructionDecoder
-[debug] 	device.BoardSwitchBundle
-[debug] 	device.BoardLedBundle
-[debug] 	device.MMIOButtonBundle
-[debug] 	device.MMIOSeg7Bundle
-[debug] 	device.MMIOLedBundle
-[debug] 	core.memory.OutRegisters
-[debug] 	device.MMIOSwitchBundle
-[debug] 	core.memory.MemoryDispatch
-[debug] 	device.BoardButtonBundle
-[debug] 	core.insFetch.PC
-[debug] Initial set of included nodes: core.decode.InstructionDecoder, device.BoardSwitchBundle, device.BoardLedBundle, device.MMIOButtonBundle, device.MMIOSeg7Bundle, device.MMIOLedBundle, core.memory.OutRegisters, device.MMIOSwitchBundle, core.memory.MemoryDispatch, device.BoardButtonBundle, core.insFetch.PC
-[debug] Including core.CoreTop by core.decode.InstructionDecoder
-[debug] Including device.BoardBundle by device.BoardSwitchBundle
-[debug] Including Top by device.BoardBundle
-[debug] Including device.MMIOOutBundle by device.MMIOButtonBundle
-[debug] Including core.memory.MemoryDispatch by device.MMIOOutBundle
-[debug] Including core.memory.OutRegisters by device.MMIOOutBundle
-[debug] Previously invalidated, but (transitively) depend on new invalidations:
-[debug] 	core.CoreTop
-[debug] Final step, transitive dependencies:
-[debug] 	Set(core.decode.InstructionDecoder, device.BoardSwitchBundle, device.BoardLedBundle, core.CoreTop, device.MMIOButtonBundle, device.MMIOSeg7Bundle, device.MMIOLedBundle, core.memory.OutRegisters, device.MMIOSwitchBundle, core.memory.MemoryDispatch, device.BoardButtonBundle, core.insFetch.PC)
-[debug] Scala compilation took 4.217912601 s
-[info] done compiling
-[debug] Initial set of included nodes: core.decode.InstructionDecoder, device.BoardSwitchBundle, device.BoardLedBundle, core.CoreTop, device.Switches, device.MMIOButtonBundle, device.MMIOSeg7Bundle, device.MMIOLedBundle, core.memory.OutRegisters, device.Seg7, device.Button, device.Led, device.MMIOSwitchBundle, core.memory.MemoryDispatch, device.BoardButtonBundle, core.insFetch.PC, device.BoardSeg7Bundle
-[debug] compilation cycle 2
-[info] compiling 9 Scala sources to D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\classes ...
-[debug] Getting org.scala-sbt:compiler-bridge_2.12:1.9.5:compile for Scala 2.12.12
-[debug] [zinc] Running cached compiler f5aad75 for Scala compiler version 2.12.12
+[debug] [zinc] Running cached compiler 32344bcd for Scala compiler version 2.12.12
 [debug] [zinc] The Scala compiler is invoked with:
 [debug] 	-Xplugin:C:\Users\86136\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\chisel3-plugin_2.12.12\3.5.4\chisel3-plugin_2.12.12-3.5.4.jar
 [debug] 	-bootclasspath
@@ -177,5 +37,5 @@
 [debug] Final step, transitive dependencies:
 [debug] 	Set()
 [debug] No classes were invalidated.
-[debug] Scala compilation took 0.985835399 s
+[debug] Scala compilation took 4.0361269 s
 [info] done compiling
