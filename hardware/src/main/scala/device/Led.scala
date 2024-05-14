@@ -17,5 +17,5 @@ class Led extends Module {
     val board = new BoardLedBundle
   }
   )
-  //TODO led logic
+  io.board.led := io.mmio.led
 }

@@ -4,7 +4,6 @@ import chisel3._
 
 
 case class GenConfig(
-
                       useIPMemory: Boolean,
                       addressWidth: Int = 32, //这两个都是不可调节的
                       dataWidth: Int = 32, //这两个都是不可调节的
@@ -24,7 +23,13 @@ case class GenConfig(
                       // for debug use
                       debugMode: Boolean,
                       logDetails: Boolean = false,
-                      var initInsFile: Option[String] = None
+                      var initInsFile: Option[String] = None,
+
+
+
+                      //clock
+                      useIPClock: Boolean = false,
+                      ipClockName: Option[String] = None,
                     ) {
 }
 
