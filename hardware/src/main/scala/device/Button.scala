@@ -14,6 +14,6 @@ class Button extends Module {
   val io = IO(new Bundle {
     val mmio = new MMIOButtonBundle
     val board = new BoardButtonBundle
-  }
-  )
+  })
+
 }

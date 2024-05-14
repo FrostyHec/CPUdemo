@@ -1,46 +1,17 @@
 [debug] Created transactional ClassFileManager with tempDir = D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\classes.bak
 [debug] About to delete class files:
-[debug] 	ControlUnit.class
-[debug] 	InstructionDecoder$$anon$1.class
-[debug] 	ControlUnit$$anon$1.class
-[debug] 	AUSelector$$anon$1.class
-[debug] 	AUSelector.class
-[debug] 	WriteDataSelector$$anon$1.class
-[debug] 	InstructionDecoder.class
-[debug] 	WriteDataSelector.class
-[debug] We backup class files:
-[debug] 	ControlUnit.class
-[debug] 	InstructionDecoder$$anon$1.class
-[debug] 	ControlUnit$$anon$1.class
-[debug] 	AUSelector$$anon$1.class
-[debug] 	AUSelector.class
-[debug] 	WriteDataSelector$$anon$1.class
-[debug] 	InstructionDecoder.class
-[debug] 	WriteDataSelector.class
-[debug] Registering generated classes:
-[debug] 	ControlUnit.class
-[debug] 	WriteDataSelector$.class
-[debug] 	ControlUnit$.class
-[debug] 	WriteDataSelector$delayedInit$body.class
-[debug] 	InstructionDecoder$$anon$1.class
-[debug] 	ControlUnit$$anon$1.class
-[debug] 	AUSelector$$anon$1.class
-[debug] 	AUSelector.class
-[debug] 	AUSelector$.class
-[debug] 	ControlUnit$delayedInit$body.class
-[debug] 	WriteDataSelector$$anon$1.class
-[debug] 	AUSelector$delayedInit$body.class
-[debug] 	InstructionDecoder.class
-[debug] 	InstructionDecoder$delayedInit$body.class
-[debug] 	InstructionDecoder$.class
-[debug] 	WriteDataSelector.class
-[debug] About to delete class files:
+[debug] 	CoreTop$delayedInit$body.class
 [debug] 	CoreTop$$anon$1.class
 [debug] 	CoreTop.class
+[debug] 	CoreTop$.class
 [debug] We backup class files:
+[debug] 	CoreTop$delayedInit$body.class
 [debug] 	CoreTop$$anon$1.class
 [debug] 	CoreTop.class
+[debug] 	CoreTop$.class
 [debug] Registering generated classes:
 [debug] 	CoreTop.class
+[debug] 	CoreTop$delayedInit$body.class
+[debug] 	CoreTop$.class
 [debug] 	CoreTop$$anon$1.class
 [debug] Removing the temporary directory used for backing up class files: D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\classes.bak
