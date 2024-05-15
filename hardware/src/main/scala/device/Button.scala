@@ -15,5 +15,6 @@ class Button extends Module {
     val mmio = new MMIOButtonBundle
     val board = new BoardButtonBundle
   })
-
+  //TODO 按钮，拨码需消抖
+  io.mmio.button := io.board.button
 }

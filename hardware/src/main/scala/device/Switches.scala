@@ -14,6 +14,6 @@ class Switches extends Module {
   val io = IO(new Bundle {
     val mmio = new MMIOSwitchBundle
     val board = new BoardSwitchBundle
-  }
-  )
+  })
+  io.mmio.switches := io.board.switches
 }

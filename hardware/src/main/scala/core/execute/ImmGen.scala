@@ -6,7 +6,7 @@ import core.config._
 
 class ImmGen extends Module{
   val io = IO(new Bundle{
-    val raw_imm: UInt = Input(UInt(32.W))
+    val raw_imm: UInt = Input(UInt(20.W))
     val unsigned: Bool = Input(Bool())
     val imm_width: UInt = Input(ImmWidthType.getWidth)
 
