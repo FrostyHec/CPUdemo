@@ -17,7 +17,6 @@ class NextPCGen extends Module{
     val pc4: UInt = Output(UInt(32.W))
     val pcImm: UInt = Output(UInt(32.W))
   })
-
   io.pc4 := io.pc + 4.U
   io.pcImm := 0.U
   io.nextPC := DontCare

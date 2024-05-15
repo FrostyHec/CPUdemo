@@ -5,6 +5,11 @@
 /.vscode/
 /bin/
 
+##ignore test/verify file
+/hardware/generated_dut/
+/hardware/test_run_dir/
+
+
 .classpath
 .project
 .settings
