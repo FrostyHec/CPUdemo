@@ -22,6 +22,7 @@ class ControlUnit extends Module {
     val rs2_out = Output(UInt(5.W))
     val rd_out = Output(UInt(5.W))
     val raw_imm_out = Output(UInt(20.W))
+    val csr_out = Output(UInt(12.W))
 
     // output signals
     val alu_type = Output(ALUType.getWidth)
@@ -43,8 +44,11 @@ class ControlUnit extends Module {
     val fault = new InsFault
   })
   //fault置为0
+  //我都懒得搞illegal instruction的判断了，开摆
   io.fault.ins_fault_type := InsFaultType.No.getUInt
+  io.fault.mtval:=0.U
 
+  io.csr_out := io.csr
   io.rs1_out := io.rs1
   io.rs2_out := io.rs2
   io.rd_out := io.rd
@@ -62,7 +66,9 @@ class ControlUnit extends Module {
   io.memory_read := DontCare
   io.memory_write := DontCare
   io.data_width := DontCare
-  io.csr_write := DontCare
+
+  //csr
+  io.csr_write := false.B
   io.operand1_type := Operand1Type.Reg1.getUInt
 
   switch(io.opcode) {
@@ -111,7 +117,6 @@ class ControlUnit extends Module {
         }
       }
     }
-
     is("b001_0011".U) { // I-type
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
@@ -299,6 +304,62 @@ class ControlUnit extends Module {
       io.unsigned := "b0".U
       io.au_type := DontCare
       io.alu_type := DontCare
+    }
+    is("b111_0011".U) { //csr
+      io.unsigned := true.B
+      io.nextPC_type := NextPCType.PC4.getUInt
+      io.au_type := AUType.ALU.getUInt
+      io.imm_width_type := ImmWidthType.Eleven.getUInt
+      io.regs_write := true.B
+      io.write_back_type := WriteBackType.CSR.getUInt
+      io.memory_write := false.B
+      io.csr_write := true.B
+      io.operand1_type := Operand1Type.CSR.getUInt
+      io.rs2_out := io.rs1
+
+      switch(io.func3) {
+        is("b001".U) { //csrrw
+          io.operand1_type := Operand1Type.Reg1.getUInt
+          io.rs1_out := 0.U
+          io.alu_type := ALUType.ADD.getUInt
+          io.operand2_type := Operand2Type.Reg2.getUInt
+        }
+        is("b010".U) { //csrrs
+          io.alu_type := ALUType.OR.getUInt
+          io.operand2_type := Operand2Type.Reg2.getUInt
+        }
+        is("b011".U) { //csrrc
+          io.alu_type := ALUType.Not2And.getUInt
+          io.operand2_type := Operand2Type.Reg2.getUInt
+        }
+        is("b101".U) { //csrrwi
+          io.operand1_type := Operand1Type.Reg1.getUInt
+          io.rs1_out := 0.U
+          io.alu_type := ALUType.ADD.getUInt
+          io.operand2_type := Operand2Type.Imm.getUInt
+        }
+        is("b110".U) { //csrrsi
+          io.alu_type := ALUType.OR.getUInt
+          io.operand2_type := Operand2Type.Imm.getUInt
+        }
+        is("b111".U) { //csrrci
+          io.alu_type := ALUType.Not2And.getUInt
+          io.operand2_type := Operand2Type.Imm.getUInt
+        }
+        is("b000".U){//ecall/ebreak
+          switch(io.raw_imm) {
+            is(0.U) { //ecall
+              io.fault.ins_fault_type:=InsFaultType.EcallM.getUInt
+            }
+            is(1.U) { //ebreak
+              io.fault.ins_fault_type:=InsFaultType.BreakPoint.getUInt
+            }
+            is("b0011000_00010".U){//mret
+              io.fault.ins_fault_type:=InsFaultType.Mret.getUInt
+            }
+          }
+        }
+      }
     }
   }
 }

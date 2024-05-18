@@ -78,7 +78,7 @@ class CoreTop extends Module {
   //execute wire
   //csr
   CSR.io.cpu_state := state.io.cpu_state
-  CSR.io.csr := CU.io.csr
+  CSR.io.csr := CU.io.csr_out
 
   //register
   regs.io.cpu_state := state.io.cpu_state

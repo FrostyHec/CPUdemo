@@ -29,5 +29,4 @@ class CSR extends Module {
     val fault_write_PC = Output(UInt(32.W))
   })
 
-
 }

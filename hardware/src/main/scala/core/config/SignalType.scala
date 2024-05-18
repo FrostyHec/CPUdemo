@@ -4,7 +4,7 @@ import chisel3.experimental.EnumType
 import utils.ExtendEnum
 
 object ALUType extends ExtendEnum {
-  val ADD, SUB, XOR, OR, AND, SLL, SRL, SRA = Value
+  val ADD, SUB, XOR, OR, AND, SLL, SRL, SRA,Not2And = Value
 }
 
 object CMPType extends ExtendEnum {

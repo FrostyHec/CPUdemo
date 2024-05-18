@@ -36,7 +36,7 @@ class InstructionDecoder extends Module {
       io.raw_imm := Cat(0.U(8.W), io.instruction(31, 20))
     }
     is("b111_0011".U) { // I-type system call
-      io.raw_imm := io.func7
+      io.raw_imm := Cat(0.U(8.W), io.instruction(31, 20))
     }
     is("b010_0011".U) { // S-type
       io.raw_imm := Cat(io.instruction(31, 25), io.instruction(11, 7))
