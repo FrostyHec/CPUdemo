@@ -58,6 +58,9 @@ class CoreTop extends Module {
   //fault write PC and global state machine
   state.io.fault_state := CSR.io.fault_state
   pc.io.fault_write_PC := CSR.io.fault_write_PC
+  //mtval generation
+  CU.io.instruction := memory.io.ins_out
+  memory.io.pc := pc.io.addr
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
@@ -67,7 +70,6 @@ class CoreTop extends Module {
 
   //ins decode wire
   insDecode.io.instruction := memory.io.ins_out
-  CU.io.instruction := memory.io.ins_out //used for generating mtval
   CU.io.csr := insDecode.io.csr
   CU.io.opcode := insDecode.io.opcode
   CU.io.func3 := insDecode.io.func3

@@ -11,4 +11,5 @@ class PLIC extends Module {
   //default
   io.interruption.io_fault_occur := false.B
   io.interruption.mtval := DontCare
+  //TODO EXTERNAL FAULT
 }

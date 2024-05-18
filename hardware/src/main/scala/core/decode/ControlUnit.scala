@@ -48,7 +48,7 @@ class ControlUnit extends Module {
     val fault = new InsFault
   })
   //fault置为0
-  //我都懒得搞illegal instruction的判断了，开摆
+  //TODO 我都懒得搞illegal instruction的判断了，开摆
   io.fault.ins_fault_type := InsFaultType.No.getUInt
   io.fault.mtval := 0.U
 
@@ -67,8 +67,8 @@ class ControlUnit extends Module {
   io.operand2_type := DontCare
   io.au_type := DontCare
   io.write_back_type := DontCare
-  io.memory_read := DontCare
-  io.memory_write := DontCare
+  io.memory_read := false.B //important! dont set as dont care
+  io.memory_write := false.B
   io.data_width := DontCare
 
   //csr

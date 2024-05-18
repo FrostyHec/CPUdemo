@@ -8,7 +8,6 @@ import utils.ExtendEnum
 
 
 class CSR extends Module {
-  //TODO CSR Registers
   // 经过学习发现不需要考虑保持时间，因为有buf可以保证组合够长
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
@@ -46,27 +45,22 @@ class CSR extends Module {
   val mtval = RegInit(0.U(32.W)) // at 0x343
   val mip = RegInit(0.U(32.W)) // at 0x344
 
-  //default value
-  io.csr_val := DontCare
-  io.fault_state := false.B
-  io.fault_write_PC := DontCare
-
-  val global_interrupt_en = mstatus(3) // mstatus.MIE
-  val io_interrupt_en = mie(11) // mie.MEIE
-  val MPIE = mstatus(7) // mstatus.MPIE
-  val MPP = mstatus(12, 11) // mstatus.MPP
-  mip(11) := global_interrupt_en & io_interrupt_en & io.io_interruption.io_fault_occur
+  val read_MIE = mstatus(3) // mstatus.MIE
+  val read_MEIE = mie(11) // mie.MEIE
+  val read_MPIE = mstatus(7) // mstatus.MPIE
+  val read_MPP = mstatus(12, 11) // mstatus.MPP
+  //  mip(11):= global_interrupt_en & io_interrupt_en & io.io_interruption.io_fault_occur
+  mip := mip.bitSet(11.U, read_MIE & read_MEIE & io.io_interruption.io_fault_occur)
 
   val no_fault = (io.mem_fault.mem_fault_type === MemFaultType.No.getUInt) &
     (io.ins_fault.ins_fault_type === InsFaultType.No.getUInt) &
-    !(global_interrupt_en & io_interrupt_en & io.io_interruption.io_fault_occur) // io fault
+    !(read_MIE & read_MEIE & io.io_interruption.io_fault_occur) // io fault
 
   def handleCSR(csr: UInt, reg: UInt): Unit = {
-    when(io.csr === csr) {
+    when(io.csr === csr) { //输出值不需要no_fault
       io.csr_val := reg
       when(io.cpu_state === CPUStateType.sWriteRegs.getUInt && io.write) {
         reg := io.write_data
-
         if (GenConfig.s.logDetails) {
           printf("write to csr[%x] with data %d\n", io.csr, io.write_data)
         }
@@ -80,27 +74,33 @@ class CSR extends Module {
     io.fault_write_PC := mtvec
     mcause := _mcause
     mtval := _mtval
-    global_interrupt_en:= false.B //MIE禁用中断写为0
-    MPIE := global_interrupt_en //MPIE <-MIE
-    MPP := cur_privilege
+    mstatus := mstatus.bitSet(3.U, false.B) //MIE禁用中断写为0
+    //    read_MPIE := read_MIE //MPIE <-MIE
+    mstatus := mstatus.bitSet(7.U, read_MIE)
+    //    read_MPP := cur_privilege
+    mstatus := Cat(mstatus(31, 13), cur_privilege, mstatus(10, 0))
     cur_privilege := PrivilegeType.Machine // 切换至M模式
   }
 
 
-  when(no_fault) {
-    // normal csr reading and writing
-    handleCSR(0x300.U, mstatus)
-    handleCSR(0x304.U, mie)
-    handleCSR(0x305.U, mtvec)
-    handleCSR(0x340.U, mscratch)
-    handleCSR(0x341.U, mepc)
-    handleCSR(0x342.U, mcause)
-    handleCSR(0x343.U, mtval)
-    handleCSR(0x344.U, mip)
-  }.otherwise {
-    // fault handling
-    //TODO  fault handling
-    val fault_type = FaultHandlerType.writeFault.getUInt // 除了mret都是writeFault
+  //default value
+  //TODO ILLEGAL INSTRUCTION
+  io.csr_val := DontCare
+  io.fault_state := false.B
+  io.fault_write_PC := DontCare
+  // normal csr reading and writing
+  //输出时不需要no fault检查，只要保证fault不会写入到reg即可，而这个是由外面这个大状态机保证的
+  handleCSR(0x300.U, mstatus)
+  handleCSR(0x304.U, mie)
+  handleCSR(0x305.U, mtvec)
+  handleCSR(0x340.U, mscratch)
+  handleCSR(0x341.U, mepc)
+  handleCSR(0x342.U, mcause)
+  handleCSR(0x343.U, mtval)
+  handleCSR(0x344.U, mip)
+  when(!no_fault) {
+    val fault_type = Wire(FaultHandlerType.getWidth)
+    fault_type := FaultHandlerType.writeFault.getUInt // 除了mret都是writeFault
     when(io.ins_fault.ins_fault_type === InsFaultType.Mret.getUInt) {
       fault_type := FaultHandlerType.leaveFault.getUInt
     }
@@ -138,8 +138,9 @@ class CSR extends Module {
     }.otherwise { // 暂时只有mret
       io.fault_state := true.B
       io.fault_write_PC := mepc
-      global_interrupt_en:=MPIE // MIE <- MPIE
-      cur_privilege:=MPP
+      //      read_MIE := read_MPIE // MIE <- MPIE
+      mstatus := mstatus.bitSet(3.U, read_MPIE)
+      cur_privilege := read_MPP
     }
   }
 
