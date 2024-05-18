@@ -3,6 +3,9 @@ package core.decode
 import chisel3._
 import core.config._
 import chisel3.util._
+import core.csr.InsFault
+
+
 class ControlUnit extends Module {
   val io = IO(new Bundle {
     val opcode = Input(UInt(7.W))
@@ -12,6 +15,7 @@ class ControlUnit extends Module {
     val rs2 = Input(UInt(5.W))
     val rd = Input(UInt(5.W))
     val raw_imm = Input(UInt(20.W))
+    val csr = Input(UInt(12.W))
 
     //output vals(direct in direct out)
     val rs1_out = Output(UInt(5.W))
@@ -32,7 +36,14 @@ class ControlUnit extends Module {
     val memory_read = Output(Bool())
     val memory_write = Output(Bool())
     val data_width = Output(DataWidth.getWidth)
+    val csr_write = Output(Bool())
+    val operand1_type = Output(Bool())
+
+    //fault
+    val fault = new InsFault
   })
+  //fault置为0
+  io.fault.ins_fault_type := InsFaultType.No.getUInt
 
   io.rs1_out := io.rs1
   io.rs2_out := io.rs2
@@ -51,6 +62,8 @@ class ControlUnit extends Module {
   io.memory_read := DontCare
   io.memory_write := DontCare
   io.data_width := DontCare
+  io.csr_write := DontCare
+  io.operand1_type := Operand1Type.Reg1.getUInt
 
   switch(io.opcode) {
     is("b011_0011".U) { // R-type
@@ -271,9 +284,9 @@ class ControlUnit extends Module {
       io.memory_write := "b0".U
       io.imm_width_type := ImmWidthType.ThirtyOne.getUInt
       io.write_back_type := WriteBackType.ImmGen.getUInt
-      io.unsigned :="b0".U
+      io.unsigned := "b0".U
       io.au_type := DontCare
-      io.alu_type :=DontCare
+      io.alu_type := DontCare
     }
 
     is("b001_0111".U) { // U-type auipc
@@ -290,11 +303,11 @@ class ControlUnit extends Module {
   }
 }
 
-object ControlUnit extends App {//name had better to be same as class name, put under the class file
+object ControlUnit extends App { //name had better to be same as class name, put under the class file
   // These lines generate the Verilog output
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
-      new ControlUnit(),//use your module class
+      new ControlUnit(), //use your module class
       Array(
         "--target-dir", "generated_dut/"
       )

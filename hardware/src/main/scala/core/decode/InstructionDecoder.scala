@@ -2,7 +2,6 @@ package core.decode
 
 import chisel3._
 import chisel3.util._
-import configs.GenConfig
 class InstructionDecoder extends Module {
   val io = IO(new Bundle {
     val instruction = Input(UInt(32.W))

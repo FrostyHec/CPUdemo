@@ -9,12 +9,17 @@ import core.config._
 class PC extends Module{
   val io=IO(new Bundle {
     val cpu_state=Input(CPUStateType.getWidth)
+
     val next_addr =Input(UInt(32.W))
+    val fault_write_PC = Input(UInt(32.W))
+
     val addr=Output(UInt(32.W))
   })
   val pc=RegInit(0.U(32.W))
   io.addr:=pc
-  when(io.cpu_state===CPUStateType.sWritePC.getUInt){
+  when(io.cpu_state===CPUStateType.faultWrite.getUInt){
+    pc:=io.fault_write_PC
+  }.elsewhen(io.cpu_state===CPUStateType.sWritePC.getUInt){
     pc:=io.next_addr
   }.otherwise{
     //do nothing

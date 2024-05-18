@@ -3,6 +3,7 @@ package core
 import chisel3._
 import configs.GenConfig
 import core.config._
+import core.csr._
 import core.memory._
 import core.insFetch._
 import core.writeBack._
@@ -16,6 +17,12 @@ class CoreTop extends Module {
     // TODO: Add IO
     val external = Flipped(new MMIOOutBundle())
   })
+  //CSR
+  val CSR = Module(new CSR)
+
+  //PLIC
+  val PLIC = Module(new PLIC)
+
   //Memory
   val memory = Module(new MemoryDispatch())
 
@@ -43,10 +50,19 @@ class CoreTop extends Module {
   val writeDataSelector = Module(new WriteDataSelector())
   val auSelector = Module(new AUSelector())
 
+  //fault detect wire
+  CSR.io.mem_fault <> memory.io.fault
+  CSR.io.ins_fault <> CU.io.fault
+  CSR.io.io_interruption <> PLIC.io.interruption
+  CSR.io.pc:=pc.io.addr
+  //fault write PC and global state machine
+  state.io.fault_state := CSR.io.fault_state
+  pc.io.fault_write_PC:=CSR.io.fault_write_PC
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
   pc.io.next_addr := nextPCGen.io.nextPC
+  pc.io.fault_write_PC := CSR.io.fault_write_PC
   memory.io.ins_addr := pc.io.addr
 
   //ins decode wire
@@ -60,6 +76,10 @@ class CoreTop extends Module {
   CU.io.raw_imm := insDecode.io.raw_imm
 
   //execute wire
+  //csr
+  CSR.io.cpu_state := state.io.cpu_state
+  CSR.io.csr := CU.io.csr
+
   //register
   regs.io.cpu_state := state.io.cpu_state
   regs.io.rs1 := CU.io.rs1_out
@@ -74,10 +94,12 @@ class CoreTop extends Module {
   immGen.io.imm_width := CU.io.imm_width_type
 
   //operandSelector
+  operandSelector.io.csr_val := CSR.io.csr_val
   operandSelector.io.rs1_val := regs.io.rs1_val
   operandSelector.io.rs2_val := regs.io.rs2_val
   operandSelector.io.real_imm := immGen.io.real_imm
   operandSelector.io.operand2Type := CU.io.operand2_type
+  operandSelector.io.operand1Type := CU.io.operand1_type
 
   //ALU
   ALU.io.operand1 := operandSelector.io.operand1
@@ -109,6 +131,10 @@ class CoreTop extends Module {
   memory.io.external <> io.external //board
 
   //write back wire
+  //csr
+  CSR.io.write := CU.io.csr_write
+  CSR.io.write_data := ALU.io.result
+
   //au selector
   auSelector.io.alu_result := ALU.io.result
   auSelector.io.cmp_result := CMP.io.result
@@ -121,6 +147,7 @@ class CoreTop extends Module {
   writeDataSelector.io.pc4 := nextPCGen.io.pc4
   writeDataSelector.io.pcImm := nextPCGen.io.pcImm
   writeDataSelector.io.write_back_type := CU.io.write_back_type
+  writeDataSelector.io.csr := CSR.io.csr_val
 
   //regs
   regs.io.write := CU.io.regs_write
@@ -152,7 +179,7 @@ class CoreTop extends Module {
     printf("nextPCGen with nextPC: %d\n", nextPCGen.io.nextPC)
     printf("memory with read_data: %d, write_data: %d, unsigned: %d, data_width: %d,\n data_addr: %d, data_write: %d,data_out: %d\n",
       memory.io.read_data, memory.io.write_data, memory.io.unsigned, memory.io.data_width, memory.io.data_addr, memory.io.data_write, memory.io.data_out)
-//    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
+    //    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
   }
 }
 

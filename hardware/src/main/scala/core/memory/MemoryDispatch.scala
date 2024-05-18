@@ -4,7 +4,9 @@ import chisel3.util._
 import chisel3._
 import configs.GenConfig
 import core.config._
+import core.csr.MemFault
 import device._
+
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
@@ -25,7 +27,12 @@ class MemoryDispatch extends Module {
 
     //连接board需要external连接outregs
     val external = Flipped(new MMIOOutBundle())
+
+    //fault
+    val fault = new MemFault()
   })
+  //fault
+  io.fault.mem_fault_type := MemFaultType.No.getUInt
 
   //32读取深度导致的
   val rw_mem_addr = io.data_addr >> 2
@@ -114,9 +121,9 @@ class MemoryDispatch extends Module {
       outRegisters.io.mem.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
       data_out := outRegisters.io.mem.read_data
-//      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
-//      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
-//      printf("DATA OUT%d\n",data_out)
+      //      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
+      //      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
+      //      printf("DATA OUT%d\n",data_out)
     }.otherwise {
       //do nothing
     }
