@@ -12,6 +12,7 @@ class InstructionDecoder extends Module {
     val func3=Output(UInt(3.W))
     val func7=Output(UInt(7.W))
     val raw_imm = Output(UInt(20.W))
+    val csr = Output(UInt(12.W))
   })
   io.opcode := io.instruction(6, 0)
   io.rd := io.instruction(11, 7)
@@ -19,6 +20,7 @@ class InstructionDecoder extends Module {
   io.rs1 := io.instruction(19, 15)
   io.rs2 := io.instruction(24, 20)
   io.func7 := io.instruction(31, 25)
+  io.csr := io.instruction(31, 20)
 
   io.raw_imm := 0.U
 

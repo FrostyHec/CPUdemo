@@ -54,10 +54,10 @@ class CoreTop extends Module {
   CSR.io.mem_fault <> memory.io.fault
   CSR.io.ins_fault <> CU.io.fault
   CSR.io.io_interruption <> PLIC.io.interruption
-  CSR.io.pc:=pc.io.addr
+  CSR.io.pc := pc.io.addr
   //fault write PC and global state machine
   state.io.fault_state := CSR.io.fault_state
-  pc.io.fault_write_PC:=CSR.io.fault_write_PC
+  pc.io.fault_write_PC := CSR.io.fault_write_PC
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
@@ -67,6 +67,8 @@ class CoreTop extends Module {
 
   //ins decode wire
   insDecode.io.instruction := memory.io.ins_out
+  CU.io.instruction := memory.io.ins_out //used for generating mtval
+  CU.io.csr := insDecode.io.csr
   CU.io.opcode := insDecode.io.opcode
   CU.io.func3 := insDecode.io.func3
   CU.io.func7 := insDecode.io.func7
@@ -74,7 +76,7 @@ class CoreTop extends Module {
   CU.io.rs2 := insDecode.io.rs2
   CU.io.rd := insDecode.io.rd
   CU.io.raw_imm := insDecode.io.raw_imm
-
+  CU.io.cur_privilege := CSR.io.cur_privilege
   //execute wire
   //csr
   CSR.io.cpu_state := state.io.cpu_state
@@ -157,16 +159,19 @@ class CoreTop extends Module {
   //--------------------debugging code----------------------------
   // expose reg value to outside
   val debug_io = if (GenConfig.s.debugMode) Some(IO(new CoreDebugIO)) else None
-  debug_io.foreach(coe_dbg =>
+  debug_io.foreach(coe_dbg => {
     regs.debug_io.foreach(reg_dbg =>
       coe_dbg.reg_vals <> reg_dbg
     )
-  )
+    CSR.debug_io.foreach(csr_dbg =>
+      coe_dbg.csr_vals <> csr_dbg
+    )
+  })
   if (GenConfig.s.logDetails) {
     //print all output signal for each module
     printf(s"-------------State %d---------------\n", state.io.cpu_state)
     printf("pc: %d\n", pc.io.addr)
-    printf("instructions: %d\n", memory.io.ins_out)
+    printf("instructions: %x\n", memory.io.ins_out)
     printf("reg operating rs_1:%d,rs_2:%d real_imm:%d\n", CU.io.rs1_out, CU.io.rs2_out, immGen.io.real_imm)
     //    printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
     //      "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +

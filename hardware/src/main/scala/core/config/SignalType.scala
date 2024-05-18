@@ -1,6 +1,6 @@
 package core.config
 
-import chisel3.experimental.EnumType
+import chisel3._
 import utils.ExtendEnum
 
 object ALUType extends ExtendEnum {
@@ -48,4 +48,9 @@ object InsFaultType extends ExtendEnum {
 }
 object Operand1Type extends ExtendEnum{
   val Reg1,CSR = Value
+}
+object PrivilegeType{
+  val width = 2.W
+  val Machine = "b11".U
+  val User = "b00".U
 }

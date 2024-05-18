@@ -33,6 +33,7 @@ class MemoryDispatch extends Module {
   })
   //fault
   io.fault.mem_fault_type := MemFaultType.No.getUInt
+  io.fault.mtval:=DontCare
 
   //32读取深度导致的
   val rw_mem_addr = io.data_addr >> 2

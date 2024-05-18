@@ -8,6 +8,7 @@ import core.csr.InsFault
 
 class ControlUnit extends Module {
   val io = IO(new Bundle {
+    val instruction = Input(UInt(32.W)) //used only for generating mtval
     val opcode = Input(UInt(7.W))
     val func3 = Input(UInt(3.W))
     val func7 = Input(UInt(7.W))
@@ -16,6 +17,9 @@ class ControlUnit extends Module {
     val rd = Input(UInt(5.W))
     val raw_imm = Input(UInt(20.W))
     val csr = Input(UInt(12.W))
+
+    //privilege
+    val cur_privilege = Input(UInt(2.W))
 
     //output vals(direct in direct out)
     val rs1_out = Output(UInt(5.W))
@@ -46,7 +50,7 @@ class ControlUnit extends Module {
   //fault置为0
   //我都懒得搞illegal instruction的判断了，开摆
   io.fault.ins_fault_type := InsFaultType.No.getUInt
-  io.fault.mtval:=0.U
+  io.fault.mtval := 0.U
 
   io.csr_out := io.csr
   io.rs1_out := io.rs1
@@ -319,43 +323,81 @@ class ControlUnit extends Module {
 
       switch(io.func3) {
         is("b001".U) { //csrrw
-          io.operand1_type := Operand1Type.Reg1.getUInt
-          io.rs1_out := 0.U
-          io.alu_type := ALUType.ADD.getUInt
-          io.operand2_type := Operand2Type.Reg2.getUInt
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.operand1_type := Operand1Type.Reg1.getUInt
+            io.rs1_out := 0.U
+            io.alu_type := ALUType.ADD.getUInt
+            io.operand2_type := Operand2Type.Reg2.getUInt
+          }
         }
         is("b010".U) { //csrrs
-          io.alu_type := ALUType.OR.getUInt
-          io.operand2_type := Operand2Type.Reg2.getUInt
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.alu_type := ALUType.OR.getUInt
+            io.operand2_type := Operand2Type.Reg2.getUInt
+          }
         }
         is("b011".U) { //csrrc
-          io.alu_type := ALUType.Not2And.getUInt
-          io.operand2_type := Operand2Type.Reg2.getUInt
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.alu_type := ALUType.Not2And.getUInt
+            io.operand2_type := Operand2Type.Reg2.getUInt
+          }
         }
         is("b101".U) { //csrrwi
-          io.operand1_type := Operand1Type.Reg1.getUInt
-          io.rs1_out := 0.U
-          io.alu_type := ALUType.ADD.getUInt
-          io.operand2_type := Operand2Type.Imm.getUInt
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.operand1_type := Operand1Type.Reg1.getUInt
+            io.rs1_out := 0.U
+            io.raw_imm_out:= Cat(0.U(27.W),io.rs1) //在那个指令字段rs1其实存的是imm......
+            io.alu_type := ALUType.ADD.getUInt
+            io.operand2_type := Operand2Type.Imm.getUInt
+          }
         }
-        is("b110".U) { //csrrsi
-          io.alu_type := ALUType.OR.getUInt
-          io.operand2_type := Operand2Type.Imm.getUInt
+        is("b110".U) { //csrrsi\
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
+            io.alu_type := ALUType.OR.getUInt
+            io.operand2_type := Operand2Type.Imm.getUInt
+          }
         }
         is("b111".U) { //csrrci
-          io.alu_type := ALUType.Not2And.getUInt
-          io.operand2_type := Operand2Type.Imm.getUInt
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
+            io.alu_type := ALUType.Not2And.getUInt
+            io.operand2_type := Operand2Type.Imm.getUInt
+          }
         }
-        is("b000".U){//ecall/ebreak
+        is("b000".U) { //ecall/ebreak
           switch(io.raw_imm) {
             is(0.U) { //ecall
-              io.fault.ins_fault_type:=InsFaultType.EcallM.getUInt
+              io.fault.ins_fault_type := InsFaultType.EcallM.getUInt
             }
             is(1.U) { //ebreak
-              io.fault.ins_fault_type:=InsFaultType.BreakPoint.getUInt
+              io.fault.ins_fault_type := InsFaultType.BreakPoint.getUInt
             }
-            is("b0011000_00010".U){//mret
-              io.fault.ins_fault_type:=InsFaultType.Mret.getUInt
+            is("b0011000_00010".U) { //mret
+              when(io.cur_privilege === "b00".U) { // User无权限
+                io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+                io.fault.mtval := io.instruction
+              }.otherwise {
+                io.fault.ins_fault_type := InsFaultType.Mret.getUInt
+              }
             }
           }
         }

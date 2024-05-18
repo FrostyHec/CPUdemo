@@ -23,6 +23,7 @@ class OperandSelector extends Module {
       io.operand1:=io.rs1_val
     }
     is(Operand1Type.CSR.getUInt){
+
       io.operand1:=io.csr_val
     }
   }
