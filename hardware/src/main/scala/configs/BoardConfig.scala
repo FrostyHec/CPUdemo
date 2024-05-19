@@ -4,6 +4,7 @@ case class BoardConfig(
                         ledWidth: Int,
                         btnWidth: Int,
                         switchWidth: Int,
+                        uart_baud_count: Int = 5  // must baud_count >=2
                       ) {
 }
 

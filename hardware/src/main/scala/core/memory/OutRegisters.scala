@@ -14,6 +14,7 @@ class OutRegisters extends Module {
     )
     val external = Flipped(new MMIOOutBundle()) // from board
   })
+  //说实在我都在想是不是可以不用插这个reg
   //registers that write by board and read by cpu
   val btn = RegInit(0.U(GenConfig.s._MMIO.btnWidth.W))
   btn := io.external.btn.button

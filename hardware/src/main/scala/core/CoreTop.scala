@@ -13,7 +13,6 @@ import device.MMIOOutBundle
 
 class CoreTop extends Module {
   val io = IO(new Bundle {
-    // TODO: Add IO
     val external = Flipped(new MMIOOutBundle())
   })
   //Memory
