@@ -69,6 +69,10 @@ class CSR extends Module {
   }
 
   def handleWrite(_mcause: UInt, _mtval: UInt): Unit = {
+    if(GenConfig.s.logDetails){
+      printf("Writing for err handle\n")
+    }
+
     io.fault_state := true.B
     mepc := io.pc
     io.fault_write_PC := mtvec

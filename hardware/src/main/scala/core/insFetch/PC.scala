@@ -18,6 +18,10 @@ class PC extends Module{
   val pc=RegInit(0.U(32.W))
   io.addr:=pc
   when(io.cpu_state===CPUStateType.faultWrite.getUInt){
+    if(GenConfig.s.logDetails){
+      printf("Write from Fault PC:%d\n",io.fault_write_PC)
+    }
+
     pc:=io.fault_write_PC
   }.elsewhen(io.cpu_state===CPUStateType.sWritePC.getUInt){
     pc:=io.next_addr
