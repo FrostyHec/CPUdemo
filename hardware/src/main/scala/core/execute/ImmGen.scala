@@ -23,18 +23,16 @@ class ImmGen extends Module{
     }
     is(ImmWidthType.Twelve.getUInt){
       when(io.unsigned){
-        io.real_imm := Cat(Fill(19, 0.U), io.raw_imm(11), io.raw_imm(0), io.raw_imm(10, 1), 0.U)
+        io.real_imm := Cat(Fill(19, 0.U), io.raw_imm(11, 0), 0.U)
       }.otherwise{
-        io.real_imm := Cat(Fill(20, io.raw_imm(11)), io.raw_imm(11, 0), 0.U)
-        //        io.real_imm := Cat(Fill(20, io.raw_imm(11)), io.raw_imm(0), io.raw_imm(10, 1), 0.U)
+        io.real_imm := Cat(Fill(19, io.raw_imm(11)), io.raw_imm(11, 0), 0.U)
       }
-//      printf("real imm: %d\n", Cat(Fill(20, io.raw_imm(11)), io.raw_imm(11, 0), 0.U))
     }
     is(ImmWidthType.Twenty.getUInt){
       when(io.unsigned){
-        io.real_imm := Cat(Fill(11, 0.U), io.raw_imm(19), io.raw_imm(7, 0), io.raw_imm(8) , io.raw_imm(18, 9), 0.U)
+        io.real_imm := Cat(Fill(11, 0.U), io.raw_imm(19, 0), 0.U)
       }.otherwise{
-        io.real_imm := Cat(Fill(12, io.raw_imm(19)), io.raw_imm(7, 0), io.raw_imm(8) , io.raw_imm(18, 9), 0.U)
+        io.real_imm := Cat(Fill(11, io.raw_imm(19)), io.raw_imm(19, 0), 0.U)
       }
     }
     is(ImmWidthType.ThirtyOne.getUInt){

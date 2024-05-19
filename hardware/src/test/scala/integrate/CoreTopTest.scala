@@ -67,4 +67,16 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
   // bgeu,blt
   // jalr,jal,lui,auipc
 
+  it should "be able to self write" in {
+    //
+    //            addi x1,x0,1
+    //            addi x1,x1,1
+    //            ->x1==2
+    load_instructions("selfwrite.txt")
+    test(new CoreTop){cpu=>
+      run_instructions(cpu,2)
+      checkRegsInCPU(cpu,1,2.U)
+    }
+  }
+
 }
