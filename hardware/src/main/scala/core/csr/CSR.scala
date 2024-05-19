@@ -157,6 +157,12 @@ class CSR extends Module {
     dbg.mtval := mtval
     dbg.mip := mip
   })
+  if (GenConfig.s.logDetails) {
+    when(!no_fault) {
+      printf("Fault occurs! mem_fault:%d, ins_fault:%d, io_fault:%d, jump to:%d\n",
+        io.mem_fault.mem_fault_type, io.ins_fault.ins_fault_type, io.io_interruption.io_fault_occur, io.fault_write_PC)
+    }
+  }
 }
 
 object FaultHandlerType extends ExtendEnum {

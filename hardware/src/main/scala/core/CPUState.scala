@@ -12,13 +12,16 @@ class CPUState extends Module {
   })
   val state = RegInit(CPUStateType.sWriteRegs.getUInt)
   io.cpu_state := state
-  when(io.fault_state) {
+  when(io.fault_state && state =/= CPUStateType.faultWrite.getUInt) {
+    //TODO check correctness ,这个是保证faultWriteState只有一个时钟周期
     state := CPUStateType.faultWrite.getUInt
   }.otherwise {
-    when(state === CPUStateType.sWritePC.getUInt) {
+    when(state === CPUStateType.faultWrite.getUInt) {
       state := CPUStateType.sWriteRegs.getUInt
-    }.otherwise {
+    }.elsewhen(state === CPUStateType.sWriteRegs.getUInt) {
       state := CPUStateType.sWritePC.getUInt
+    }.otherwise {
+      state := CPUStateType.sWriteRegs.getUInt
     }
   }
 }

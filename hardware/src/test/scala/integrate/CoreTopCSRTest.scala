@@ -44,4 +44,39 @@ class CoreTopCSRTest extends FlatSpec with ChiselScalatestTester with Matchers {
       getCSRInCPU(cpu).mtval.expect(1.U)
     }
   }
+
+  it should "correctly interrupt on trap instructions" in {
+    //    addi x1,x0,16
+    //    csrrw x0,mtvec,t0
+    //    beqz x0, test
+    //
+    //interrupt:
+    //    addi x3,x0,20
+    //    csrrs x4,mepc,x0
+    //    addi x4,x4,4
+    //    csrrw x0,mepc,x4
+    //    mret
+    //    beqz x0, interrupt // should be useless
+    //
+    //test:
+    //    ecall
+    //    addi x2,x0,10
+    // 3->20.U, 2->10.U
+    load_instructions("fault/faultIns1.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 10)
+      checkRegsInCPU(cpu, 3, 20.U)
+      checkRegsInCPU(cpu, 2, 10.U)
+    }
+  }
+  it should "avoid illegal mem access" in {
+    load_instructions("fault/memFault.txt")
+    test(new CoreTop){cpu=>
+      run_instructions(cpu,12)
+      checkRegsInCPU(cpu,4,100.U)
+      checkRegsInCPU(cpu,3,20.U)
+      checkRegsInCPU(cpu,6,1000.U)
+    }
+
+  }
 }

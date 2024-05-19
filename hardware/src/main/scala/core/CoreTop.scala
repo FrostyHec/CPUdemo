@@ -27,7 +27,11 @@ class CoreTop extends Module {
   val memory = Module(new MemoryDispatch())
 
   //clock FSM
+//  val state = withClock((!clock.asBool).asClock) {//TODO 要不要下降沿有待商榷
+//    Module(new CPUState())
+//  }
   val state = Module(new CPUState())
+
 
   //ins fetch
   val pc = Module(new PC())
