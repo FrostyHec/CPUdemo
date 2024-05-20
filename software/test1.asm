@@ -58,7 +58,7 @@ case1:
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case1
-lb t3, 2(a2) # �����п��ܻ������� -> ��Ӧ�ľ�����ֽڵĵ�ַ
+lb t3, 2(a2)ַ
 sw t3, (a3) # 7-seg
 sw t3, 16(a0)
 beq zero, zero, situation
@@ -67,7 +67,7 @@ case2:
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case2
-lbu t4, 1(a2) # �����п��ܻ������� -> ��Ӧ�ľ�����ֽڵĵ�ַ
+lbu t4, 1(a2)
 sw t4, (a3) # 7-seg
 sw t4, 20(a0)
 beq zero, zero, situation
