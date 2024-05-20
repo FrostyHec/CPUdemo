@@ -42,31 +42,19 @@ class MemoryDispatch extends Module {
   val data_out = Wire(UInt(32.W))
 
   //判断是否是写周期
-  val is_write_clk = io.cpu_state === CPUStateType.sWriteRegs.getUInt
+  val is_write_clk = io.cpu_state === CPUStateType.sWriteRegs.getUInt || io.cpu_state === CPUStateType.sLoadMode.getUInt
 
-
-  //依据位宽生成data_in
-  data_in := DontCare
-  switch(io.data_width) {
-    is(DataWidth.Byte.getUInt) {
-      data_in := (io.data_write(7, 0) << 8.U * io.data_addr(1, 0))
-    }
-    is(DataWidth.HalfWord.getUInt) {
-      data_in := (io.data_write(15, 0) << 16.U * io.data_addr(1))
-    }
-    is(DataWidth.Word.getUInt) {
-      data_in := io.data_write
-    }
-  }
+  //Ins read
+  insRAM.io2.read_addr := read_ins_addr
+  io.ins_out := insRAM.io2.read_data
 
   //默认值连线
-  //第一套io:insRAM读
   insRAM.io.assign(
     write = false.B,
-    read_addr = read_ins_addr,
+    read_addr = rw_mem_addr,
     write_addr = rw_mem_addr,
     write_data = data_in,
-    read_data = io.ins_out
+    read_data = DontCare
   )
   dataRAM.io.assign(
     write = false.B,
@@ -89,10 +77,11 @@ class MemoryDispatch extends Module {
   data_out := DontCare
   when(GenConfig.s.insBegin <= io.data_addr
     && io.data_addr <= GenConfig.s.insEnd) { //insMem
+    data_out := insRAM.io.read_data
     when(io.write_data) {
       insRAM.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-      printf("Cant read insRAM\n")
+
     }.otherwise {
       //do nothing
     }
@@ -100,21 +89,21 @@ class MemoryDispatch extends Module {
     && io.data_addr <= GenConfig.s.dataEnd) { //dataMem
     //需要处理伪哈佛架构的地址偏移
     val havard_mem = (io.data_addr - GenConfig.s.dataBegin) >> 2
+    dataRAM.io.read_addr := havard_mem
+    dataRAM.io.write_addr := havard_mem
+    data_out := dataRAM.io.read_data
     when(io.write_data) {
-      dataRAM.io.write_addr := havard_mem
       dataRAM.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-      dataRAM.io.read_addr := havard_mem
-      data_out := dataRAM.io.read_data
     }.otherwise {
       //do nothing
     }
   }.elsewhen(GenConfig.s._MMIO.begin <= io.data_addr
     && io.data_addr <= GenConfig.s._MMIO.end) { //outRegs
+    data_out := outRegisters.io.mem.read_data
     when(io.write_data) {
       outRegisters.io.mem.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-      data_out := outRegisters.io.mem.read_data
       //      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
       //      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
       //      printf("DATA OUT%d\n",data_out)
@@ -123,6 +112,38 @@ class MemoryDispatch extends Module {
     }
   }.otherwise {
     printf("Unexpected address!") //TODO throw err
+  }
+  //依据位宽生成data_in
+  data_in := DontCare
+  switch(io.data_width) {
+    is(DataWidth.Byte.getUInt) {
+      val value = io.data_write(7, 0)
+      switch(io.data_addr(1, 0)) {
+        is("b00".U) {
+          data_in := Cat(data_out(31, 8), value)
+        }
+        is("b01".U) {
+          data_in := Cat(data_out(31, 16), value, data_out(7, 0))
+        }
+        is("b10".U) {
+          data_in := Cat(data_out(31, 24), value, data_out(15, 0))
+        }
+        is("b11".U) {
+          data_in := Cat(value, data_out(23, 0))
+        }
+      }
+    }
+    is(DataWidth.HalfWord.getUInt) {
+      val value = io.data_write(15, 0)
+      when(io.data_addr(1) === "b0".U) {
+        data_in := Cat(data_out(31, 16), value)
+      }.otherwise {
+        data_in := Cat(value, data_out(15, 0))
+      }
+    }
+    is(DataWidth.Word.getUInt) {
+      data_in := io.data_write
+    }
   }
   //最后，依据data_width对读到的结果做处理
   //不支持非对齐内存

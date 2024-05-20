@@ -9,6 +9,9 @@ import device.{BoardBundle, DeviceTop}
 
 class Top extends Module {
   val io = IO(new BoardBundle)
+
+
+
   val clockSeparator = Module(new ClockSeparator)
   val cpu = withClock(clockSeparator.io.cpuClock) {
     Module(new CoreTop)
