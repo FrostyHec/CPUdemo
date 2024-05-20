@@ -1,73 +1,4 @@
-[debug] Running TaskDef(example.DFFTester, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.CMPTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.memory.MemoryDispatchTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.OperandSelectorTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.ImmGenTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.decode.InstructionDecoderTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.writeBack.WriteDataSelectorTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.utils.RAMTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.ALUTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.decode.ControlUnitTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.insFetch.PCTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.NextPCGenTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.writeBack.AUSelectorTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(core.execute.RegistersTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[debug] Running TaskDef(integrate.CoreTopTest, org.scalatest.tools.Framework$$anon$1@75222626, false, [SuiteSelector])
-[info] WriteDataSelectorTest:
-[info] WriteDataSelector
-[info] - should correctly do sth
-[info] DFFTester:
-[info] DFF
-[info] - should correctly store input value
-[info] PCTest:
-[info] PCTest
-[info] - should be zero at initial
-[info] - should correctly store at sWritePC state
-[info] - should avoid change value at other state
-[info] OperandSelectorTest:
-[info] OperandSelector
-[info] - should correctly select the Operand
-[info] - should perform robustly under corner cases
-[info] AUSelectorTest:
-[info] AUSelector
-[info] - should correctly do sth
-[info] InstructionDecoderTest:
-[info] InstructionDecoder
-[info] - should correctly decode R-type instructions
-[info] - should correctly decode I-type instructions
-[info] - should correctly decode U-type instructions with zero extension
-[info] ControlUnitTest:
-[info] ALU
-[info] - should correctly do sth
-[info] RAMTest:
-[info] RAM
-[info] - should correctly store value
-[info] - should correctly load file
-[info] CoreTopTest:
-[info] CPU Core
-[info] - should addi x1,x0,1 -> x1=1
-[info] - should addi x1,x0,-1 x1=>-1
-[info] - should beq1
-[info] - should not beq
-[info] RegistersTest:
-[info] Registers
-[info] - should correctly store&read value
-[info] - should avoid modification on reg0
-[info] - should avoid write in non-write stage
-[info] - should avoid write when write is not enable
-[info] - should correctly output rs1_val and rs2_val
-[info] NextPCGenTest:
-[info] NextPCGen
-[info] - should correctly perform pc + 4
-[info] - should correctly perform branch
-[info] - should correctly perform branch from ALU
-[info] ImmGenTest:
-[info] NextPCGen
-[info] - should correctly generate imm when MSB is 11
-[info] - should correctly generate imm when MSB is 12 *** FAILED ***
-[info]   io_real_imm=4294964564 (0xfffff554) did not equal expected=4294963882 (0xfffff2aa) (lines in ImmGenTest.scala: 49) (ImmGenTest.scala:54)
-[info] - should correctly generate imm when MSB is 20
-[info] - should correctly generate imm when MSB is 31
+[debug] Running TaskDef(core.memory.MemoryDispatchTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
 [info] MemoryDispatchTest:
 [info] MemoryDispatch
 [info] - should correctly store instructions
@@ -75,36 +6,103 @@
 [info] - should correctly handle data with in data memory
 [info] - should correctly mapping the mmio result
 [info] - should correctly avoid writing into non-writable reg(for cpu side)
-[info] ALUTest:
-[info] ALU
-[info] - should correctly do sth
-[info] - should pass corner cases
+[debug] Running TaskDef(core.execute.ImmGenTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] ImmGenTest:
+[info] NextPCGen
+[info] - should correctly generate imm when MSB is 11
+[info] - should correctly generate imm when MSB is 12
+[info] - should correctly generate imm when MSB is 20
+[info] - should correctly generate imm when MSB is 31
+[debug] Running TaskDef(core.execute.OperandSelectorTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] OperandSelectorTest:
+[info] OperandSelector
+[info] - should correctly select the Operand
+[info] - should perform robustly under corner cases
+[debug] Running TaskDef(core.execute.CMPTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
 [info] CMPTest:
 [info] CMP
 [info] - should compare correctly in less than(LT) mode
 [info] - should compare correctly in greater or equal(GE) mode
 [info] - should compare correctly in equal(EQ) mode
 [info] - should compare correctly in not equal(NE) mode
-[info] Run completed in 24 seconds, 311 milliseconds.
-[info] Total number of tests run: 41
+[debug] Running TaskDef(core.decode.InstructionDecoderTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] InstructionDecoderTest:
+[info] InstructionDecoder
+[info] - should correctly decode R-type instructions
+[info] - should correctly decode I-type instructions
+[info] - should correctly decode U-type instructions with zero extension
+[debug] Running TaskDef(core.execute.ALUTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] ALUTest:
+[info] ALU
+[info] - should correctly do sth
+[info] - should pass corner cases
+[debug] Running TaskDef(core.writeBack.AUSelectorTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] AUSelectorTest:
+[info] AUSelector
+[info] - should correctly do sth
+[debug] Running TaskDef(core.writeBack.WriteDataSelectorTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] WriteDataSelectorTest:
+[info] WriteDataSelector
+[info] - should correctly do sth
+[debug] Running TaskDef(core.execute.RegistersTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] RegistersTest:
+[info] Registers
+[info] - should correctly store&read value
+[info] - should avoid modification on reg0
+[info] - should avoid write in non-write stage
+[info] - should avoid write when write is not enable
+[info] - should correctly output rs1_val and rs2_val
+[debug] Running TaskDef(integrate.CoreTopTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] CoreTopTest:
+[info] CPU Core
+[info] - should addi x1,x0,1 -> x1=1
+[info] - should addi x1,x0,-1 x1=>-1
+[info] - should beq1
+[info] - should not beq
+[info] - should be able to self write
+[debug] Running TaskDef(core.insFetch.PCTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] PCTest:
+[info] PCTest
+[info] - should be zero at initial
+[info] - should correctly store at sWritePC state
+[info] - should avoid change value at other state
+[debug] Running TaskDef(core.utils.RAMTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] RAMTest:
+[info] RAM
+[info] - should correctly store value
+[info] - should correctly load file
+[debug] Running TaskDef(core.execute.NextPCGenTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] NextPCGenTest:
+[info] NextPCGen
+[info] - should correctly perform pc + 4
+[info] - should correctly perform branch
+[info] - should correctly perform branch from ALU
+[debug] Running TaskDef(integrate.TotalTopTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] TotalTopTest:
+[info] Total Generate.Top Test
+[info] - should read data from switch
+[debug] Running TaskDef(core.decode.ControlUnitTest, org.scalatest.tools.Framework$$anon$1@3a7dcdf2, false, [SuiteSelector])
+[info] ControlUnitTest:
+[info] ALU
+[info] - should correctly do sth
+[info] Run completed in 26 seconds, 616 milliseconds.
+[info] Total number of tests run: 42
 [info] Suites: completed 15, aborted 0
-[info] Tests: succeeded 40, failed 1, canceled 0, ignored 0, pending 0
-[info] *** 1 TEST FAILED ***
+[info] Tests: succeeded 42, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
 [debug] Passed tests:
 [debug] 	core.memory.MemoryDispatchTest
+[debug] 	core.execute.ImmGenTest
 [debug] 	core.execute.OperandSelectorTest
 [debug] 	core.execute.CMPTest
 [debug] 	core.decode.InstructionDecoderTest
 [debug] 	core.execute.ALUTest
 [debug] 	core.writeBack.AUSelectorTest
-[debug] 	example.DFFTester
 [debug] 	core.writeBack.WriteDataSelectorTest
 [debug] 	core.execute.RegistersTest
 [debug] 	integrate.CoreTopTest
 [debug] 	core.insFetch.PCTest
 [debug] 	core.utils.RAMTest
 [debug] 	core.execute.NextPCGenTest
+[debug] 	integrate.TotalTopTest
 [debug] 	core.decode.ControlUnitTest
-[error] Failed tests:
-[error] 	core.execute.ImmGenTest
-[error] (Test / test) sbt.TestsFailedException: Tests unsuccessful

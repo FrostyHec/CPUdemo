@@ -20,6 +20,7 @@ class Top extends Module {
 
   //cpu-device
   cpu.io.external<>device.io.mmio
+  cpu.io.external_signal<>device.io.external_signal
 
 
   //--------------------debugging code----------------------------

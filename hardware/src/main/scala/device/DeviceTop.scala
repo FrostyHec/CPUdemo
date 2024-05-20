@@ -2,6 +2,10 @@ package device
 
 import chisel3._
 
+class ExternalSignalBundle extends Bundle{
+  val load_data_mode = Output(Bool())
+}
+
 class MMIOOutBundle extends Bundle {
   //cpu output devices
   val led = new MMIOLedBundle
@@ -26,7 +30,11 @@ class DeviceTop extends Module {
   val io = IO(new Bundle {
     val mmio = new MMIOOutBundle
     val board = new BoardBundle
+    val external_signal = new ExternalSignalBundle
   })
+  //TODO EXTERNAL SIGNAL
+  io.external_signal.load_data_mode:=false.B
+
   val led = Module(new Led)
   val seg7 = Module(new Seg7)
   val btn = Module(new Button)
