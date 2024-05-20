@@ -8,12 +8,13 @@ import core.insFetch._
 import core.writeBack._
 import core.execute._
 import core.decode._
-import device.MMIOOutBundle
+import device.{ExternalSignalBundle, MMIOOutBundle}
 
 
 class CoreTop extends Module {
   val io = IO(new Bundle {
     val external = Flipped(new MMIOOutBundle())
+    val external_signal = Flipped(new ExternalSignalBundle)
   })
   //Memory
   val memory = Module(new MemoryDispatch())
@@ -42,6 +43,8 @@ class CoreTop extends Module {
   val writeDataSelector = Module(new WriteDataSelector())
   val auSelector = Module(new AUSelector())
 
+  //Load data mode
+  state.io.load_mode := io.external_signal.load_data_mode
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
@@ -151,7 +154,7 @@ class CoreTop extends Module {
     printf("nextPCGen with nextPC: %d\n", nextPCGen.io.nextPC)
     printf("memory with read_data: %d, write_data: %d, unsigned: %d, data_width: %d,\n data_addr: %d, data_write: %d,data_out: %d\n",
       memory.io.read_data, memory.io.write_data, memory.io.unsigned, memory.io.data_width, memory.io.data_addr, memory.io.data_write, memory.io.data_out)
-//    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
+    //    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
   }
 }
 

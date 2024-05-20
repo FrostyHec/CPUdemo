@@ -28,5 +28,5 @@ object DataWidth extends ExtendEnum {
   val Byte, HalfWord, Word = Value
 }
 object CPUStateType extends ExtendEnum {
-  val sWritePC, sWriteRegs = Value
+  val sWritePC, sWriteRegs, sLoadMode = Value
 }

@@ -5,6 +5,7 @@ import chisel3._
 import configs.GenConfig
 import core.config._
 import device._
+
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
@@ -48,10 +49,10 @@ class MemoryDispatch extends Module {
   data_in := DontCare
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
-      data_in := io.data_write(7, 0)
+      data_in := (io.data_write(7, 0) << 8 * io.data_addr(1, 0))
     }
     is(DataWidth.HalfWord.getUInt) {
-      data_in := io.data_write(15, 0)
+      data_in := (io.data_write(15, 0) << 16 * io.data_addr(1))
     }
     is(DataWidth.Word.getUInt) {
       data_in := io.data_write
@@ -114,9 +115,9 @@ class MemoryDispatch extends Module {
       outRegisters.io.mem.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
       data_out := outRegisters.io.mem.read_data
-//      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
-//      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
-//      printf("DATA OUT%d\n",data_out)
+      //      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
+      //      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
+      //      printf("DATA OUT%d\n",data_out)
     }.otherwise {
       //do nothing
     }
