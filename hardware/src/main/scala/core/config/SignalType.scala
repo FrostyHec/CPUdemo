@@ -22,11 +22,11 @@ object AUType extends ExtendEnum{
   val ALU,CMP= Value
 }
 object WriteBackType extends ExtendEnum{
-  val AU,Mem,PC4,ImmGen=Value
+  val AU,Mem,PC4,ImmGen,PCImm=Value
 }
 object DataWidth extends ExtendEnum {
   val Byte, HalfWord, Word = Value
 }
 object CPUStateType extends ExtendEnum {
-  val sWritePC, sWriteRegs = Value
+  val sWritePC, sWriteRegs, sLoadMode = Value
 }

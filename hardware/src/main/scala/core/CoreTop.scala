@@ -8,13 +8,13 @@ import core.insFetch._
 import core.writeBack._
 import core.execute._
 import core.decode._
-import device.MMIOOutBundle
+import device.{ExternalSignalBundle, MMIOOutBundle}
 
 
 class CoreTop extends Module {
   val io = IO(new Bundle {
-    // TODO: Add IO
     val external = Flipped(new MMIOOutBundle())
+    val external_signal = Flipped(new ExternalSignalBundle)
   })
   //Memory
   val memory = Module(new MemoryDispatch())
@@ -43,6 +43,8 @@ class CoreTop extends Module {
   val writeDataSelector = Module(new WriteDataSelector())
   val auSelector = Module(new AUSelector())
 
+  //Load data mode
+  state.io.load_mode := io.external_signal.load_data_mode
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
@@ -141,18 +143,21 @@ class CoreTop extends Module {
     printf("pc: %d\n", pc.io.addr)
     printf("instructions: %d\n", memory.io.ins_out)
     printf("reg operating rs_1:%d,rs_2:%d real_imm:%d\n", CU.io.rs1_out, CU.io.rs2_out, immGen.io.real_imm)
-    //    printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
-    //      "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +
-    //      " au_type: %d, write_back_type: %d, memory_read: %d, memory_write: %d, data_width: %d\n",
-    //      CU.io.rs1_out, CU.io.rs2_out, CU.io.rd_out, CU.io.raw_imm_out,
-    //      CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
-    //      CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
+//        printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
+//          "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +
+//          " au_type: %d, write_back_type: %d, memory_read: %d, memory_write: %d, data_width: %d\n",
+//          CU.io.rs1_out, CU.io.rs2_out, CU.io.rd_out, CU.io.raw_imm_out,
+//          CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
+//          CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
+//        printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
+//        printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
+//        printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
     printf("ALU with result: %d,", ALU.io.result)
     printf("CMP with result: %d\n", CMP.io.result)
     printf("nextPCGen with nextPC: %d\n", nextPCGen.io.nextPC)
     printf("memory with read_data: %d, write_data: %d, unsigned: %d, data_width: %d,\n data_addr: %d, data_write: %d,data_out: %d\n",
       memory.io.read_data, memory.io.write_data, memory.io.unsigned, memory.io.data_width, memory.io.data_addr, memory.io.data_write, memory.io.data_out)
-//    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
+    //    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
   }
 }
 
