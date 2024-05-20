@@ -442,7 +442,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
     }
   }
 
-  it should "correctly avoid writing into non-writable reg(for cpu side)" in{
+  it should "correctly avoid writing into non-writable reg(for cpu side)" in {
     //avoid write btn
     test(new MemoryDispatch) { memoryDispatch =>
       println("_______________test begin_____________")
@@ -473,6 +473,41 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
       data_outputs(
         memoryDispatch,
         data_out = 0.U
+      )
+      println("_______________test finish_____________")
+    }
+  }
+  it should "correctly sb/sh with different aligned" in {
+    //sb to addr: xxxx01
+    test(new MemoryDispatch) { memoryDispatch =>
+      println("_______________test begin_____________")
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = ignoreUInt,
+        unsigned = false,
+        read_data = false,
+        write_data = true,
+        data_width = DataWidth.Byte,
+        data_addr = (GenConfig.s.dataBegin.litValue+1).U,
+        data_write = 10,
+        withStep = true
+      )
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = ignoreUInt,
+        unsigned = true,
+        read_data = true,
+        write_data = false,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s.dataBegin,
+        data_write = ignoreVal,
+        withStep = false
+      )
+      data_outputs(
+        memoryDispatch,
+        data_out = 2560.U
       )
       println("_______________test finish_____________")
     }

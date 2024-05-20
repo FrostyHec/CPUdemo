@@ -49,10 +49,10 @@ class MemoryDispatch extends Module {
   data_in := DontCare
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
-      data_in := (io.data_write(7, 0) << 8 * io.data_addr(1, 0))
+      data_in := (io.data_write(7, 0) << 8.U * io.data_addr(1, 0))
     }
     is(DataWidth.HalfWord.getUInt) {
-      data_in := (io.data_write(15, 0) << 16 * io.data_addr(1))
+      data_in := (io.data_write(15, 0) << 16.U * io.data_addr(1))
     }
     is(DataWidth.Word.getUInt) {
       data_in := io.data_write
@@ -92,7 +92,7 @@ class MemoryDispatch extends Module {
     when(io.write_data) {
       insRAM.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-      printf("Cant read insRAM")
+      printf("Cant read insRAM\n")
     }.otherwise {
       //do nothing
     }
