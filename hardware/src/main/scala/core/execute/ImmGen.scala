@@ -16,9 +16,9 @@ class ImmGen extends Module{
   switch(io.imm_width){
     is(ImmWidthType.Eleven.getUInt){
       when(io.unsigned){
-        io.real_imm := Cat(Fill(21, 0.U), io.raw_imm(11, 0))
+        io.real_imm := Cat(Fill(20, 0.U), io.raw_imm(11, 0))
       }.otherwise{
-        io.real_imm := Cat(Fill(21, io.raw_imm(11)), io.raw_imm(11, 0))
+        io.real_imm := Cat(Fill(20, io.raw_imm(11)), io.raw_imm(11, 0))
       }
     }
     is(ImmWidthType.Twelve.getUInt){
