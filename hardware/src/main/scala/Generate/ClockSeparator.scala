@@ -7,7 +7,9 @@ class ClockSeparator extends Module {
   val io = IO(new Bundle {
     val cpuClock = Output(Clock())
     val uartClock = Output(Clock())
-  })//TODO时钟分频
+  })
+  //TODO 时钟分频
+  io.uartClock:=DontCare
   if (GenConfig.s.useIPClock) {
     printf("Doesn't support use ip")
   } else {

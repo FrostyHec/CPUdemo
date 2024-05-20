@@ -43,7 +43,7 @@ class DeviceTop extends Module {
   val seg7 = Module(new Seg7)
   val btn = Module(new Button)
   val switches = Module(new Switches)
-  val uart = Module(new UART)
+  val uart = Module(new UART)//TODO 例化的时候可能要传入特殊时钟
   //mmio
   led.io.mmio <> io.mmio.led
   seg7.io.mmio <> io.mmio.seg7
@@ -58,5 +58,6 @@ class DeviceTop extends Module {
   switches.io.board <> io.board.switch
   uart.io.board<>io.board.uart
 
-  //external signal TODO
+  //external signal TODO set it
+  io.external_signal.load_data_mode:=io.board.switch.switches(23)
 }
