@@ -18,7 +18,8 @@ class CoreTop extends Module {
   })
   //Memory
   val memory = Module(new MemoryDispatch())
-
+  val uartLoader = Module(new UARTLoader())
+  val memInSelector = Module(new MemWriteSelector())
   //clock FSM
   val state = Module(new CPUState())
 
@@ -37,7 +38,21 @@ class CoreTop extends Module {
   val CMP = Module(new CMP())
   val nextPCGen = Module(new NextPCGen())
 
+  //UART Module
+  uartLoader.io.cpu_state := state.io.cpu_state
+  uartLoader.io.rxValid := io.external.uart.rxValid
+  uartLoader.io.rxData := io.external.uart.rxData
+
   //data access
+  //TODO WIRES ON DATA ACCESS,from 2 select 1
+  memInSelector.io.cpu_state := state.io.cpu_state
+  memInSelector.io.uart_in <> uartLoader.io.mem
+
+  memInSelector.io.cpu_read_data := CU.io.memory_read
+  memInSelector.io.cpu_write_data := CU.io.memory_write
+  memInSelector.io.cpu_data_width := CU.io.data_width
+  memInSelector.io.cpu_data_addr := ALU.io.result
+  memInSelector.io.cpu_data_write := regs.io.rs2_val
 
   //write back
   val writeDataSelector = Module(new WriteDataSelector())
@@ -102,11 +117,11 @@ class CoreTop extends Module {
 
   //data access wire
   memory.io.cpu_state := state.io.cpu_state
-  memory.io.data_addr := ALU.io.result
-  memory.io.data_write := regs.io.rs2_val
-  memory.io.data_width := CU.io.data_width
-  memory.io.write_data := CU.io.memory_write
-  memory.io.read_data := CU.io.memory_read
+  memory.io.data_addr := memInSelector.io.data_addr //ALU.io.result
+  memory.io.data_write := memInSelector.io.data_write //regs.io.rs2_val
+  memory.io.data_width := memInSelector.io.data_width //CU.io.data_width
+  memory.io.write_data := memInSelector.io.write_data //CU.io.memory_write
+  memory.io.read_data := memInSelector.io.read_data //CU.io.memory_read
   memory.io.unsigned := CU.io.unsigned
   memory.io.external <> io.external //board
 
@@ -141,23 +156,24 @@ class CoreTop extends Module {
     //print all output signal for each module
     printf(s"-------------State %d---------------\n", state.io.cpu_state)
     printf("pc: %d\n", pc.io.addr)
-    printf("instructions: %d\n", memory.io.ins_out)
+    printf("instructions: %x\n", memory.io.ins_out)
     printf("reg operating rs_1:%d,rs_2:%d real_imm:%d\n", CU.io.rs1_out, CU.io.rs2_out, immGen.io.real_imm)
-//        printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
-//          "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +
-//          " au_type: %d, write_back_type: %d, memory_read: %d, memory_write: %d, data_width: %d\n",
-//          CU.io.rs1_out, CU.io.rs2_out, CU.io.rd_out, CU.io.raw_imm_out,
-//          CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
-//          CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
-//        printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
-//        printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
-//        printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
+    //        printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
+    //          "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +
+    //          " au_type: %d, write_back_type: %d, memory_read: %d, memory_write: %d, data_width: %d\n",
+    //          CU.io.rs1_out, CU.io.rs2_out, CU.io.rd_out, CU.io.raw_imm_out,
+    //          CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
+    //          CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
+    //        printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
+    //        printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
+    //        printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
     printf("ALU with result: %d,", ALU.io.result)
     printf("CMP with result: %d\n", CMP.io.result)
     printf("nextPCGen with nextPC: %d\n", nextPCGen.io.nextPC)
-    printf("memory with read_data: %d, write_data: %d, unsigned: %d, data_width: %d,\n data_addr: %d, data_write: %d,data_out: %d\n",
+    printf("memory with read_data: %d, write_data: %d, unsigned: %d, data_width: %d,\n data_addr: %d, data_write: %x,data_out: %x\n",
       memory.io.read_data, memory.io.write_data, memory.io.unsigned, memory.io.data_width, memory.io.data_addr, memory.io.data_write, memory.io.data_out)
     //    printf("writeDataSelector with write_data: %d, write-enable: %d,rd:%d\n", writeDataSelector.io.write_data, CU.io.regs_write, CU.io.rd_out)
+    printf("uart out data: %x valid: %d\n",io.external.uart.rxData,io.external.uart.rxValid)
   }
 }
 

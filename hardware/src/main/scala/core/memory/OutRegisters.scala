@@ -14,6 +14,10 @@ class OutRegisters extends Module {
     )
     val external = Flipped(new MMIOOutBundle()) // from board
   })
+  //TODO urat来个MMIO
+  io.external.uart.txData := DontCare
+  io.external.uart.txStart := false.B
+
   //说实在我都在想是不是可以不用插这个reg
   //registers that write by board and read by cpu
   val btn = RegInit(0.U(GenConfig.s._MMIO.btnWidth.W))
@@ -24,7 +28,7 @@ class OutRegisters extends Module {
 
   //registers that write by cpu and read by board
   val led = RegInit(0.U(GenConfig.s._MMIO.ledWidth.W))
-  io.external.led.led:= led
+  io.external.led.led := led
 
   val seg7 = RegInit(0.U(GenConfig.s._MMIO.seg7Width.W))
   io.external.seg7.seg7 := seg7
@@ -61,6 +65,7 @@ class OutRegisters extends Module {
     //do nothing
   }
 }
+
 object OutRegisters extends App {
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(

@@ -505,9 +505,40 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
         data_write = ignoreVal,
         withStep = false
       )
+      // 00_00_0a_00
       data_outputs(
         memoryDispatch,
         data_out = 2560.U
+      )
+      //----------------
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = ignoreUInt,
+        unsigned = false,
+        read_data = false,
+        write_data = true,
+        data_width = DataWidth.Byte,
+        data_addr = GenConfig.s.dataBegin,
+        data_write = 10,
+        withStep = true
+      )
+      input(
+        memoryDispatch,
+        cpu_state = CPUStateType.sWriteRegs,
+        ins_addr = ignoreUInt,
+        unsigned = true,
+        read_data = true,
+        write_data = false,
+        data_width = DataWidth.Word,
+        data_addr = GenConfig.s.dataBegin,
+        data_write = ignoreVal,
+        withStep = false
+      )
+      // 00_00_0a_0a
+      data_outputs(
+        memoryDispatch,
+        data_out = 2570.U
       )
       println("_______________test finish_____________")
     }

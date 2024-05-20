@@ -246,7 +246,7 @@ class ControlUnit extends Module {
       io.memory_write := "b0".U
       io.operand2_type := Operand2Type.Imm.getUInt
       io.write_back_type := WriteBackType.PC4.getUInt
-      io.imm_width_type := ImmWidthType.Twenty.getUInt
+      io.imm_width_type := ImmWidthType.Twelve.getUInt
       io.unsigned := "b0".U
       io.alu_type := DontCare
     }
@@ -258,7 +258,7 @@ class ControlUnit extends Module {
       io.memory_write := "b0".U
       io.operand2_type := Operand2Type.Imm.getUInt
       io.write_back_type := WriteBackType.PC4.getUInt
-      io.imm_width_type := ImmWidthType.Twelve.getUInt
+      io.imm_width_type := ImmWidthType.Eleven.getUInt
       io.unsigned := "b0".U
       io.au_type := AUType.ALU.getUInt
       io.alu_type := ALUType.ADD.getUInt
@@ -282,7 +282,7 @@ class ControlUnit extends Module {
       io.memory_read := "b0".U
       io.memory_write := "b0".U
       io.imm_width_type := ImmWidthType.ThirtyOne.getUInt
-      io.write_back_type := WriteBackType.PC4.getUInt
+      io.write_back_type := WriteBackType.PCImm.getUInt
       io.unsigned := "b0".U
       io.au_type := DontCare
       io.alu_type := DontCare
