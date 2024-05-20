@@ -19,4 +19,8 @@ class TotalTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
   //TODO testing any wanted io operations
+
+  it should "load data correctly from UART" in{
+    //TODO UART需要一个较慢的时钟
+  }
 }

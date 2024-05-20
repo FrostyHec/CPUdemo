@@ -15,7 +15,6 @@ class Seg7 extends Module {
   val io = IO(new Bundle {
     val mmio = new MMIOSeg7Bundle
     val board = new BoardSeg7Bundle
-  }
-  )
+  })
   //TODO seg7 logic
 }

@@ -3,9 +3,10 @@ package core.utils
 import chisel3._
 import chiseltest._
 import configs.GenConfig
+import device.UART
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import utils._
+
 
 class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   behavior of "UART"
@@ -13,13 +14,13 @@ class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   var baud_count = GenConfig.s.board.uart_baud_count //10000000/115200
 
   def init(dut: UART): Unit = {
-    dut.io.rx.poke(true.B)
-    dut.io.txStart.poke(false.B)
+    dut.io.board.rx.poke(true.B)
+    dut.io.mmio.txStart.poke(false.B)
   }
 
   def sendSingleRx(dut: UART, bit: Bool): Unit = {
     for (_ <- 0 until baud_count) {
-      dut.io.rx.poke(bit)
+      dut.io.board.rx.poke(bit)
       dut.clock.step()
     }
   }
@@ -34,16 +35,16 @@ class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   }
 
   def sendData(dut: UART, data: UInt): Unit = {
-    dut.io.txData.poke(data)
-    dut.io.txStart.poke(true.B)
+    dut.io.mmio.txData.poke(data)
+    dut.io.mmio.txStart.poke(true.B)
     dut.clock.step(2)
-    dut.io.txStart.poke(false.B)
+    dut.io.mmio.txStart.poke(false.B)
   }
 
   def checkSingleTx(dut: UART, bit: Bool): Unit = {
     for (_ <- 0 until baud_count) {
-      dut.io.tx.expect(bit)
-      dut.io.txReady.expect(false.B)
+      dut.io.board.tx.expect(bit)
+      dut.io.mmio.txReady.expect(false.B)
       dut.clock.step()
     }
   }
@@ -66,8 +67,8 @@ class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
           val data = dt.U(8.W)
           sendRx(dut, data)
           dut.clock.step(10)
-          dut.io.rxValid.expect(true.B)
-          dut.io.rxData.expect(data)
+          dut.io.mmio.rxValid.expect(true.B)
+          dut.io.mmio.rxData.expect(data)
         }
       }
     }
@@ -85,7 +86,7 @@ class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
           sendData(dut, data)
           checkTx(dut, data)
 //          dut.clock.step(2)
-          dut.io.txReady.expect(true.B)
+          dut.io.mmio.txReady.expect(true.B)
         }
       }
     }

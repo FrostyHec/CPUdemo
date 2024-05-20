@@ -684,31 +684,6 @@ class UARTtx extends Module {
     printf("TX cur ready: %b \n", io.ready)
   }
 }
-
-// 整体UART模块
-class UART extends Module {
-  val io = IO(new Bundle {
-    val rx = Input(Bool()) // 串行输入信号
-    val tx = Output(Bool()) // 串行输出信号
-    val rxData = Output(UInt(8.W)) // 接收数据
-    val rxValid = Output(Bool()) // 接收数据有效信号
-    val txData = Input(UInt(8.W)) // 发送数据
-    val txStart = Input(Bool()) // 发送开始信号
-    val txReady = Output(Bool()) // 发送器准备好信号
-  })
-
-  val uartRx = Module(new UARTrx)
-  val uartTx = Module(new UARTtx)
-
-  uartRx.io.rx := io.rx
-  io.rxData := uartRx.io.data
-  io.rxValid := uartRx.io.valid
-
-  uartTx.io.data := io.txData
-  uartTx.io.start := io.txStart
-  io.tx := uartTx.io.tx
-  io.txReady := uartTx.io.ready
-}
 //package utils
 //import chisel3._
 //import chisel3.util._
