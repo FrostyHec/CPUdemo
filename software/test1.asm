@@ -8,29 +8,29 @@ slli a4, a4, 20     # mask of the cases
 
 # determine the cases
 situation:
-addi a4, zero, 0
+addi a5, zero, 0
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, situation
 lw t1, (a2)
 and t1, t1, a4
 srli t1, t1, 21
-beq a4, t1, case0
+beq a5, t1, case0
 
-addi a4, a4, 1
-beq a4, t1, case1
-addi a4, a4, 1
-beq a4, t1, case2
-addi a4, a4, 1
-beq a4, t1, case3
-addi a4, a4, 1
-beq a4, t1, case4
-addi a4, a4, 1
-beq a4, t1, case5
-addi a4, a4, 1
-beq a4, t1, case6
-addi a4, a4, 1
-beq a4, t1, case7
+addi a5, a5, 1
+beq a5, t1, case1
+addi a5, a5, 1
+beq a5, t1, case2
+addi a5, a5, 1
+beq a5, t1, case3
+addi a5, a5, 1
+beq a5, t1, case4
+addi a5, a5, 1
+beq a5, t1, case5
+addi a5, a5, 1
+beq a5, t1, case6
+addi a5, a5, 1
+beq a5, t1, case7
 beq zero, zero, situation 
 
 case0:
