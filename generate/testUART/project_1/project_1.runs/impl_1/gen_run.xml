@@ -1,95 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1716306388">
-  <File Type="PWROPT-DCP" Name="UARTWrapper2_pwropt.dcp"/>
-  <File Type="ROUTE-PWR" Name="UARTWrapper2_power_routed.rpt"/>
-  <File Type="PA-TCL" Name="UARTWrapper2.tcl"/>
-  <File Type="ROUTE-PWR-SUM" Name="UARTWrapper2_power_summary_routed.pb"/>
-  <File Type="REPORTS-TCL" Name="UARTWrapper2_reports.tcl"/>
-  <File Type="BG-DRC" Name="UARTWrapper2.drc"/>
-  <File Type="OPT-METHODOLOGY-DRC" Name="UARTWrapper2_methodology_drc_opted.rpt"/>
-  <File Type="INIT-TIMING" Name="UARTWrapper2_timing_summary_init.rpt"/>
-  <File Type="OPT-HWDEF" Name="UARTWrapper2.hwdef"/>
-  <File Type="OPT-DCP" Name="UARTWrapper2_opt.dcp"/>
-  <File Type="OPT-DRC" Name="UARTWrapper2_drc_opted.rpt"/>
-  <File Type="OPT-TIMING" Name="UARTWrapper2_timing_summary_opted.rpt"/>
-  <File Type="PWROPT-DRC" Name="UARTWrapper2_drc_pwropted.rpt"/>
-  <File Type="PWROPT-TIMING" Name="UARTWrapper2_timing_summary_pwropted.rpt"/>
-  <File Type="PLACE-DCP" Name="UARTWrapper2_placed.dcp"/>
-  <File Type="PLACE-IO" Name="UARTWrapper2_io_placed.rpt"/>
-  <File Type="PLACE-CLK" Name="UARTWrapper2_clock_utilization_placed.rpt"/>
-  <File Type="PLACE-UTIL" Name="UARTWrapper2_utilization_placed.rpt"/>
-  <File Type="PLACE-UTIL-PB" Name="UARTWrapper2_utilization_placed.pb"/>
-  <File Type="PLACE-CTRL" Name="UARTWrapper2_control_sets_placed.rpt"/>
-  <File Type="PLACE-SIMILARITY" Name="UARTWrapper2_incremental_reuse_placed.rpt"/>
-  <File Type="PLACE-PRE-SIMILARITY" Name="UARTWrapper2_incremental_reuse_pre_placed.rpt"/>
-  <File Type="PLACE-TIMING" Name="UARTWrapper2_timing_summary_placed.rpt"/>
-  <File Type="POSTPLACE-PWROPT-DCP" Name="UARTWrapper2_postplace_pwropt.dcp"/>
-  <File Type="POSTPLACE-PWROPT-TIMING" Name="UARTWrapper2_timing_summary_postplace_pwropted.rpt"/>
-  <File Type="PHYSOPT-DCP" Name="UARTWrapper2_physopt.dcp"/>
-  <File Type="PHYSOPT-DRC" Name="UARTWrapper2_drc_physopted.rpt"/>
-  <File Type="BG-BIT" Name="UARTWrapper2.bit"/>
-  <File Type="PHYSOPT-TIMING" Name="UARTWrapper2_timing_summary_physopted.rpt"/>
-  <File Type="ROUTE-ERROR-DCP" Name="UARTWrapper2_routed_error.dcp"/>
-  <File Type="ROUTE-DCP" Name="UARTWrapper2_routed.dcp"/>
-  <File Type="ROUTE-BLACKBOX-DCP" Name="UARTWrapper2_routed_bb.dcp"/>
-  <File Type="ROUTE-DRC" Name="UARTWrapper2_drc_routed.rpt"/>
-  <File Type="ROUTE-DRC-PB" Name="UARTWrapper2_drc_routed.pb"/>
-  <File Type="BITSTR-MSK" Name="UARTWrapper2.msk"/>
-  <File Type="ROUTE-DRC-RPX" Name="UARTWrapper2_drc_routed.rpx"/>
-  <File Type="BG-BGN" Name="UARTWrapper2.bgn"/>
-  <File Type="ROUTE-METHODOLOGY-DRC" Name="UARTWrapper2_methodology_drc_routed.rpt"/>
-  <File Type="BITSTR-RBT" Name="UARTWrapper2.rbt"/>
-  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="UARTWrapper2_methodology_drc_routed.rpx"/>
-  <File Type="BG-BIN" Name="UARTWrapper2.bin"/>
-  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="UARTWrapper2_methodology_drc_routed.pb"/>
-  <File Type="ROUTE-PWR-RPX" Name="UARTWrapper2_power_routed.rpx"/>
-  <File Type="ROUTE-STATUS" Name="UARTWrapper2_route_status.rpt"/>
-  <File Type="ROUTE-STATUS-PB" Name="UARTWrapper2_route_status.pb"/>
-  <File Type="ROUTE-TIMINGSUMMARY" Name="UARTWrapper2_timing_summary_routed.rpt"/>
-  <File Type="ROUTE-TIMING-PB" Name="UARTWrapper2_timing_summary_routed.pb"/>
-  <File Type="ROUTE-TIMING-RPX" Name="UARTWrapper2_timing_summary_routed.rpx"/>
-  <File Type="ROUTE-SIMILARITY" Name="UARTWrapper2_incremental_reuse_routed.rpt"/>
-  <File Type="RDI-RDI" Name="UARTWrapper2.vdi"/>
-  <File Type="ROUTE-CLK" Name="UARTWrapper2_clock_utilization_routed.rpt"/>
-  <File Type="POSTROUTE-PHYSOPT-DCP" Name="UARTWrapper2_postroute_physopt.dcp"/>
-  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="UARTWrapper2_postroute_physopt_bb.dcp"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="UARTWrapper2_timing_summary_postroute_physopted.rpt"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="UARTWrapper2_timing_summary_postroute_physopted.pb"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="UARTWrapper2_timing_summary_postroute_physopted.rpx"/>
-  <File Type="BITSTR-NKY" Name="UARTWrapper2.nky"/>
-  <File Type="BITSTR-BMM" Name="UARTWrapper2_bd.bmm"/>
-  <File Type="BITSTR-MMI" Name="UARTWrapper2.mmi"/>
+<GenRun Id="impl_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1716313349">
+  <File Type="PWROPT-DCP" Name="UARTVerify_pwropt.dcp"/>
+  <File Type="ROUTE-PWR" Name="UARTVerify_power_routed.rpt"/>
+  <File Type="PA-TCL" Name="UARTVerify.tcl"/>
+  <File Type="ROUTE-PWR-SUM" Name="UARTVerify_power_summary_routed.pb"/>
+  <File Type="REPORTS-TCL" Name="UARTVerify_reports.tcl"/>
+  <File Type="BG-DRC" Name="UARTVerify.drc"/>
+  <File Type="OPT-METHODOLOGY-DRC" Name="UARTVerify_methodology_drc_opted.rpt"/>
+  <File Type="INIT-TIMING" Name="UARTVerify_timing_summary_init.rpt"/>
+  <File Type="OPT-HWDEF" Name="UARTVerify.hwdef"/>
+  <File Type="OPT-DCP" Name="UARTVerify_opt.dcp"/>
+  <File Type="OPT-DRC" Name="UARTVerify_drc_opted.rpt"/>
+  <File Type="OPT-TIMING" Name="UARTVerify_timing_summary_opted.rpt"/>
+  <File Type="PWROPT-DRC" Name="UARTVerify_drc_pwropted.rpt"/>
+  <File Type="PWROPT-TIMING" Name="UARTVerify_timing_summary_pwropted.rpt"/>
+  <File Type="PLACE-DCP" Name="UARTVerify_placed.dcp"/>
+  <File Type="PLACE-IO" Name="UARTVerify_io_placed.rpt"/>
+  <File Type="PLACE-CLK" Name="UARTVerify_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="UARTVerify_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="UARTVerify_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="UARTVerify_control_sets_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="UARTVerify_incremental_reuse_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="UARTVerify_incremental_reuse_pre_placed.rpt"/>
+  <File Type="PLACE-TIMING" Name="UARTVerify_timing_summary_placed.rpt"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="UARTVerify_postplace_pwropt.dcp"/>
+  <File Type="POSTPLACE-PWROPT-TIMING" Name="UARTVerify_timing_summary_postplace_pwropted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="UARTVerify_physopt.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="UARTVerify_drc_physopted.rpt"/>
+  <File Type="BG-BIT" Name="UARTVerify.bit"/>
+  <File Type="PHYSOPT-TIMING" Name="UARTVerify_timing_summary_physopted.rpt"/>
+  <File Type="ROUTE-ERROR-DCP" Name="UARTVerify_routed_error.dcp"/>
+  <File Type="ROUTE-DCP" Name="UARTVerify_routed.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="UARTVerify_routed_bb.dcp"/>
+  <File Type="ROUTE-DRC" Name="UARTVerify_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="UARTVerify_drc_routed.pb"/>
+  <File Type="BITSTR-MSK" Name="UARTVerify.msk"/>
+  <File Type="ROUTE-DRC-RPX" Name="UARTVerify_drc_routed.rpx"/>
+  <File Type="BG-BGN" Name="UARTVerify.bgn"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="UARTVerify_methodology_drc_routed.rpt"/>
+  <File Type="BITSTR-RBT" Name="UARTVerify.rbt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="UARTVerify_methodology_drc_routed.rpx"/>
+  <File Type="BG-BIN" Name="UARTVerify.bin"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="UARTVerify_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="UARTVerify_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="UARTVerify_route_status.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="UARTVerify_route_status.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="UARTVerify_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="UARTVerify_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="UARTVerify_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="UARTVerify_incremental_reuse_routed.rpt"/>
+  <File Type="RDI-RDI" Name="UARTVerify.vdi"/>
+  <File Type="ROUTE-CLK" Name="UARTVerify_clock_utilization_routed.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="UARTVerify_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="UARTVerify_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="UARTVerify_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="UARTVerify_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="UARTVerify_timing_summary_postroute_physopted.rpx"/>
+  <File Type="BITSTR-NKY" Name="UARTVerify.nky"/>
+  <File Type="BITSTR-BMM" Name="UARTVerify_bd.bmm"/>
+  <File Type="BITSTR-MMI" Name="UARTVerify.mmi"/>
   <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
-  <File Type="BITSTR-LTX" Name="UARTWrapper2.ltx"/>
-  <File Type="BITSTR-SYSDEF" Name="UARTWrapper2.sysdef"/>
+  <File Type="BITSTR-LTX" Name="UARTVerify.ltx"/>
+  <File Type="BITSTR-SYSDEF" Name="UARTVerify.sysdef"/>
   <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
     <Filter Type="Srcs"/>
-    <File Path="$PSRCDIR/sources_1/new/UARTVerify.v">
+    <File Path="$PSRCDIR/sources_1/new/brand_new/UART.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/new/UARTWrapper2.v">
+    <File Path="$PSRCDIR/sources_1/new/brand_new/UARTVerify.v">
       <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/new/UARTWrapper.v">
-      <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/new/testing.v">
-      <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -97,7 +81,7 @@
     </File>
     <Config>
       <Option Name="DesignMode" Val="RTL"/>
-      <Option Name="TopModule" Val="UARTWrapper2"/>
+      <Option Name="TopModule" Val="UARTVerify"/>
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">

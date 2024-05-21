@@ -37,5 +37,12 @@ class Top extends Module {
 }
 
 object Top extends App {
-
+  println(
+    new(chisel3.stage.ChiselStage).emitVerilog(
+      new Top,
+      Array(
+        "--target-dir", "generated_dut/"
+      )
+    )
+  )
 }

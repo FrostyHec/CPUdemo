@@ -31,18 +31,18 @@ case class GenConfig(
                       useIPClock: Boolean = false,
                       ipClockName: Option[String] = None,
 
-                      useIPUART: Boolean = false
+                      useIPUART: Boolean = true
                     ) {
 }
 
 object GenConfig {
-  def s = onBoard//forTest
+  def s = forTest
 
   private val onBoard = GenConfig(
     debugMode = false,
     useIPMemory = true,
     useIPUART = true,
-    useIPClock = true,
+    useIPClock = false//true,
   )
 
   private val forTest = GenConfig(

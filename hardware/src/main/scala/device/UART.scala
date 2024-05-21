@@ -27,9 +27,9 @@ class UART extends Module {
     val mmio = new MMIOUARTBundle
   })
   if (GenConfig.s.useIPUART) {
-    val uart = Module(new UART_IP)
-    uart.io.clk := clock
-    uart.io.rst := reset
+    val uart = Module(new UART_IP())
+    uart.io.clk := clock.asBool
+    uart.io.rst := reset.asBool
 
     uart.io.s_axis_tdata := io.mmio.txData
     uart.io.s_axis_tvalid := io.mmio.txStart
@@ -42,7 +42,7 @@ class UART extends Module {
     io.mmio.rxValid := uart.io.m_axis_tvalid
     uart.io.m_axis_tready := false.B //TODO check correctness
 
-    uart.io.prescale:=1302.U // 10000000/115200
+    uart.io.prescale := 1302.U // 10000000/(9600*8)
 
   } else {
     val uartRx = Module(new UARTrx)
@@ -62,7 +62,7 @@ class UART extends Module {
 
 class UART_IP extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle() {
-    val clk = Input(Clock())
+    val clk = Input(Bool())
     val rst = Input(Bool())
 
     val s_axis_tdata = Input(UInt(8.W))
@@ -84,7 +84,7 @@ class UART_IP extends BlackBox with HasBlackBoxResource {
     val prescale = Input(UInt(16.W))
   })
 
-  override def desiredName: String = "UART"
+  override def desiredName: String = "uart"
 
   addResource("/verilog/UART.v")
 }

@@ -18,7 +18,6 @@ class UARTVerify extends Module {
 
   val out_led=RegInit(0.U(8.W))
 
-
   io.led:=out_led
   io.signal:=uart.io.mmio.rxValid
   when(uart.io.mmio.rxValid){
