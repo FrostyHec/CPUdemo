@@ -6,7 +6,6 @@ import configs.GenConfig
 
 class Debounce extends Module {
   val io = IO(new Bundle {
-    val clock = Input(Clock())
     val in = Input(Bool())
     val out = Output(Bool())
   })
@@ -14,10 +13,10 @@ class Debounce extends Module {
   val out1 = Module(new DFF())
   val out2 = Module(new DFF())
 
-  out1.io.clk := io.clock
+  out1.io.clk := clock
   out1.io.in := io.in
 
-  out2.io.clk := io.clock
+  out2.io.clk := clock
   out2.io.in := out1.io.out
 
   io.out := out1.io.out && !out2.io.out
