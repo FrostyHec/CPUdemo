@@ -3,6 +3,7 @@ package device
 import chisel3._
 import configs.GenConfig
 import utils._
+import chisel3.util._
 
 class MMIOUARTBundle extends Bundle {
   val rxData = Output(UInt(8.W)) // 接收数据
@@ -25,17 +26,65 @@ class UART extends Module {
     val board = new BoardUARTBundle
     val mmio = new MMIOUARTBundle
   })
+  if (GenConfig.s.useIPUART) {
+    val uart = Module(new UART_IP)
+    uart.io.clk := clock
+    uart.io.rst := reset
 
-  val uartRx = Module(new UARTrx)
-  val uartTx = Module(new UARTtx)
+    uart.io.s_axis_tdata := io.mmio.txData
+    uart.io.s_axis_tvalid := io.mmio.txStart
+    io.mmio.txReady := uart.io.s_axis_tready
 
-  uartRx.io.rx := io.board.rx
-  io.board.tx := uartTx.io.tx
+    uart.io.rxd := io.board.rx
+    io.board.tx := uart.io.txd
 
-  io.mmio.rxData := uartRx.io.data
-  io.mmio.rxValid := uartRx.io.valid
+    io.mmio.rxData := uart.io.m_axis_tdata
+    io.mmio.rxValid := uart.io.m_axis_tvalid
+    uart.io.m_axis_tready := false.B //TODO check correctness
 
-  uartTx.io.data := io.mmio.txData
-  uartTx.io.start := io.mmio.txStart
-  io.mmio.txReady := uartTx.io.ready
+    uart.io.prescale:=1302.U // 10000000/115200
+
+  } else {
+    val uartRx = Module(new UARTrx)
+    val uartTx = Module(new UARTtx)
+
+    uartRx.io.rx := io.board.rx
+    io.board.tx := uartTx.io.tx
+
+    io.mmio.rxData := uartRx.io.data
+    io.mmio.rxValid := uartRx.io.valid
+
+    uartTx.io.data := io.mmio.txData
+    uartTx.io.start := io.mmio.txStart
+    io.mmio.txReady := uartTx.io.ready
+  }
+}
+
+class UART_IP extends BlackBox with HasBlackBoxResource {
+  val io = IO(new Bundle() {
+    val clk = Input(Clock())
+    val rst = Input(Bool())
+
+    val s_axis_tdata = Input(UInt(8.W))
+    val s_axis_tvalid = Input(Bool())
+    val s_axis_tready = Output(Bool())
+
+    val m_axis_tdata = Output(UInt(8.W))
+    val m_axis_tvalid = Output(Bool())
+    val m_axis_tready = Input(Bool())
+
+    val rxd = Input(Bool())
+    val txd = Output(Bool())
+
+    val tx_busy = Output(Bool())
+    val rx_busy = Output(Bool())
+    val rx_overrun_error = Output(Bool())
+    val rx_frame_error = Output(Bool())
+
+    val prescale = Input(UInt(16.W))
+  })
+
+  override def desiredName: String = "UART"
+
+  addResource("/verilog/UART.v")
 }

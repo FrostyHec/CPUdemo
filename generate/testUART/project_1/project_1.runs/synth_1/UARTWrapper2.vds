@@ -1,0 +1,342 @@
+#-----------------------------------------------------------
+# Vivado v2017.4 (64-bit)
+# SW Build 2086221 on Fri Dec 15 20:55:39 MST 2017
+# IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
+# Start of session at: Tue May 21 23:46:29 2024
+# Process ID: 23368
+# Current directory: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1
+# Command line: vivado.exe -log UARTWrapper2.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source UARTWrapper2.tcl
+# Log file: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1/UARTWrapper2.vds
+# Journal file: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source UARTWrapper2.tcl -notrace
+Command: synth_design -top UARTWrapper2 -part xc7a100tfgg484-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 45436 
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:00 ; elapsed = 00:00:03 . Memory (MB): peak = 388.602 ; gain = 98.508
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'UARTWrapper2' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:23]
+INFO: [Synth 8-638] synthesizing module 'uart' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:105]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'uart_tx' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:302]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'uart_tx' (1#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:302]
+INFO: [Synth 8-638] synthesizing module 'uart_rx' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:191]
+	Parameter DATA_WIDTH bound to: 8 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'uart_rx' (2#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:191]
+INFO: [Synth 8-256] done synthesizing module 'uart' (3#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:105]
+WARNING: [Synth 8-350] instance 'u' of module 'uart' requires 15 connections, but only 10 given [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:34]
+INFO: [Synth 8-256] done synthesizing module 'UARTWrapper2' (4#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:23]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:00 ; elapsed = 00:00:03 . Memory (MB): peak = 440.426 ; gain = 150.332
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:00 ; elapsed = 00:00:03 . Memory (MB): peak = 440.426 ; gain = 150.332
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7a100tfgg484-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc]
+Finished Parsing XDC File [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/UARTWrapper2_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/UARTWrapper2_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 785.996 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:04 ; elapsed = 00:00:10 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a100tfgg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:04 ; elapsed = 00:00:10 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:04 ; elapsed = 00:00:10 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+INFO: [Synth 8-5544] ROM "s_axis_tready_reg" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "txd_reg" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+WARNING: [Synth 8-6014] Unused sequential element prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:352]
+INFO: [Synth 8-5544] ROM "bit_cnt" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+WARNING: [Synth 8-6014] Unused sequential element prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:250]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:10 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     19 Bit       Adders := 3     
+	   2 Input      4 Bit       Adders := 2     
++---Registers : 
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 2     
+	                4 Bit    Registers := 2     
+	                1 Bit    Registers := 8     
++---Muxes : 
+	   2 Input     19 Bit        Muxes := 3     
+	   2 Input      9 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 8     
+	   3 Input      4 Bit        Muxes := 1     
+	   2 Input      3 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 39    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module uart_tx 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     19 Bit       Adders := 1     
+	   2 Input      4 Bit       Adders := 1     
++---Registers : 
+	                9 Bit    Registers := 1     
+	                4 Bit    Registers := 1     
+	                1 Bit    Registers := 3     
++---Muxes : 
+	   2 Input     19 Bit        Muxes := 2     
+	   2 Input      9 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 13    
+Module uart_rx 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     19 Bit       Adders := 2     
+	   2 Input      4 Bit       Adders := 1     
++---Registers : 
+	                8 Bit    Registers := 2     
+	                4 Bit    Registers := 1     
+	                1 Bit    Registers := 5     
++---Muxes : 
+	   2 Input     19 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 6     
+	   3 Input      4 Bit        Muxes := 1     
+	   2 Input      3 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 26    
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-6014] Unused sequential element u/uart_tx_inst/s_axis_tready_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:343]
+WARNING: [Synth 8-6014] Unused sequential element u/uart_tx_inst/busy_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:346]
+WARNING: [Synth 8-6014] Unused sequential element u/uart_rx_inst/busy_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:241]
+WARNING: [Synth 8-6014] Unused sequential element u/uart_rx_inst/overrun_error_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:242]
+WARNING: [Synth 8-6014] Unused sequential element u/uart_rx_inst/frame_error_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:243]
+WARNING: [Synth 8-6014] Unused sequential element u/uart_tx_inst/prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:352]
+WARNING: [Synth 8-6014] Unused sequential element u/uart_rx_inst/prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTWrapper2.v:250]
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:05 ; elapsed = 00:00:11 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 785.996 ; gain = 495.902
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++-------------+--------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name  | RTL Name                       | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++-------------+--------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|UARTWrapper2 | u/uart_tx_inst/data_reg_reg[0] | 8      | 1     | NO           | NO                 | YES               | 1      | 0       | 
++-------------+--------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |    10|
+|3     |LUT1   |     1|
+|4     |LUT2   |    25|
+|5     |LUT3   |     4|
+|6     |LUT4   |    11|
+|7     |LUT5   |    12|
+|8     |LUT6   |    25|
+|9     |SRL16E |     1|
+|10    |FDRE   |    65|
+|11    |FDSE   |     2|
+|12    |IBUF   |     3|
+|13    |OBUF   |    10|
++------+-------+------+
+
+Report Instance Areas: 
++------+-----------------+--------+------+
+|      |Instance         |Module  |Cells |
++------+-----------------+--------+------+
+|1     |top              |        |   170|
+|2     |  u              |uart    |   156|
+|3     |    uart_rx_inst |uart_rx |    89|
+|4     |    uart_tx_inst |uart_tx |    67|
++------+-----------------+--------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 9 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:06 ; elapsed = 00:00:12 . Memory (MB): peak = 807.297 ; gain = 171.633
+Synthesis Optimization Complete : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 807.297 ; gain = 517.203
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 13 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+23 Infos, 11 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:19 . Memory (MB): peak = 807.297 ; gain = 529.848
+INFO: [Common 17-1381] The checkpoint 'D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1/UARTWrapper2.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file UARTWrapper2_utilization_synth.rpt -pb UARTWrapper2_utilization_synth.pb
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.022 . Memory (MB): peak = 807.297 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Tue May 21 23:46:51 2024...

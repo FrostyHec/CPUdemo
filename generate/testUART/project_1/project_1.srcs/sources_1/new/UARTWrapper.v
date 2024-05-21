@@ -22,15 +22,23 @@
 
 module UARTWrapper(
   input        clock,
+  input        reset,
   input        io_board_rx,
   output       io_board_tx,
   output [7:0] io_led,
   output       io_signal
 );
-    wire reset=1'b0;
     wire div_clock ;
-    
-    v UARTVerify(
+    //主时钟频�?:100MHz
+    //5个上升沿1data
+    //9600Baud
+    clk_wiz_0 c(
+        .reset(reset),
+        .clk_in1(clock),
+        .clk_out1(div_clock)
+    );
+
+   UARTVerify v(
         .clock(div_clock),
         .reset(reset),
         .io_board_rx(io_board_rx),
