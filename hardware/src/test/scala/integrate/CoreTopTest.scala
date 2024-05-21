@@ -62,16 +62,12 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInCPU(cpu, 5, 1.U)
     }
   }
-  //TODO MINIMUM TESTING INSTRUCTIONS:
-  // lb,sb,lw,sw
-  // bgeu,blt
-  // jalr,jal,lui,auipc
+
   it should "lw and sw" in {
     //    addi x1, x0, 108
     //    sw x1, (x2)
     //    add x1, x0, x0
     //    lw x1, (x2)
-    // todo data out 出错
     load_instructions("lsw1.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)

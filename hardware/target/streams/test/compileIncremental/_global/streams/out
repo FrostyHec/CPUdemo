@@ -1,6 +1,0 @@
-[debug] [zinc] IncrementalCompile -----------
-[debug] IncrementalCompile.incrementalCompile
-[debug] previous = Stamps for: 19 products, 17 sources, 5 libraries
-[debug] current source = Set(${BASE}/src/test/scala/core/utils/RAMTest.scala, ${BASE}/src/test/scala/core/writeBack/AUSelectorTest.scala, ${BASE}/src/test/scala/core/memory/MemoryDispatchTest.scala, ${BASE}/src/test/scala/core/execute/RegistersTest.scala, ${BASE}/src/test/scala/core/execute/ImmGenTest.scala, ${BASE}/src/test/scala/core/execute/NextPCGenTest.scala, ${BASE}/src/test/scala/core/decode/ControlUnitTest.scala, ${BASE}/src/test/scala/core/execute/CMPTest.scala, ${BASE}/src/test/scala/core/decode/InstructionDecoderTest.scala, ${BASE}/src/test/scala/core/execute/ALUTest.scala, ${BASE}/src/test/scala/integrate/TotalTopTest.scala, ${BASE}/src/test/scala/testutils/ValueUtils.scala, ${BASE}/src/test/scala/core/insFetch/PCTest.scala, ${BASE}/src/test/scala/core/writeBack/WriteDataSelectorTest.scala, ${BASE}/src/test/scala/utils/InsUtils.scala, ${BASE}/src/test/scala/integrate/CoreTopTest.scala, ${BASE}/src/test/scala/core/execute/OperandSelectorTest.scala)
-[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(),Set(),API Changes: Set())
-[debug] No changes
