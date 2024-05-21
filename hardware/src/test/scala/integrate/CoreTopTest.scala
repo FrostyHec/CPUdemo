@@ -80,7 +80,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sb x1, (x2)
     //    add x1, x0, x0
     //    lb x1, (x2)
-    // todo data out 出错
     load_instructions("lsb1.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
@@ -93,7 +92,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sb x1, (x2)
     //    add x1, x0, x0
     //    lb x1, (x2)
-    // todo data out 出错
     load_instructions("lsb2.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
@@ -106,7 +104,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sb x1, (x2)
     //    add x1, x0, x0
     //    lbu x1, (x2)
-    // todo data out 出错
     load_instructions("lsb3.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
