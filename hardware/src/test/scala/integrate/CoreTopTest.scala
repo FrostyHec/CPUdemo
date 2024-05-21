@@ -236,7 +236,7 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  //todo 这个不行
+  //todo ok
   it should "jal" in {
     //      jal x1, 8
     //      addi x2, x0, 1
