@@ -41,7 +41,7 @@ class Seg7 extends Module {
     "b11".U -> "b0111_0111".U
   ))
 
-  counter := counter + 1
+  counter := counter + 1.U
 }
 
 class HexToSeg7 extends Module {
