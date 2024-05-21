@@ -239,20 +239,20 @@ class ControlUnit extends Module {
     }
 
     is("b110_1111".U) { // J-type jal
-      io.nextPC_type := NextPCType.Branch.getUInt
+      io.nextPC_type := NextPCType.BranchFromALU.getUInt
       io.regs_write := "b1".U
-      io.au_type := DontCare
+      io.au_type := AUType.ALU.getUInt
       io.memory_read := "b0".U
       io.memory_write := "b0".U
       io.operand2_type := Operand2Type.Imm.getUInt
       io.write_back_type := WriteBackType.PC4.getUInt
       io.imm_width_type := ImmWidthType.Twelve.getUInt
       io.unsigned := "b0".U
-      io.alu_type := DontCare
+      io.alu_type := ALUType.ADD.getUInt
     }
 
     is("b110_0111".U) { // I-type jalr
-      io.nextPC_type := NextPCType.Branch.getUInt
+      io.nextPC_type := NextPCType.BranchFromALU.getUInt
       io.regs_write := "b1".U
       io.memory_read := "b0".U
       io.memory_write := "b0".U
