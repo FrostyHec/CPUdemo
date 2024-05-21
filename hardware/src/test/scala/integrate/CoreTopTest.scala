@@ -275,7 +275,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  //todo 这里有问题，似乎x1取的是next pc的值
   it should "auipc" in {
     //      auipc x1, 0x12345
     //      addi x2, x0, 1
