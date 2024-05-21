@@ -75,6 +75,21 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "lw 1" in {
+    /*
+        addi x1, x0, 128
+        slli x1, x1, 8
+        sw x1, 1(x2)
+        add x1, x0, x0
+        lw x1, 1(x2)
+     */
+    load_instructions("lw1.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 5)
+      checkRegsInCPU(cpu, 1, "h_80_00".U)
+    }
+  }
+
   it should "lb and sb (1)" in {
     //    addi x1, x0, 108
     //    sb x1, (x2)
@@ -121,6 +136,36 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 5)
       checkRegsInCPU(cpu, 1, 108.U)
+    }
+  }
+
+  it should "lb (2)" in {
+    /*
+        addi x1, x0, 128
+        slli x1, x1, 8
+        sw x1, (x2)
+        add x1, x0, x0
+        lb x1, 1(x2)
+     */
+    load_instructions("lb2.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 5)
+      checkRegsInCPU(cpu, 1, "h_ff_ff_ff_80".U)
+    }
+  }
+
+  it should "lb (3)" in {
+    /*
+        addi x1, x0, 128
+        slli x1, x1, 8
+        sw x1, (x2)
+        add x1, x0, x0
+        lbu x1, 1(x2)
+     */
+    load_instructions("lb3.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 5)
+      checkRegsInCPU(cpu, 1, 128.U)
     }
   }
 
@@ -214,6 +259,48 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInCPU(cpu, 3, 0.U)
       checkRegsInCPU(cpu, 4, 1.U)
       checkRegsInCPU(cpu, 5, 1.U)
+    }
+  }
+
+  it should "not bne" in {
+    /*
+        addi x1, x0, 1
+        addi x2, x0, 1
+        bne x1, x2, NEXT
+        addi x3, x0, 1
+        addi x4, x0, 1
+        addi x5, x0, 1
+        NEXT:
+        addi x3, x0, 10
+        -> x3=10,x4=1,x5=1
+     */
+    load_instructions("bne1.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 7)
+      checkRegsInCPU(cpu, 3, 10.U)
+      checkRegsInCPU(cpu, 4, 1.U)
+      checkRegsInCPU(cpu, 5, 1.U)
+    }
+  }
+
+  it should "bne" in {
+    /*
+        addi x1, x0, 1
+        addi x2, x0, 2
+        bne x1, x2, NEXT
+        addi x3, x0, 1
+        addi x4, x0, 1
+        addi x5, x0, 1
+        NEXT:
+        addi x3, x0, 10
+        -> x3=10,x4=0,x5=0
+     */
+    load_instructions("bne2.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 7)
+      checkRegsInCPU(cpu, 3, 10.U)
+      checkRegsInCPU(cpu, 4, 0.U)
+      checkRegsInCPU(cpu, 5, 0.U)
     }
   }
 

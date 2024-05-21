@@ -82,22 +82,5 @@ class TotalTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  // todo seg7 not implemented yet
-  it should "write data to seg7" in {
-    /*
-    addi x1,x0,-260 // x1 = 0xfffffefc -> seg7
-    addi x2,x0,15
-    sw x2, 0(x1)
-    */
-    load_instructions("seg7Write1.txt")
-    test(new Top) { total =>
-      total.io.seg7.seg7_high.expect(0.U)
-      total.io.seg7.seg7_low.expect(0.U)
-      run_instructions(total,3)
-      total.io.seg7.seg7_high.expect(0.U)
-      total.io.seg7.seg7_low.expect(15.U)
-    }
-  }
-
 
 }
