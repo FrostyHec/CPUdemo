@@ -23,6 +23,7 @@ class NextPCGen extends Module{
   switch(io.nextPC_type){
     is(NextPCType.PC4.getUInt){
       io.nextPC := io.pc + 4.U
+      io.pcImm := io.pc + io.alu_result
     }
     // J type 的移位直接在immGen里面解决了，这里不再处理
     is(NextPCType.Branch.getUInt){
