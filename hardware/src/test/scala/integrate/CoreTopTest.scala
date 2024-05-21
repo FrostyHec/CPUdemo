@@ -79,7 +79,7 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  it should "lb and sb" in {
+  it should "lb and sb (1)" in {
     //    addi x1, x0, 108
     //    sb x1, (x2)
     //    add x1, x0, x0
@@ -88,6 +88,46 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     load_instructions("lsb1.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
+      checkRegsInCPU(cpu, 1, 108.U)
+    }
+  }
+
+  it should "lb and sb (2)" in {
+    //    addi x1, x0, 128
+    //    sb x1, (x2)
+    //    add x1, x0, x0
+    //    lb x1, (x2)
+    // todo data out 出错
+    load_instructions("lsb2.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 4)
+      checkRegsInCPU(cpu, 1, "h_ff_ff_ff_80".U)
+    }
+  }
+
+  it should "lb and sb (3)" in {
+    //    addi x1, x0, 128
+    //    sb x1, (x2)
+    //    add x1, x0, x0
+    //    lbu x1, (x2)
+    // todo data out 出错
+    load_instructions("lsb3.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 4)
+      checkRegsInCPU(cpu, 1, "h_80".U)
+    }
+  }
+
+  it should "lb (1)" in {
+    //    addi x1, x0, 108
+    //    slli x1, x1, 4
+    //    sw x1, (x2)
+    //    add x1, x0, x0
+    //    lb x1, 1(x2)
+    // todo data out 出错
+    load_instructions("lb1.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 5)
       checkRegsInCPU(cpu, 1, 108.U)
     }
   }
