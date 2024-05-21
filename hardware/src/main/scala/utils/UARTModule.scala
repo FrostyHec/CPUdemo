@@ -515,7 +515,7 @@ import chisel3.util._
 import configs.GenConfig
 
 object DebugDetailConfig{
-  val test_rx = true
+  val test_rx = false
   val test_tx = false
 }
 

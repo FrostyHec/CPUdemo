@@ -3,6 +3,10 @@ addi a0, zero, -256 # 0xffff_ff00 -> led * 24
 addi a1, a0, 4      # 0xffff_ff04 -> btn * 5
 addi a2, a0, 8      # 0xffff_ff08 -> swi * 24
 addi a3, a0, 12     # 0xffff_ff0c -> 7seg
+addi a6, zero, 1
+slli a6, a6, 16
+srli t0, a0, 16
+add a6, a6, t0		# 0x0001_ffff -> stack
 addi a4, zero, 14
 slli a4, a4, 20     # mask of the cases
 
@@ -72,7 +76,7 @@ andi t0, t0, 4
 beq t0, zero, case1
 lb t3, 1(a2)
 sw t3, (a3) # 7-seg
-sw t3, 16(a0)
+sw t3, (a6)
 beq zero, zero, ini
 
 case2:
@@ -81,36 +85,36 @@ andi t0, t0, 4
 beq t0, zero, case2
 lbu t4, (a2)
 sw t4, (a3) # 7-seg
-sw t4, 20(a0)
+sw t4, -4(a6)
 beq zero, zero, ini
 
 case3:
-lw t3, 16(a0)
-lw t4, 20(a0)
+lw t3, (a6)
+lw t4, -4(a6)
 beq t3, t4, label
 beq zero, zero, ini
 
 case4:
-lw t3, 16(a0)
-lw t4, 20(a0)
+lw t3, (a6)
+lw t4, -4(a6)
 blt t3, t4, label
 beq zero, zero, ini
 
 case5:
-lw t3, 16(a0)
-lw t4, 20(a0)
+lw t3, (a6)
+lw t4, -4(a6)
 bge t3, t4, label
 beq zero, zero, ini
 
 case6:
-lw t3, 16(a0)
-lw t4, 20(a0)
+lw t3, (a6)
+lw t4, -4(a6)
 bltu t3, t4, label
 beq zero, zero, ini
 
 case7:
-lw t3, 16(a0)
-lw t4, 20(a0)
+lw t3, (a6)
+lw t4, -4(a6)
 bgeu t3, t4, label
 beq zero, zero, ini
 

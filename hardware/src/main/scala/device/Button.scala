@@ -17,8 +17,9 @@ class Button extends Module {
     val board = new BoardButtonBundle
   })
   //TODO 按钮，拨码需消抖
-  val but_deb = Module(new Debounce())
-  // but_deb.io.clock (100Hz)
-  but_deb.io.in := io.board.button
-  io.mmio.button := but_deb.io.out
+//  val but_deb = Module(new Debounce())
+//  // but_deb.io.clock (100Hz)
+//  but_deb.io.in := io.board.button
+//  io.mmio.button := but_deb.io.out
+  io.mmio.button := io.board.button
 }
