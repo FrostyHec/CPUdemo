@@ -117,10 +117,8 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sw x1, (x2)
     //    add x1, x0, x0
     //    lb x1, 1(x2)
-    // todo data out 出错
     load_instructions("lb1.txt")
     test(new CoreTop) { cpu =>
-        run_instructions(cpu,2)
       run_instructions(cpu, 5)
       checkRegsInCPU(cpu, 1, 108.U)
     }
@@ -236,7 +234,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  //todo ok
   it should "jal" in {
     //      jal x1, 8
     //      addi x2, x0, 1
