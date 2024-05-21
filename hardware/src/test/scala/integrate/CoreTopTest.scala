@@ -62,16 +62,12 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInCPU(cpu, 5, 1.U)
     }
   }
-  //TODO MINIMUM TESTING INSTRUCTIONS:
-  // lb,sb,lw,sw
-  // bgeu,blt
-  // jalr,jal,lui,auipc
+
   it should "lw and sw" in {
     //    addi x1, x0, 108
     //    sw x1, (x2)
     //    add x1, x0, x0
     //    lw x1, (x2)
-    // todo data out 出错
     load_instructions("lsw1.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
@@ -84,7 +80,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sb x1, (x2)
     //    add x1, x0, x0
     //    lb x1, (x2)
-    // todo data out 出错
     load_instructions("lsb1.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
@@ -97,7 +92,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sb x1, (x2)
     //    add x1, x0, x0
     //    lb x1, (x2)
-    // todo data out 出错
     load_instructions("lsb2.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
@@ -110,7 +104,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    sb x1, (x2)
     //    add x1, x0, x0
     //    lbu x1, (x2)
-    // todo data out 出错
     load_instructions("lsb3.txt")
     test(new CoreTop) { cpu =>
       run_instructions(cpu, 4)
@@ -120,13 +113,14 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
   it should "lb (1)" in {
     //    addi x1, x0, 108
-    //    slli x1, x1, 4
+    //    slli x1, x1, 8
     //    sw x1, (x2)
     //    add x1, x0, x0
     //    lb x1, 1(x2)
     // todo data out 出错
     load_instructions("lb1.txt")
     test(new CoreTop) { cpu =>
+        run_instructions(cpu,2)
       run_instructions(cpu, 5)
       checkRegsInCPU(cpu, 1, 108.U)
     }
@@ -242,7 +236,7 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  //todo 这个不行
+  //todo ok
   it should "jal" in {
     //      jal x1, 8
     //      addi x2, x0, 1
@@ -275,7 +269,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  //todo 这里有问题，似乎x1取的是next pc的值
   it should "auipc" in {
     //      auipc x1, 0x12345
     //      addi x2, x0, 1

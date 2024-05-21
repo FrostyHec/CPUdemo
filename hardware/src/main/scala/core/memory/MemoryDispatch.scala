@@ -151,7 +151,7 @@ class MemoryDispatch extends Module {
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
       val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(7)))
-      switch(read_ins_addr(1, 0)) {
+      switch(io.data_addr(1, 0)) {
         is("b00".U) {
           io.data_out := Cat(high_bit, data_out(7, 0))
         }
@@ -169,7 +169,7 @@ class MemoryDispatch extends Module {
     is(DataWidth.HalfWord.getUInt) {
       //doesn't support unaligned memory access
       val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
-      switch(read_ins_addr(1, 0)) {
+      switch(io.data_addr(1, 0)) {
         is("b00".U) {
           io.data_out := Cat(high_bit, data_out(15, 0))
         }
