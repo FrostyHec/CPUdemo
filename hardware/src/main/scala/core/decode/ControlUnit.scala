@@ -277,7 +277,7 @@ class ControlUnit extends Module {
     }
 
     is("b001_0111".U) { // U-type auipc
-      io.nextPC_type := NextPCType.BranchFromALU.getUInt
+      io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.memory_read := "b0".U
       io.memory_write := "b0".U
