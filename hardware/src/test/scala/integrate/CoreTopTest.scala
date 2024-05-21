@@ -139,6 +139,7 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  // todo 这个有一点问题
   it should "lb (2)" in {
     /*
         addi x1, x0, 128
@@ -370,7 +371,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
   }
 
   it should "be able to self write" in {
-    //
     //            addi x1,x0,1
     //            addi x1,x1,1
     //            ->x1==2
@@ -378,6 +378,23 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new CoreTop){cpu=>
       run_instructions(cpu,2)
       checkRegsInCPU(cpu,1,2.U)
+    }
+  }
+
+  it should "load and save" in {
+    /*
+        addi x1, x0, 128
+        sw x1, 0(x2)
+        add x1, x0, 234
+        sw x1, 4(x2)
+        lw x1, 0(x2)
+        lw x3, 4(x2)
+     */
+    load_instructions("loadSave1.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 6)
+      checkRegsInCPU(cpu, 1, 128.U)
+      checkRegsInCPU(cpu, 3, 234.U)
     }
   }
 

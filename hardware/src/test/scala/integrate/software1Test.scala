@@ -62,24 +62,102 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  // todo 这个测试过不了, 应该是 lb 出问题了
-//  it should "jump to the correct place3 : jump to case 1 if input 1 in button" in {
-//    load_instructions("software1.txt")
-//    test(new Top) { total =>
-//      run_instructions(total, 30)
-//      checkRegsInTop(total, 15, 0.U)
-//      total.io.switch.switches.poke("h_20_12_34".U)
-//      run_instructions(total, 30)
-//      total.io.btn.button.poke(4.U)
-//      run_instructions(total, 30)
-//      total.io.btn.button.poke(0.U)
-//      run_instructions(total, 30)
-//      total.io.switch.switches.poke("h_00_ab_cd".U)
-//      run_instructions(total, 30)
-//      total.io.btn.button.poke(4.U)
-//      run_instructions(total, 30)
-//      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
-//      checkRegsInTop(total, 15, 0.U)
-//    }
-//  }
+  it should "jump to the correct place3 : jump to case 1 if input 1 in button" in {
+    load_instructions("software1.txt")
+    test(new Top) { total =>
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_20_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+    }
+  }
+
+  it should "jump to the correct place4 : jump to case 2 if input 2 in button" in {
+    load_instructions("software1.txt")
+    test(new Top) { total =>
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_40_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 29, "h_cd".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+    }
+  }
+
+  it should "jump to the correct place5 : jump to case 3 if input 3 in button" in {
+    load_instructions("software1.txt")
+    test(new Top) { total =>
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_20_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_40_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      checkRegsInTop(total, 29, "h_cd".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_60_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      checkRegsInTop(total, 29, "h_cd".U)
+      checkRegsInTop(total, 31, 0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+    }
+  }
 }

@@ -16,8 +16,9 @@ class Switches extends Module {
     val mmio = new MMIOSwitchBundle
     val board = new BoardSwitchBundle
   })
-  val switch_deb = Module(new Debounce())
-  // switch_deb.io.clock (100Hz)
-  switch_deb.io.in := io.board.switches
-  io.mmio.switches := switch_deb.io.out
+//  val switch_deb = Module(new Debounce())
+//  // switch_deb.io.clock (100Hz)
+//  switch_deb.io.in := io.board.switches
+//  io.mmio.switches := switch_deb.io.out
+  io.mmio.switches := io.board.switches
 }
