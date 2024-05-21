@@ -116,7 +116,7 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
   it should "lb (1)" in {
     //    addi x1, x0, 108
-    //    slli x1, x1, 4
+    //    slli x1, x1, 8
     //    sw x1, (x2)
     //    add x1, x0, x0
     //    lb x1, 1(x2)
