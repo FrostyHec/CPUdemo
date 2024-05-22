@@ -1,0 +1,17 @@
+#Successful Tests
+#Wed May 22 01:54:33 CST 2024
+core.writeBack.WriteDataSelectorTest=1716314057833
+core.utils.UARTTest=1716314033419
+core.execute.OperandSelectorTest=1716314047083
+integrate.TotalTopTest=1716314073011
+core.execute.ALUTest=1716314057127
+integrate.CoreUARTSimTest=1716314057667
+core.memory.MemoryDispatchTest=1716314015201
+core.execute.RegistersTest=1716314058670
+core.decode.InstructionDecoderTest=1716314054350
+core.insFetch.PCTest=1716314066916
+core.decode.ControlUnitTest=1716314073195
+core.utils.RAMTest=1716314068456
+core.execute.CMPTest=1716314053906
+core.writeBack.AUSelectorTest=1716314057283
+core.execute.ImmGenTest=1716314046487
