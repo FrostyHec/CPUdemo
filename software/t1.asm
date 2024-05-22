@@ -22,7 +22,9 @@ andi t0, t0, 4
 beq t0, zero, situation
 lw t1, (a2)
 and t1, t1, a4
+add s2, zero, t1
 srli t1, t1, 21
+add s1, zero, t1
 check0:
 lw t0, (a1)
 andi t0, t0, 4
@@ -46,6 +48,7 @@ beq a5, t1, case7
 beq zero, zero, ini
 
 case0:
+addi s0, zero, 0
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case0
@@ -71,15 +74,17 @@ bne t0, zero, check0c1
 	
 
 case1:
+addi s0, zero, 1
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case1
 lb t3, 1(a2)
 sw t3, (a3) # 7-seg
-sw t3, -8(a6)
+sw t3, (a6)
 beq zero, zero, ini
 
 case2:
+addi s0, zero, 2
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case2
@@ -89,31 +94,36 @@ sw t4, -4(a6)
 beq zero, zero, ini
 
 case3:
-lw t3, -8(a6)
+addi s0, zero, 3
+lw t3, (a6)
 lw t4, -4(a6)
 beq t3, t4, label
 beq zero, zero, ini
 
 case4:
-lw t3, -8(a6)
+addi s0, zero, 4
+lw t3, (a6)
 lw t4, -4(a6)
 blt t3, t4, label
 beq zero, zero, ini
 
 case5:
-lw t3, -8(a6)
+addi s0, zero, 5
+lw t3, (a6)
 lw t4, -4(a6)
 bge t3, t4, label
 beq zero, zero, ini
 
 case6:
-lw t3, -8(a6)
+addi s0, zero, 6
+lw t3, (a6)
 lw t4, -4(a6)
 bltu t3, t4, label
 beq zero, zero, ini
 
 case7:
-lw t3, -8(a6)
+addi s0, zero, 7
+lw t3, (a6)
 lw t4, -4(a6)
 bgeu t3, t4, label
 beq zero, zero, ini

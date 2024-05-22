@@ -90,6 +90,22 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "lw 2" in {
+    /*
+        addi x1, x0, 255
+        sw x1, 0(x2)
+        lb x1, 0(x2)
+        sw x1, 0(x2)
+        addi x1, x0, 0
+        lw x1, 0(x2)
+     */
+    load_instructions("lw2.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 6)
+      checkRegsInCPU(cpu, 1, "h_ff_ff_ff_ff".U)
+    }
+  }
+
   it should "lb and sb (1)" in {
     //    addi x1, x0, 108
     //    sb x1, (x2)
