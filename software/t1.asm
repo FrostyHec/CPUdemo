@@ -21,6 +21,7 @@ lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, situation
 lw t1, (a2)
+add s3, t1, zero
 and t1, t1, a4
 add s2, zero, t1
 srli t1, t1, 21
