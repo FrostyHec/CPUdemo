@@ -1,0 +1,7 @@
+0.6
+2017.4
+Dec 15 2017
+21:07:18
+D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.sim/sim_1/behav/xsim/glbl.v,1513215259,verilog,,,,glbl,,,,,,,,
+D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sim_1/new/UARTVerifySim.v,1716301393,verilog,,,,UARTVerifySim,,,../../../../project_1.srcs/sources_1/ip/clk_wiz_0,,,,,
+D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/UARTVerify.v,1716296564,verilog,,D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sim_1/new/UARTVerifySim.v,,UART;UARTVerify;UARTrx;UARTtx,,,../../../../project_1.srcs/sources_1/ip/clk_wiz_0,,,,,
