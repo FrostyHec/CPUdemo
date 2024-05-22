@@ -256,7 +256,6 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
-      // todo 这里似乎有lb导致的问题
       checkRegsInTop(total, 28, "h_05".U)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 30)
@@ -421,7 +420,6 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
-      // todo 这里有lb导致的错误
       checkRegsInTop(total, 28, "h_12".U)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 30)
@@ -435,7 +433,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 30)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 30)
-      total.io.switch.switches.poke("h_00_ab_2".U)
+      total.io.switch.switches.poke("h_00_ab_02".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
