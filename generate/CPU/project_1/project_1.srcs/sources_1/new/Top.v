@@ -1868,51 +1868,48 @@ module Seg7(
   input         clock,
   input         reset,
   input  [31:0] io_mmio_seg7,
-  output [7:0]  io_board_seg7_high,
-  output [7:0]  io_board_seg7_low,
+  output [7:0]  io_board_seg7,
   output [7:0]  io_board_an
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  wire [3:0] seg7Module_low_io_hexDigit; // @[Seg7.scala 29:30]
-  wire [7:0] seg7Module_low_io_seg7; // @[Seg7.scala 29:30]
-  wire [3:0] seg7Module_high_io_hexDigit; // @[Seg7.scala 33:31]
-  wire [7:0] seg7Module_high_io_seg7; // @[Seg7.scala 33:31]
-  wire [3:0] digits_low_0 = io_mmio_seg7[3:0]; // @[Seg7.scala 24:61]
-  wire [3:0] digits_low_1 = io_mmio_seg7[7:4]; // @[Seg7.scala 24:61]
-  wire [3:0] digits_low_2 = io_mmio_seg7[11:8]; // @[Seg7.scala 24:61]
-  wire [3:0] digits_low_3 = io_mmio_seg7[15:12]; // @[Seg7.scala 24:61]
-  wire [3:0] digits_high_0 = io_mmio_seg7[19:16]; // @[Seg7.scala 25:62]
-  wire [3:0] digits_high_1 = io_mmio_seg7[23:20]; // @[Seg7.scala 25:62]
-  wire [3:0] digits_high_2 = io_mmio_seg7[27:24]; // @[Seg7.scala 25:62]
-  wire [3:0] digits_high_3 = io_mmio_seg7[31:28]; // @[Seg7.scala 25:62]
+  wire [3:0] seg7Module_io_hexDigit; // @[Seg7.scala 33:26]
+  wire [7:0] seg7Module_io_seg7; // @[Seg7.scala 33:26]
+  wire [3:0] digits_0 = io_mmio_seg7[3:0]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_1 = io_mmio_seg7[7:4]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_2 = io_mmio_seg7[11:8]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_3 = io_mmio_seg7[15:12]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_4 = io_mmio_seg7[19:16]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_5 = io_mmio_seg7[23:20]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_6 = io_mmio_seg7[27:24]; // @[Seg7.scala 25:57]
+  wire [3:0] digits_7 = io_mmio_seg7[31:28]; // @[Seg7.scala 25:57]
   reg [2:0] counter; // @[Seg7.scala 27:24]
-  wire [3:0] _GEN_1 = 2'h1 == counter[1:0] ? digits_low_1 : digits_low_0; // @[Seg7.scala 30:{30,30}]
-  wire [3:0] _GEN_2 = 2'h2 == counter[1:0] ? digits_low_2 : _GEN_1; // @[Seg7.scala 30:{30,30}]
-  wire [3:0] _GEN_5 = 2'h1 == counter[1:0] ? digits_high_1 : digits_high_0; // @[Seg7.scala 34:{31,31}]
-  wire [3:0] _GEN_6 = 2'h2 == counter[1:0] ? digits_high_2 : _GEN_5; // @[Seg7.scala 34:{31,31}]
-  wire [7:0] _io_board_an_T_2 = 2'h1 == counter[1:0] ? 8'hdd : 8'hee; // @[Mux.scala 81:58]
-  wire [7:0] _io_board_an_T_4 = 2'h2 == counter[1:0] ? 8'hbb : _io_board_an_T_2; // @[Mux.scala 81:58]
-  wire [2:0] _counter_T_1 = counter + 3'h1; // @[Seg7.scala 44:22]
-  HexToSeg7 seg7Module_low ( // @[Seg7.scala 29:30]
-    .io_hexDigit(seg7Module_low_io_hexDigit),
-    .io_seg7(seg7Module_low_io_seg7)
+  wire [3:0] _GEN_1 = 3'h1 == counter ? digits_1 : digits_0; // @[Seg7.scala 34:{26,26}]
+  wire [3:0] _GEN_2 = 3'h2 == counter ? digits_2 : _GEN_1; // @[Seg7.scala 34:{26,26}]
+  wire [3:0] _GEN_3 = 3'h3 == counter ? digits_3 : _GEN_2; // @[Seg7.scala 34:{26,26}]
+  wire [3:0] _GEN_4 = 3'h4 == counter ? digits_4 : _GEN_3; // @[Seg7.scala 34:{26,26}]
+  wire [3:0] _GEN_5 = 3'h5 == counter ? digits_5 : _GEN_4; // @[Seg7.scala 34:{26,26}]
+  wire [3:0] _GEN_6 = 3'h6 == counter ? digits_6 : _GEN_5; // @[Seg7.scala 34:{26,26}]
+  wire [7:0] _io_board_an_T_1 = 3'h1 == counter ? 8'hfd : 8'hfe; // @[Mux.scala 81:58]
+  wire [7:0] _io_board_an_T_3 = 3'h2 == counter ? 8'hfb : _io_board_an_T_1; // @[Mux.scala 81:58]
+  wire [7:0] _io_board_an_T_5 = 3'h3 == counter ? 8'hf7 : _io_board_an_T_3; // @[Mux.scala 81:58]
+  wire [7:0] _io_board_an_T_7 = 3'h4 == counter ? 8'hef : _io_board_an_T_5; // @[Mux.scala 81:58]
+  wire [7:0] _io_board_an_T_9 = 3'h5 == counter ? 8'hdf : _io_board_an_T_7; // @[Mux.scala 81:58]
+  wire [7:0] _io_board_an_T_11 = 3'h6 == counter ? 8'hbf : _io_board_an_T_9; // @[Mux.scala 81:58]
+  wire [2:0] _counter_T_1 = counter + 3'h1; // @[Seg7.scala 48:22]
+  HexToSeg7 seg7Module ( // @[Seg7.scala 33:26]
+    .io_hexDigit(seg7Module_io_hexDigit),
+    .io_seg7(seg7Module_io_seg7)
   );
-  HexToSeg7 seg7Module_high ( // @[Seg7.scala 33:31]
-    .io_hexDigit(seg7Module_high_io_hexDigit),
-    .io_seg7(seg7Module_high_io_seg7)
-  );
-  assign io_board_seg7_high = seg7Module_high_io_seg7; // @[Seg7.scala 35:22]
-  assign io_board_seg7_low = seg7Module_low_io_seg7; // @[Seg7.scala 31:21]
-  assign io_board_an = 2'h3 == counter[1:0] ? 8'h77 : _io_board_an_T_4; // @[Mux.scala 81:58]
-  assign seg7Module_low_io_hexDigit = 2'h3 == counter[1:0] ? digits_low_3 : _GEN_2; // @[Seg7.scala 30:{30,30}]
-  assign seg7Module_high_io_hexDigit = 2'h3 == counter[1:0] ? digits_high_3 : _GEN_6; // @[Seg7.scala 34:{31,31}]
+  assign io_board_seg7 = seg7Module_io_seg7; // @[Seg7.scala 35:17]
+  assign io_board_an = 3'h7 == counter ? 8'h7f : _io_board_an_T_11; // @[Mux.scala 81:58]
+  assign seg7Module_io_hexDigit = 3'h7 == counter ? digits_7 : _GEN_6; // @[Seg7.scala 34:{26,26}]
   always @(posedge clock) begin
     if (reset) begin // @[Seg7.scala 27:24]
       counter <= 3'h0; // @[Seg7.scala 27:24]
     end else begin
-      counter <= _counter_T_1; // @[Seg7.scala 44:11]
+      counter <= _counter_T_1; // @[Seg7.scala 48:11]
     end
   end
 // Register and memory initialization
@@ -2034,8 +2031,7 @@ module DeviceTop(
   output [7:0]  io_mmio_uart_rxData,
   output        io_mmio_uart_rxValid,
   output [23:0] io_board_led_led,
-  output [7:0]  io_board_seg7_seg7_high,
-  output [7:0]  io_board_seg7_seg7_low,
+  output [7:0]  io_board_seg7_seg7,
   output [7:0]  io_board_seg7_an,
   input  [4:0]  io_board_btn_button,
   input  [23:0] io_board_switch_switches,
@@ -2048,8 +2044,7 @@ module DeviceTop(
   wire  seg7_clock; // @[DeviceTop.scala 43:20]
   wire  seg7_reset; // @[DeviceTop.scala 43:20]
   wire [31:0] seg7_io_mmio_seg7; // @[DeviceTop.scala 43:20]
-  wire [7:0] seg7_io_board_seg7_high; // @[DeviceTop.scala 43:20]
-  wire [7:0] seg7_io_board_seg7_low; // @[DeviceTop.scala 43:20]
+  wire [7:0] seg7_io_board_seg7; // @[DeviceTop.scala 43:20]
   wire [7:0] seg7_io_board_an; // @[DeviceTop.scala 43:20]
   wire [31:0] btn_io_mmio_button; // @[DeviceTop.scala 44:19]
   wire [4:0] btn_io_board_button; // @[DeviceTop.scala 44:19]
@@ -2069,8 +2064,7 @@ module DeviceTop(
     .clock(seg7_clock),
     .reset(seg7_reset),
     .io_mmio_seg7(seg7_io_mmio_seg7),
-    .io_board_seg7_high(seg7_io_board_seg7_high),
-    .io_board_seg7_low(seg7_io_board_seg7_low),
+    .io_board_seg7(seg7_io_board_seg7),
     .io_board_an(seg7_io_board_an)
   );
   Button btn ( // @[DeviceTop.scala 44:19]
@@ -2094,8 +2088,7 @@ module DeviceTop(
   assign io_mmio_uart_rxData = uart_io_mmio_rxData; // @[DeviceTop.scala 52:16]
   assign io_mmio_uart_rxValid = uart_io_mmio_rxValid; // @[DeviceTop.scala 52:16]
   assign io_board_led_led = led_io_board_led; // @[DeviceTop.scala 55:16]
-  assign io_board_seg7_seg7_high = seg7_io_board_seg7_high; // @[DeviceTop.scala 56:17]
-  assign io_board_seg7_seg7_low = seg7_io_board_seg7_low; // @[DeviceTop.scala 56:17]
+  assign io_board_seg7_seg7 = seg7_io_board_seg7; // @[DeviceTop.scala 56:17]
   assign io_board_seg7_an = seg7_io_board_an; // @[DeviceTop.scala 56:17]
   assign io_board_uart_tx = uart_io_board_tx; // @[DeviceTop.scala 59:16]
   assign io_external_signal_load_data_mode = io_board_switch_switches[23]; // @[DeviceTop.scala 62:62]
@@ -2113,8 +2106,7 @@ module Top(
   input         clock,
   input         reset,
   output [23:0] io_led_led,
-  output [7:0]  io_seg7_seg7_high,
-  output [7:0]  io_seg7_seg7_low,
+  output [7:0]  io_seg7_seg7,
   output [7:0]  io_seg7_an,
   input  [4:0]  io_btn_button,
   input  [23:0] io_switch_switches,
@@ -2142,8 +2134,7 @@ module Top(
   wire [7:0] device_io_mmio_uart_rxData; // @[Top.scala 19:22]
   wire  device_io_mmio_uart_rxValid; // @[Top.scala 19:22]
   wire [23:0] device_io_board_led_led; // @[Top.scala 19:22]
-  wire [7:0] device_io_board_seg7_seg7_high; // @[Top.scala 19:22]
-  wire [7:0] device_io_board_seg7_seg7_low; // @[Top.scala 19:22]
+  wire [7:0] device_io_board_seg7_seg7; // @[Top.scala 19:22]
   wire [7:0] device_io_board_seg7_an; // @[Top.scala 19:22]
   wire [4:0] device_io_board_btn_button; // @[Top.scala 19:22]
   wire [23:0] device_io_board_switch_switches; // @[Top.scala 19:22]
@@ -2176,8 +2167,7 @@ module Top(
     .io_mmio_uart_rxData(device_io_mmio_uart_rxData),
     .io_mmio_uart_rxValid(device_io_mmio_uart_rxValid),
     .io_board_led_led(device_io_board_led_led),
-    .io_board_seg7_seg7_high(device_io_board_seg7_seg7_high),
-    .io_board_seg7_seg7_low(device_io_board_seg7_seg7_low),
+    .io_board_seg7_seg7(device_io_board_seg7_seg7),
     .io_board_seg7_an(device_io_board_seg7_an),
     .io_board_btn_button(device_io_board_btn_button),
     .io_board_switch_switches(device_io_board_switch_switches),
@@ -2186,8 +2176,7 @@ module Top(
     .io_external_signal_load_data_mode(device_io_external_signal_load_data_mode)
   );
   assign io_led_led = device_io_board_led_led; // @[Top.scala 22:18]
-  assign io_seg7_seg7_high = device_io_board_seg7_seg7_high; // @[Top.scala 22:18]
-  assign io_seg7_seg7_low = device_io_board_seg7_seg7_low; // @[Top.scala 22:18]
+  assign io_seg7_seg7 = device_io_board_seg7_seg7; // @[Top.scala 22:18]
   assign io_seg7_an = device_io_board_seg7_an; // @[Top.scala 22:18]
   assign io_uart_tx = device_io_board_uart_tx; // @[Top.scala 22:18]
   assign clockSeparator_clock = clock;
