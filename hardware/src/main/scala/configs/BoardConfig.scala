@@ -6,7 +6,7 @@ case class BoardConfig(
                         switchWidth: Int,
                         seg7Width: Int,
                         anWidth: Int,
-                        uart_baud_count: Int = 5  // must baud_count >=2
+                        uart_baud_count: Int = 1302  // must baud_count >=2
                       ) {
 }
 

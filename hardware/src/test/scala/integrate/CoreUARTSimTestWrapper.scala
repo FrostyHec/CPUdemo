@@ -8,7 +8,7 @@ import utils.InsUtils._
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 
-class CoreUARTSimTest extends FlatSpec with ChiselScalatestTester with Matchers {
+class CoreUARTSimTestWrapper extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior of "CPU load from UART"
 
   def word_transmit(cpu: CoreTop, data: UInt, rcv_time: Int, hold: Int): Unit = {

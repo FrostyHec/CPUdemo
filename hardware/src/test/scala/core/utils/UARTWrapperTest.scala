@@ -3,17 +3,17 @@ package core.utils
 import chisel3._
 import chiseltest._
 import configs.GenConfig
-import device.UART
+import device.UARTWrapper
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import utils.UARTUtils._
 
 
-class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
+class UARTWrapperTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   behavior of "UART"
 
   it should "receive data correctly" in {
-    test(new UART) { dut =>
+    test(new UARTWrapper) { dut =>
       for (dt <- 0 to 255) {
         for (wt <- 1 to baud_count) {
           init(dut)
@@ -30,7 +30,7 @@ class UARTTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   }
 
   it should "transmit data correctly" in {
-    test(new UART) { dut =>
+    test(new UARTWrapper) { dut =>
       for (dt <- 0 to 255) {
         println(s"cur val::$dt")
         for (wt <- 1 to baud_count) {

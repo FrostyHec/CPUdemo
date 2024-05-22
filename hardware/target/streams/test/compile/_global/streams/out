@@ -1,0 +1,5 @@
+[debug] Acquiring lock on file D:\ComputerScience\Projects\CPUdemo\hardware\project\target\.sbt-compilation-infos\root-test\.sbt-idea-lock ...
+[warn] there were 17 deprecation warnings (since 3.1.0); re-run with -deprecation for details
+[warn] there were 159 feature warnings; re-run with -feature for details
+[warn] two warnings found
+[debug] Releasing lock on file D:\ComputerScience\Projects\CPUdemo\hardware\project\target\.sbt-compilation-infos\root-test\.sbt-idea-lock.

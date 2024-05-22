@@ -21,13 +21,13 @@ class BoardUARTBundle extends Bundle {
 
 // 整体UART模
 //TODO 整体模块上层的rst必须要取反成为low_enable
-class UART extends Module {
+class UARTWrapper extends Module {
   val io = IO(new Bundle {
     val board = new BoardUARTBundle
     val mmio = new MMIOUARTBundle
   })
   if (GenConfig.s.useIPUART) {
-    val uart = Module(new UART_IP())
+    val uart = Module(new uart())
     uart.io.clk := clock.asBool
     uart.io.rst := reset.asBool
 
@@ -60,7 +60,7 @@ class UART extends Module {
   }
 }
 
-class UART_IP extends BlackBox with HasBlackBoxResource {
+class uart extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle() {
     val clk = Input(Bool())
     val rst = Input(Bool())

@@ -4,24 +4,24 @@ import Generate.Top
 import chisel3._
 import chiseltest._
 import configs.GenConfig
-import device.UART
+import device.UARTWrapper
 
 object UARTUtils {
   val baud_count = GenConfig.s.board.uart_baud_count //10000000/115200
 
-  def init(dut: UART): Unit = {
+  def init(dut: UARTWrapper): Unit = {
     dut.io.board.rx.poke(true.B)
     dut.io.mmio.txStart.poke(false.B)
   }
 
-  def sendSingleRx(dut: UART, bit: Bool): Unit = {
+  def sendSingleRx(dut: UARTWrapper, bit: Bool): Unit = {
     for (_ <- 0 until baud_count) {
       dut.io.board.rx.poke(bit)
       dut.clock.step()
     }
   }
 
-  def sendRx(dut: UART, data: UInt): Unit = {
+  def sendRx(dut: UARTWrapper, data: UInt): Unit = {
     require(data.getWidth <= 8)
     sendSingleRx(dut, false.B) //start
     for (i <- 0 until 8) { //8 data
@@ -31,14 +31,14 @@ object UARTUtils {
     sendSingleRx(dut, true.B) //stop
   }
 
-  def sendData(dut: UART, data: UInt): Unit = {
+  def sendData(dut: UARTWrapper, data: UInt): Unit = {
     dut.io.mmio.txData.poke(data)
     dut.io.mmio.txStart.poke(true.B)
     dut.clock.step(2)
     dut.io.mmio.txStart.poke(false.B)
   }
 
-  def checkSingleTx(dut: UART, bit: Bool): Unit = {
+  def checkSingleTx(dut: UARTWrapper, bit: Bool): Unit = {
     for (_ <- 0 until baud_count) {
       dut.io.board.tx.expect(bit)
       dut.io.mmio.txReady.expect(false.B)
@@ -46,7 +46,7 @@ object UARTUtils {
     }
   }
 
-  def checkTx(dut: UART, data: UInt): Unit = {
+  def checkTx(dut: UARTWrapper, data: UInt): Unit = {
     checkSingleTx(dut, false.B) //start
     for (i <- 0 until 8) { //8 data
       checkSingleTx(dut, data(i))
@@ -78,11 +78,12 @@ object UARTUtils {
   }
 
   def sendWordFromTop(top: Top, data: UInt): Unit = {
+    top.clock.setTimeout(0)
     require(data.getWidth <= 32)
     for (i <- 0 until 4) { //8 data
       sendRxFromTop(top, data(i * 8 + 7, i * 8))
-      println(s"sent BYTE ${i} val: ${data(i * 8 + 7, i * 8).litValue}")
-      top.clock.step(10)//todo?
+      println(s"sent BYTE $i val: ${data(i * 8 + 7, i * 8).litValue}")
+      top.clock.step(10)
     }
   }
 }
