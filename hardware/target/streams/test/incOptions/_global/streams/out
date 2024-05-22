@@ -1,0 +1,36 @@
+[debug] Created transactional ClassFileManager with tempDir = D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\test-classes.bak
+[debug] About to delete class files:
+[debug] We backup class files:
+[debug] Created transactional ClassFileManager with tempDir = D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\test-classes.bak
+[debug] About to delete class files:
+[debug] We backup class files:
+[debug] Registering generated classes:
+[debug] 	PCTest.class
+[debug] 	software1Test.class
+[debug] 	InsUtils.class
+[debug] 	CoreUARTSimTest.class
+[debug] 	UARTVerify$.class
+[debug] 	UARTVerify$$anon$1.class
+[debug] 	NextPCGenTest.class
+[debug] 	RegistersTest.class
+[debug] 	TotalTopTest.class
+[debug] 	WriteDataSelectorTest.class
+[debug] 	UARTVerify.class
+[debug] 	OperandSelectorTest.class
+[debug] 	UARTUtils$.class
+[debug] 	ValueUtils.class
+[debug] 	AUSelectorTest.class
+[debug] 	ControlUnitTest.class
+[debug] 	MemoryDispatchTest.class
+[debug] 	UARTVerify$delayedInit$body.class
+[debug] 	InstructionDecoderTest.class
+[debug] 	ValueUtils$.class
+[debug] 	CMPTest.class
+[debug] 	ALUTest.class
+[debug] 	InsUtils$.class
+[debug] 	UARTTest.class
+[debug] 	UARTUtils.class
+[debug] 	CoreTopTest.class
+[debug] 	ImmGenTest.class
+[debug] 	RAMTest.class
+[debug] Removing the temporary directory used for backing up class files: D:\ComputerScience\Projects\CPUdemo\hardware\target\scala-2.12\test-classes.bak
