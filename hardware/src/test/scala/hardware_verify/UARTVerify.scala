@@ -11,7 +11,7 @@ class UARTVerify extends Module {
     val signal = Output(Bool())
   })
   val mmio=new MMIOUARTBundle
-  val uart=Module(new UART())
+  val uart=Module(new UARTWrapper())
   io.board<>uart.io.board
   uart.io.mmio.txStart:=false.B
   uart.io.mmio.txData:=DontCare
