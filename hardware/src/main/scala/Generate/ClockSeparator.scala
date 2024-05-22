@@ -16,3 +16,6 @@ class ClockSeparator extends Module {
     io.cpuClock := clock
   }
 }
+class IPClock extends BlackBox{
+  
+}
