@@ -7,7 +7,7 @@ addi a6, zero, 1
 slli a6, a6, 16
 srli t0, a0, 16
 add a6, a6, t0		# 0x0001_ffff -> stack
-addi a4, zero, 14
+addi a4, zero, 7
 slli a4, a4, 20     # mask of the cases
 
 # determine the cases
@@ -22,7 +22,7 @@ andi t0, t0, 4
 beq t0, zero, situation
 lw t1, (a2)
 and t1, t1, a4
-srli t1, t1, 21
+srli t1, t1, 20
 check0:
 lw t0, (a1)
 andi t0, t0, 4
@@ -76,7 +76,7 @@ andi t0, t0, 4
 beq t0, zero, case1
 lb t3, 1(a2)
 sw t3, (a3) # 7-seg
-sw t3, -8(a6)
+sw t3, (a6)
 beq zero, zero, ini
 
 case2:
@@ -89,31 +89,31 @@ sw t4, -4(a6)
 beq zero, zero, ini
 
 case3:
-lw t3, -8(a6)
+lw t3, (a6)
 lw t4, -4(a6)
 beq t3, t4, label
 beq zero, zero, ini
 
 case4:
-lw t3, -8(a6)
+lw t3, (a6)
 lw t4, -4(a6)
 blt t3, t4, label
 beq zero, zero, ini
 
 case5:
-lw t3, -8(a6)
+lw t3, (a6)
 lw t4, -4(a6)
 bge t3, t4, label
 beq zero, zero, ini
 
 case6:
-lw t3, -8(a6)
+lw t3, (a6)
 lw t4, -4(a6)
 bltu t3, t4, label
 beq zero, zero, ini
 
 case7:
-lw t3, -8(a6)
+lw t3, (a6)
 lw t4, -4(a6)
 bgeu t3, t4, label
 beq zero, zero, ini

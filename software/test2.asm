@@ -3,7 +3,7 @@ addi a0, zero, -256 # 0xffff_ff00 -> led * 24
 addi a1, a0, 4      # 0xffff_ff04 -> btn * 5
 addi a2, a0, 8      # 0xffff_ff08 -> swi * 24
 addi a3, a0, 12     # 0xffff_ff0c -> 7seg
-addi a4, zero, 14
+addi a4, zero, 7
 slli a4, a4, 20     # mask of the cases
 
 # determine the cases
@@ -18,7 +18,7 @@ andi t0, t0, 4
 beq t0, zero, situation
 lw t1, (a2)
 and t1, t1, a4
-srli t1, t1, 21
+srli t1, t1, 20
 check0:
 lw t0, (a1)
 andi t0, t0, 4

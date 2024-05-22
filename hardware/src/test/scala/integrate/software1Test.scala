@@ -19,7 +19,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInTop(total, 11, "h_ff_ff_ff_04".U) // btn
       checkRegsInTop(total, 12, "h_ff_ff_ff_08".U) // swi
       checkRegsInTop(total, 13, "h_ff_ff_ff_0c".U) // 7seg
-      checkRegsInTop(total, 14, "h_e0_00_00".U) // mask
+      checkRegsInTop(total, 14, "h_70_00_00".U) // mask
     }
   }
 
@@ -92,7 +92,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_20_12_34".U)
+      total.io.switch.switches.poke("h_10_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -114,7 +114,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
+      total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -136,7 +136,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_20_12_34".U)
+      total.io.switch.switches.poke("h_10_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -153,7 +153,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
+      total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -171,7 +171,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_60_12_34".U)
+      total.io.switch.switches.poke("h_30_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -246,7 +246,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_20_12_34".U)
+      total.io.switch.switches.poke("h_10_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -264,7 +264,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
+      total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -282,7 +282,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_60_12_34".U)
+      total.io.switch.switches.poke("h_30_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -301,6 +301,23 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_10_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
@@ -312,6 +329,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
       checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      checkRegsInTop(total, 29, "h_cd".U)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
@@ -322,31 +340,12 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
-      total.io.btn.button.poke(0.U)
-      run_instructions(total, 30)
-      total.io.switch.switches.poke("h_00_ab_cd".U)
-      run_instructions(total, 30)
-      total.io.btn.button.poke(4.U)
-      run_instructions(total, 30)
-      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
-      checkRegsInTop(total, 29, "h_cd".U)
-      total.io.btn.button.poke(0.U)
-      run_instructions(total, 30)
-      checkRegsInTop(total, 15, 0.U)
-
-      run_instructions(total, 30)
-      checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_80_12_34".U)
-      run_instructions(total, 30)
-      total.io.btn.button.poke(4.U)
-      run_instructions(total, 30)
       checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 30)
       checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
       checkRegsInTop(total, 29, "h_cd".U)
       run_instructions(total, 30)
-      // todo 这里是 0 ， 这个测试过不了，原因未知
       checkRegsInTop(total, 31, 1.U)
       total.io.led.led.expect(1.U)
       run_instructions(total, 30)
@@ -421,7 +420,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_20_12_34".U)
+      total.io.switch.switches.poke("h_10_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -438,7 +437,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
+      total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -455,7 +454,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_a0_12_34".U)
+      total.io.switch.switches.poke("h_50_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -536,7 +535,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_20_12_34".U)
+      total.io.switch.switches.poke("h_10_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -554,7 +553,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
+      total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -571,7 +570,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_a0_12_34".U)
+      total.io.switch.switches.poke("h_50_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -590,7 +589,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_20_12_34".U)
+      total.io.switch.switches.poke("h_10_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -607,7 +606,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
+      total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -624,7 +623,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_c0_12_34".U)
+      total.io.switch.switches.poke("h_60_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -643,6 +642,23 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_10_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_20_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
@@ -653,23 +669,6 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
-      checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
-      total.io.btn.button.poke(0.U)
-      run_instructions(total, 30)
-      checkRegsInTop(total, 15, 0.U)
-
-      run_instructions(total, 30)
-      checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_40_12_34".U)
-      run_instructions(total, 30)
-      total.io.btn.button.poke(4.U)
-      run_instructions(total, 30)
-      total.io.btn.button.poke(0.U)
-      run_instructions(total, 30)
-      total.io.switch.switches.poke("h_00_ab_cd".U)
-      run_instructions(total, 30)
-      total.io.btn.button.poke(4.U)
-      run_instructions(total, 30)
       checkRegsInTop(total, 29, "h_cd".U)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 30)
@@ -677,7 +676,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
 
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
-      total.io.switch.switches.poke("h_e0_12_34".U)
+      total.io.switch.switches.poke("h_70_12_34".U)
       run_instructions(total, 30)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 30)
@@ -685,8 +684,6 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 30)
       checkRegsInTop(total, 28, "h_ff_ff_ff_ab".U)
       checkRegsInTop(total, 29, "h_cd".U)
-      // bgeu
-      // todo 这里也出问题了，感觉像是就跳不到了，但也不是，前面那个可以跳到
       checkRegsInTop(total, 31, 1.U)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
