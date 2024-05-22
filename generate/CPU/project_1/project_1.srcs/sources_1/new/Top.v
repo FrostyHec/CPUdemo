@@ -1,101 +1,58 @@
 module ClockSeparator(
   input   clock,
+  input   reset,
   output  io_cpuClock
 );
-  assign io_cpuClock = clock; // @[ClockSeparator.scala 16:17]
+  wire  ip_clock_clk_in1; // @[ClockSeparator.scala 14:26]
+  wire  ip_clock_reset; // @[ClockSeparator.scala 14:26]
+  wire  ip_clock_clk_out1; // @[ClockSeparator.scala 14:26]
+  wire  ip_clock_clk_out2; // @[ClockSeparator.scala 14:26]
+  clk_wiz_0 ip_clock ( // @[ClockSeparator.scala 14:26]
+    .clk_in1(ip_clock_clk_in1),
+    .reset(ip_clock_reset),
+    .clk_out1(ip_clock_clk_out1),
+    .clk_out2(ip_clock_clk_out2)
+  );
+  assign io_cpuClock = ip_clock_clk_out2; // @[ClockSeparator.scala 17:17]
+  assign ip_clock_clk_in1 = clock; // @[ClockSeparator.scala 15:25]
+  assign ip_clock_reset = reset; // @[ClockSeparator.scala 16:22]
 endmodule
 module DualPortRAM(
   input         clock,
   input         io_write,
-  input  [31:0] io_read_addr,
-  input  [31:0] io_write_addr,
+  input  [13:0] io_write_addr,
   input  [31:0] io_write_data,
   output [31:0] io_read_data,
-  input  [31:0] io2_read_addr,
+  input  [13:0] io2_read_addr,
   output [31:0] io2_read_data
 );
-`ifdef RANDOMIZE_MEM_INIT
-  reg [31:0] _RAND_0;
-`endif // RANDOMIZE_MEM_INIT
-  reg [31:0] mem [0:65535]; // @[MemoryPacket.scala 60:18]
-  wire  mem_io_read_data_MPORT_en; // @[MemoryPacket.scala 60:18]
-  wire [15:0] mem_io_read_data_MPORT_addr; // @[MemoryPacket.scala 60:18]
-  wire [31:0] mem_io_read_data_MPORT_data; // @[MemoryPacket.scala 60:18]
-  wire  mem_io2_read_data_MPORT_en; // @[MemoryPacket.scala 60:18]
-  wire [15:0] mem_io2_read_data_MPORT_addr; // @[MemoryPacket.scala 60:18]
-  wire [31:0] mem_io2_read_data_MPORT_data; // @[MemoryPacket.scala 60:18]
-  wire [31:0] mem_MPORT_data; // @[MemoryPacket.scala 60:18]
-  wire [15:0] mem_MPORT_addr; // @[MemoryPacket.scala 60:18]
-  wire  mem_MPORT_mask; // @[MemoryPacket.scala 60:18]
-  wire  mem_MPORT_en; // @[MemoryPacket.scala 60:18]
-  assign mem_io_read_data_MPORT_en = 1'h1;
-  assign mem_io_read_data_MPORT_addr = io_read_addr[15:0];
-  assign mem_io_read_data_MPORT_data = mem[mem_io_read_data_MPORT_addr]; // @[MemoryPacket.scala 60:18]
-  assign mem_io2_read_data_MPORT_en = 1'h1;
-  assign mem_io2_read_data_MPORT_addr = io2_read_addr[15:0];
-  assign mem_io2_read_data_MPORT_data = mem[mem_io2_read_data_MPORT_addr]; // @[MemoryPacket.scala 60:18]
-  assign mem_MPORT_data = io_write_data;
-  assign mem_MPORT_addr = io_write_addr[15:0];
-  assign mem_MPORT_mask = 1'h1;
-  assign mem_MPORT_en = io_write;
-  assign io_read_data = mem_io_read_data_MPORT_data; // @[MemoryPacket.scala 69:18]
-  assign io2_read_data = mem_io2_read_data_MPORT_data; // @[MemoryPacket.scala 70:19]
-  always @(posedge clock) begin
-    if (mem_MPORT_en & mem_MPORT_mask) begin
-      mem[mem_MPORT_addr] <= mem_MPORT_data; // @[MemoryPacket.scala 60:18]
-    end
-  end
-// Register and memory initialization
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-`ifdef FIRRTL_BEFORE_INITIAL
-`FIRRTL_BEFORE_INITIAL
-`endif
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-`ifdef RANDOMIZE_MEM_INIT
-  _RAND_0 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 65536; initvar = initvar+1)
-    mem[initvar] = _RAND_0[31:0];
-`endif // RANDOMIZE_MEM_INIT
-  `endif // RANDOMIZE
-end // initial
-`ifdef FIRRTL_AFTER_INITIAL
-`FIRRTL_AFTER_INITIAL
-`endif
-`endif // SYNTHESIS
+  wire  ip_mem_clk; // @[MemoryPacket.scala 63:24]
+  wire [13:0] ip_mem_a; // @[MemoryPacket.scala 63:24]
+  wire [31:0] ip_mem_d; // @[MemoryPacket.scala 63:24]
+  wire [13:0] ip_mem_dpra; // @[MemoryPacket.scala 63:24]
+  wire  ip_mem_we; // @[MemoryPacket.scala 63:24]
+  wire [31:0] ip_mem_spo; // @[MemoryPacket.scala 63:24]
+  wire [31:0] ip_mem_dpo; // @[MemoryPacket.scala 63:24]
+  ins_mem ip_mem ( // @[MemoryPacket.scala 63:24]
+    .clk(ip_mem_clk),
+    .a(ip_mem_a),
+    .d(ip_mem_d),
+    .dpra(ip_mem_dpra),
+    .we(ip_mem_we),
+    .spo(ip_mem_spo),
+    .dpo(ip_mem_dpo)
+  );
+  assign io_read_data = ip_mem_spo; // @[MemoryPacket.scala 69:18]
+  assign io2_read_data = ip_mem_dpo; // @[MemoryPacket.scala 70:19]
+  assign ip_mem_clk = clock; // @[MemoryPacket.scala 64:19]
+  assign ip_mem_a = io_write ? io_write_addr : io2_read_addr; // @[MemoryPacket.scala 65:23]
+  assign ip_mem_d = io_write_data; // @[MemoryPacket.scala 66:17]
+  assign ip_mem_dpra = io2_read_addr; // @[MemoryPacket.scala 67:20]
+  assign ip_mem_we = io_write; // @[MemoryPacket.scala 68:18]
 endmodule
 module InsRAM(
   input         clock,
   input         io_write,
-  input  [31:0] io_read_addr,
   input  [31:0] io_write_addr,
   input  [31:0] io_write_data,
   output [31:0] io_read_data,
@@ -104,16 +61,14 @@ module InsRAM(
 );
   wire  insRAM_clock; // @[InsRAM.scala 17:22]
   wire  insRAM_io_write; // @[InsRAM.scala 17:22]
-  wire [31:0] insRAM_io_read_addr; // @[InsRAM.scala 17:22]
-  wire [31:0] insRAM_io_write_addr; // @[InsRAM.scala 17:22]
+  wire [13:0] insRAM_io_write_addr; // @[InsRAM.scala 17:22]
   wire [31:0] insRAM_io_write_data; // @[InsRAM.scala 17:22]
   wire [31:0] insRAM_io_read_data; // @[InsRAM.scala 17:22]
-  wire [31:0] insRAM_io2_read_addr; // @[InsRAM.scala 17:22]
+  wire [13:0] insRAM_io2_read_addr; // @[InsRAM.scala 17:22]
   wire [31:0] insRAM_io2_read_data; // @[InsRAM.scala 17:22]
   DualPortRAM insRAM ( // @[InsRAM.scala 17:22]
     .clock(insRAM_clock),
     .io_write(insRAM_io_write),
-    .io_read_addr(insRAM_io_read_addr),
     .io_write_addr(insRAM_io_write_addr),
     .io_write_data(insRAM_io_write_data),
     .io_read_data(insRAM_io_read_data),
@@ -124,89 +79,36 @@ module InsRAM(
   assign io2_read_data = insRAM_io2_read_data; // @[InsRAM.scala 25:7]
   assign insRAM_clock = clock;
   assign insRAM_io_write = io_write; // @[InsRAM.scala 24:6]
-  assign insRAM_io_read_addr = io_read_addr; // @[InsRAM.scala 24:6]
-  assign insRAM_io_write_addr = io_write_addr; // @[InsRAM.scala 24:6]
+  assign insRAM_io_write_addr = io_write_addr[13:0]; // @[InsRAM.scala 24:6]
   assign insRAM_io_write_data = io_write_data; // @[InsRAM.scala 24:6]
-  assign insRAM_io2_read_addr = io2_read_addr; // @[InsRAM.scala 25:7]
+  assign insRAM_io2_read_addr = io2_read_addr[13:0]; // @[InsRAM.scala 25:7]
 endmodule
 module RAM(
   input         clock,
   input         io_write,
-  input  [31:0] io_read_addr,
-  input  [31:0] io_write_addr,
+  input  [13:0] io_read_addr,
+  input  [13:0] io_write_addr,
   input  [31:0] io_write_data,
   output [31:0] io_read_data
 );
-`ifdef RANDOMIZE_MEM_INIT
-  reg [31:0] _RAND_0;
-`endif // RANDOMIZE_MEM_INIT
-  reg [31:0] mem [0:65535]; // @[MemoryPacket.scala 33:18]
-  wire  mem_io_read_data_MPORT_en; // @[MemoryPacket.scala 33:18]
-  wire [15:0] mem_io_read_data_MPORT_addr; // @[MemoryPacket.scala 33:18]
-  wire [31:0] mem_io_read_data_MPORT_data; // @[MemoryPacket.scala 33:18]
-  wire [31:0] mem_MPORT_data; // @[MemoryPacket.scala 33:18]
-  wire [15:0] mem_MPORT_addr; // @[MemoryPacket.scala 33:18]
-  wire  mem_MPORT_mask; // @[MemoryPacket.scala 33:18]
-  wire  mem_MPORT_en; // @[MemoryPacket.scala 33:18]
-  assign mem_io_read_data_MPORT_en = 1'h1;
-  assign mem_io_read_data_MPORT_addr = io_read_addr[15:0];
-  assign mem_io_read_data_MPORT_data = mem[mem_io_read_data_MPORT_addr]; // @[MemoryPacket.scala 33:18]
-  assign mem_MPORT_data = io_write_data;
-  assign mem_MPORT_addr = io_write_addr[15:0];
-  assign mem_MPORT_mask = 1'h1;
-  assign mem_MPORT_en = io_write;
-  assign io_read_data = mem_io_read_data_MPORT_data; // @[MemoryPacket.scala 42:18]
-  always @(posedge clock) begin
-    if (mem_MPORT_en & mem_MPORT_mask) begin
-      mem[mem_MPORT_addr] <= mem_MPORT_data; // @[MemoryPacket.scala 33:18]
-    end
-  end
-// Register and memory initialization
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-`ifdef FIRRTL_BEFORE_INITIAL
-`FIRRTL_BEFORE_INITIAL
-`endif
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-`ifdef RANDOMIZE_MEM_INIT
-  _RAND_0 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 65536; initvar = initvar+1)
-    mem[initvar] = _RAND_0[31:0];
-`endif // RANDOMIZE_MEM_INIT
-  `endif // RANDOMIZE
-end // initial
-`ifdef FIRRTL_AFTER_INITIAL
-`FIRRTL_AFTER_INITIAL
-`endif
-`endif // SYNTHESIS
+  wire  ip_ram_clk; // @[MemoryPacket.scala 31:24]
+  wire [31:0] ip_ram_a; // @[MemoryPacket.scala 31:24]
+  wire [31:0] ip_ram_d; // @[MemoryPacket.scala 31:24]
+  wire  ip_ram_we; // @[MemoryPacket.scala 31:24]
+  wire [31:0] ip_ram_spo; // @[MemoryPacket.scala 31:24]
+  wire [13:0] _ip_ram_io_a_T = io_write ? io_write_addr : io_read_addr; // @[MemoryPacket.scala 33:23]
+  data_mem ip_ram ( // @[MemoryPacket.scala 31:24]
+    .clk(ip_ram_clk),
+    .a(ip_ram_a),
+    .d(ip_ram_d),
+    .we(ip_ram_we),
+    .spo(ip_ram_spo)
+  );
+  assign io_read_data = ip_ram_spo; // @[MemoryPacket.scala 36:18]
+  assign ip_ram_clk = clock; // @[MemoryPacket.scala 32:19]
+  assign ip_ram_a = {{18'd0}, _ip_ram_io_a_T}; // @[MemoryPacket.scala 33:17]
+  assign ip_ram_d = io_write_data; // @[MemoryPacket.scala 34:17]
+  assign ip_ram_we = io_write; // @[MemoryPacket.scala 35:18]
 endmodule
 module DataRAM(
   input         clock,
@@ -218,8 +120,8 @@ module DataRAM(
 );
   wire  dataRAM_clock; // @[DataRAM.scala 12:23]
   wire  dataRAM_io_write; // @[DataRAM.scala 12:23]
-  wire [31:0] dataRAM_io_read_addr; // @[DataRAM.scala 12:23]
-  wire [31:0] dataRAM_io_write_addr; // @[DataRAM.scala 12:23]
+  wire [13:0] dataRAM_io_read_addr; // @[DataRAM.scala 12:23]
+  wire [13:0] dataRAM_io_write_addr; // @[DataRAM.scala 12:23]
   wire [31:0] dataRAM_io_write_data; // @[DataRAM.scala 12:23]
   wire [31:0] dataRAM_io_read_data; // @[DataRAM.scala 12:23]
   RAM dataRAM ( // @[DataRAM.scala 12:23]
@@ -233,8 +135,8 @@ module DataRAM(
   assign io_read_data = dataRAM_io_read_data; // @[DataRAM.scala 18:7]
   assign dataRAM_clock = clock;
   assign dataRAM_io_write = io_write; // @[DataRAM.scala 18:7]
-  assign dataRAM_io_read_addr = io_read_addr; // @[DataRAM.scala 18:7]
-  assign dataRAM_io_write_addr = io_write_addr; // @[DataRAM.scala 18:7]
+  assign dataRAM_io_read_addr = io_read_addr[13:0]; // @[DataRAM.scala 18:7]
+  assign dataRAM_io_write_addr = io_write_addr[13:0]; // @[DataRAM.scala 18:7]
   assign dataRAM_io_write_data = io_write_data; // @[DataRAM.scala 18:7]
 endmodule
 module OutRegisters(
@@ -382,7 +284,6 @@ module MemoryDispatch(
   input  [1:0]  io_cpu_state,
   input  [31:0] io_ins_addr,
   output [31:0] io_ins_out,
-  input         io_read_data,
   input         io_write_data,
   input         io_unsigned,
   input  [1:0]  io_data_width,
@@ -396,7 +297,6 @@ module MemoryDispatch(
 );
   wire  insRAM_clock; // @[MemoryDispatch.scala 36:22]
   wire  insRAM_io_write; // @[MemoryDispatch.scala 36:22]
-  wire [31:0] insRAM_io_read_addr; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io_write_addr; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io_write_data; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io_read_data; // @[MemoryDispatch.scala 36:22]
@@ -423,20 +323,20 @@ module MemoryDispatch(
   wire [29:0] read_ins_addr = io_ins_addr[31:2]; // @[MemoryDispatch.scala 33:35]
   wire  is_write_clk = io_cpu_state == 2'h1 | io_cpu_state == 2'h2; // @[MemoryDispatch.scala 45:71]
   wire  _T_1 = io_data_addr <= 32'hffff; // @[MemoryDispatch.scala 79:21]
-  wire  _GEN_0 = io_write_data & (is_write_clk & io_write_data); // @[MemoryDispatch.scala 81:25 82:23 MemoryPacket.scala 16:16]
+  wire  _GEN_0 = io_write_data & (is_write_clk & io_write_data); // @[MemoryDispatch.scala 81:25 82:23 MemoryPacket.scala 17:16]
   wire  _T_3 = 32'h10000 <= io_data_addr; // @[MemoryDispatch.scala 88:36]
   wire  _T_5 = _T_3 & io_data_addr <= 32'h1ffff; // @[MemoryDispatch.scala 89:5]
   wire [31:0] _havard_mem_T_1 = io_data_addr - 32'h10000; // @[MemoryDispatch.scala 91:36]
   wire [29:0] havard_mem = _havard_mem_T_1[31:2]; // @[MemoryDispatch.scala 91:61]
   wire  _T_6 = 32'hffffff00 <= io_data_addr; // @[MemoryDispatch.scala 101:38]
   wire [31:0] _GEN_3 = outRegisters_io_mem_read_data; // @[MemoryDispatch.scala 102:47 103:14]
-  wire  _GEN_4 = _T_6 & _GEN_0; // @[MemoryDispatch.scala 102:47 MemoryPacket.scala 16:16]
-  wire [29:0] _GEN_5 = _T_3 & io_data_addr <= 32'h1ffff ? havard_mem : rw_mem_addr; // @[MemoryDispatch.scala 89:45 92:26 MemoryPacket.scala 17:20]
+  wire  _GEN_4 = _T_6 & _GEN_0; // @[MemoryDispatch.scala 102:47 MemoryPacket.scala 17:16]
+  wire [29:0] _GEN_5 = _T_3 & io_data_addr <= 32'h1ffff ? havard_mem : rw_mem_addr; // @[MemoryDispatch.scala 89:45 92:26 MemoryPacket.scala 18:20]
   wire [31:0] _GEN_6 = _T_3 & io_data_addr <= 32'h1ffff ? dataRAM_io_read_data : _GEN_3; // @[MemoryDispatch.scala 89:45 94:14]
-  wire  _GEN_7 = _T_3 & io_data_addr <= 32'h1ffff & _GEN_0; // @[MemoryDispatch.scala 89:45 MemoryPacket.scala 16:16]
-  wire  _GEN_8 = _T_3 & io_data_addr <= 32'h1ffff ? 1'h0 : _GEN_4; // @[MemoryDispatch.scala 89:45 MemoryPacket.scala 16:16]
+  wire  _GEN_7 = _T_3 & io_data_addr <= 32'h1ffff & _GEN_0; // @[MemoryDispatch.scala 89:45 MemoryPacket.scala 17:16]
+  wire  _GEN_8 = _T_3 & io_data_addr <= 32'h1ffff ? 1'h0 : _GEN_4; // @[MemoryDispatch.scala 89:45 MemoryPacket.scala 17:16]
   wire [31:0] data_out = io_data_addr <= 32'hffff ? insRAM_io_read_data : _GEN_6; // @[MemoryDispatch.scala 79:44 80:14]
-  wire [29:0] _GEN_11 = io_data_addr <= 32'hffff ? rw_mem_addr : _GEN_5; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 17:20]
+  wire [29:0] _GEN_11 = io_data_addr <= 32'hffff ? rw_mem_addr : _GEN_5; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 18:20]
   wire  _T_11 = 2'h0 == io_data_width; // @[MemoryDispatch.scala 118:25]
   wire [7:0] value = io_data_write[7:0]; // @[MemoryDispatch.scala 120:32]
   wire  _T_13 = 2'h0 == io_data_addr[1:0]; // @[MemoryDispatch.scala 121:34]
@@ -455,25 +355,30 @@ module MemoryDispatch(
   wire [31:0] _data_in_T_13 = {value_1,data_out[15:0]}; // @[Cat.scala 33:92]
   wire [31:0] _GEN_18 = ~io_data_addr[1] ? _data_in_T_11 : _data_in_T_13; // @[MemoryDispatch.scala 138:40 139:17 141:17]
   wire [31:0] _GEN_20 = 2'h1 == io_data_width ? _GEN_18 : io_data_write; // @[MemoryDispatch.scala 118:25]
-  wire  _high_bit_T_1 = io_unsigned ? 1'h0 : data_out[7]; // @[MemoryDispatch.scala 153:34]
+  wire  _high_bit_T_1 = io_unsigned ? 1'h0 : data_out[7]; // @[MemoryDispatch.scala 155:38]
   wire [23:0] high_bit = _high_bit_T_1 ? 24'hffffff : 24'h0; // @[Bitwise.scala 77:12]
   wire [31:0] _io_data_out_T_1 = {high_bit,data_out[7:0]}; // @[Cat.scala 33:92]
-  wire [31:0] _io_data_out_T_3 = {high_bit,data_out[15:8]}; // @[Cat.scala 33:92]
-  wire [31:0] _io_data_out_T_5 = {high_bit,data_out[23:16]}; // @[Cat.scala 33:92]
-  wire [31:0] _io_data_out_T_7 = {high_bit,data_out[31:24]}; // @[Cat.scala 33:92]
-  wire [31:0] _GEN_23 = _T_15 ? _io_data_out_T_5 : _io_data_out_T_7; // @[MemoryDispatch.scala 154:34 162:23]
-  wire [31:0] _GEN_24 = _T_14 ? _io_data_out_T_3 : _GEN_23; // @[MemoryDispatch.scala 154:34 159:23]
-  wire [31:0] _GEN_25 = _T_13 ? _io_data_out_T_1 : _GEN_24; // @[MemoryDispatch.scala 154:34 156:23]
-  wire  _high_bit_T_4 = io_unsigned ? 1'h0 : data_out[15]; // @[MemoryDispatch.scala 171:34]
-  wire [15:0] high_bit_1 = _high_bit_T_4 ? 16'hffff : 16'h0; // @[Bitwise.scala 77:12]
-  wire [31:0] _io_data_out_T_9 = {high_bit_1,data_out[15:0]}; // @[Cat.scala 33:92]
-  wire [31:0] _io_data_out_T_11 = {high_bit_1,data_out[31:16]}; // @[Cat.scala 33:92]
-  wire [31:0] _GEN_27 = _T_13 ? _io_data_out_T_9 : _io_data_out_T_11; // @[MemoryDispatch.scala 172:34 174:23]
+  wire  _high_bit_T_4 = io_unsigned ? 1'h0 : data_out[15]; // @[MemoryDispatch.scala 159:38]
+  wire [23:0] high_bit_1 = _high_bit_T_4 ? 24'hffffff : 24'h0; // @[Bitwise.scala 77:12]
+  wire [31:0] _io_data_out_T_3 = {high_bit_1,data_out[15:8]}; // @[Cat.scala 33:92]
+  wire  _high_bit_T_7 = io_unsigned ? 1'h0 : data_out[23]; // @[MemoryDispatch.scala 163:38]
+  wire [23:0] high_bit_2 = _high_bit_T_7 ? 24'hffffff : 24'h0; // @[Bitwise.scala 77:12]
+  wire [31:0] _io_data_out_T_5 = {high_bit_2,data_out[23:16]}; // @[Cat.scala 33:92]
+  wire  _high_bit_T_10 = io_unsigned ? 1'h0 : data_out[31]; // @[MemoryDispatch.scala 167:38]
+  wire [23:0] high_bit_3 = _high_bit_T_10 ? 24'hffffff : 24'h0; // @[Bitwise.scala 77:12]
+  wire [31:0] _io_data_out_T_7 = {high_bit_3,data_out[31:24]}; // @[Cat.scala 33:92]
+  wire [31:0] _GEN_23 = _T_15 ? _io_data_out_T_5 : _io_data_out_T_7; // @[MemoryDispatch.scala 153:34 164:23]
+  wire [31:0] _GEN_24 = _T_14 ? _io_data_out_T_3 : _GEN_23; // @[MemoryDispatch.scala 153:34 160:23]
+  wire [31:0] _GEN_25 = _T_13 ? _io_data_out_T_1 : _GEN_24; // @[MemoryDispatch.scala 153:34 156:23]
+  wire [15:0] high_bit_4 = _high_bit_T_4 ? 16'hffff : 16'h0; // @[Bitwise.scala 77:12]
+  wire [31:0] _io_data_out_T_9 = {high_bit_4,data_out[15:0]}; // @[Cat.scala 33:92]
+  wire [15:0] high_bit_5 = _high_bit_T_10 ? 16'hffff : 16'h0; // @[Bitwise.scala 77:12]
+  wire [31:0] _io_data_out_T_11 = {high_bit_5,data_out[31:16]}; // @[Cat.scala 33:92]
+  wire [31:0] _GEN_27 = _T_13 ? _io_data_out_T_9 : _io_data_out_T_11; // @[MemoryDispatch.scala 174:34 177:23]
   wire [31:0] _GEN_29 = _T_17 ? _GEN_27 : data_out; // @[MemoryDispatch.scala 151:25]
   InsRAM insRAM ( // @[MemoryDispatch.scala 36:22]
     .clock(insRAM_clock),
     .io_write(insRAM_io_write),
-    .io_read_addr(insRAM_io_read_addr),
     .io_write_addr(insRAM_io_write_addr),
     .io_write_data(insRAM_io_write_data),
     .io_read_data(insRAM_io_read_data),
@@ -506,21 +411,20 @@ module MemoryDispatch(
   assign io_external_led_led = outRegisters_io_external_led_led; // @[MemoryDispatch.scala 73:28]
   assign io_external_seg7_seg7 = outRegisters_io_external_seg7_seg7; // @[MemoryDispatch.scala 73:28]
   assign insRAM_clock = clock;
-  assign insRAM_io_write = io_data_addr <= 32'hffff & _GEN_0; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 16:16]
-  assign insRAM_io_read_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 17:20]
-  assign insRAM_io_write_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 18:21]
+  assign insRAM_io_write = io_data_addr <= 32'hffff & _GEN_0; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 17:16]
+  assign insRAM_io_write_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 19:21]
   assign insRAM_io_write_data = 2'h0 == io_data_width ? _GEN_17 : _GEN_20; // @[MemoryDispatch.scala 118:25]
   assign insRAM_io2_read_addr = {{2'd0}, read_ins_addr}; // @[MemoryDispatch.scala 48:24]
   assign dataRAM_clock = clock;
-  assign dataRAM_io_write = io_data_addr <= 32'hffff ? 1'h0 : _GEN_7; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 16:16]
+  assign dataRAM_io_write = io_data_addr <= 32'hffff ? 1'h0 : _GEN_7; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 17:16]
   assign dataRAM_io_read_addr = {{2'd0}, _GEN_11};
   assign dataRAM_io_write_addr = {{2'd0}, _GEN_11};
   assign dataRAM_io_write_data = 2'h0 == io_data_width ? _GEN_17 : _GEN_20; // @[MemoryDispatch.scala 118:25]
   assign outRegisters_clock = clock;
   assign outRegisters_reset = reset;
-  assign outRegisters_io_mem_write = io_data_addr <= 32'hffff ? 1'h0 : _GEN_8; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 16:16]
-  assign outRegisters_io_mem_read_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 17:20]
-  assign outRegisters_io_mem_write_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 18:21]
+  assign outRegisters_io_mem_write = io_data_addr <= 32'hffff ? 1'h0 : _GEN_8; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 17:16]
+  assign outRegisters_io_mem_read_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 18:20]
+  assign outRegisters_io_mem_write_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 19:21]
   assign outRegisters_io_mem_write_data = 2'h0 == io_data_width ? _GEN_17 : _GEN_20; // @[MemoryDispatch.scala 118:25]
   assign outRegisters_io_external_btn_button = io_external_btn_button; // @[MemoryDispatch.scala 73:28]
   assign outRegisters_io_external_switches_switches = io_external_switches_switches; // @[MemoryDispatch.scala 73:28]
@@ -653,18 +557,15 @@ module MemWriteSelector(
   input         io_uart_in_mem_write,
   input  [31:0] io_uart_in_data_to_write,
   input  [31:0] io_uart_in_data_addr,
-  input         io_cpu_read_data,
   input         io_cpu_write_data,
   input  [1:0]  io_cpu_data_width,
   input  [31:0] io_cpu_data_addr,
   input  [31:0] io_cpu_data_write,
-  output        io_read_data,
   output        io_write_data,
   output [1:0]  io_data_width,
   output [31:0] io_data_addr,
   output [31:0] io_data_write
 );
-  assign io_read_data = io_cpu_state == 2'h2 ? 1'h0 : io_cpu_read_data; // @[MemWriteSelector.scala 29:54 30:17 36:17]
   assign io_write_data = io_cpu_state == 2'h2 ? io_uart_in_mem_write : io_cpu_write_data; // @[MemWriteSelector.scala 29:54 31:18 37:18]
   assign io_data_width = io_cpu_state == 2'h2 ? 2'h0 : io_cpu_data_width; // @[MemWriteSelector.scala 29:54 32:18 38:18]
   assign io_data_addr = io_cpu_state == 2'h2 ? io_uart_in_data_addr : io_cpu_data_addr; // @[MemWriteSelector.scala 29:54 33:17 39:17]
@@ -855,7 +756,6 @@ module ControlUnit(
   output        io_operand2_type,
   output        io_au_type,
   output [2:0]  io_write_back_type,
-  output        io_memory_read,
   output        io_memory_write,
   output [1:0]  io_data_width
 );
@@ -957,7 +857,6 @@ module ControlUnit(
   wire [1:0] _GEN_144 = 7'h13 == io_opcode ? 2'h0 : _GEN_133; // @[ControlUnit.scala 55:21 103:22]
   wire  _GEN_145 = 7'h13 == io_opcode | _GEN_134; // @[ControlUnit.scala 104:21 55:21]
   wire  _GEN_146 = 7'h13 == io_opcode ? _GEN_65 : _GEN_135; // @[ControlUnit.scala 55:21]
-  wire  _GEN_147 = 7'h13 == io_opcode ? 1'h0 : 7'h3 == io_opcode; // @[ControlUnit.scala 55:21 106:22]
   wire  _GEN_148 = 7'h13 == io_opcode ? 1'h0 : _GEN_137; // @[ControlUnit.scala 55:21 107:23]
   wire  _GEN_149 = 7'h13 == io_opcode ? 1'h0 : _GEN_135; // @[ControlUnit.scala 55:21 108:24]
   wire [2:0] _GEN_151 = 7'h13 == io_opcode ? 3'h0 : _GEN_138; // @[ControlUnit.scala 55:21 110:26]
@@ -977,7 +876,6 @@ module ControlUnit(
   assign io_operand2_type = 7'h33 == io_opcode | _GEN_149; // @[ControlUnit.scala 55:21 62:24]
   assign io_au_type = 7'h33 == io_opcode ? _GEN_34 : _GEN_146; // @[ControlUnit.scala 55:21]
   assign io_write_back_type = 7'h33 == io_opcode ? 3'h0 : _GEN_151; // @[ControlUnit.scala 55:21 63:26]
-  assign io_memory_read = 7'h33 == io_opcode ? 1'h0 : _GEN_147; // @[ControlUnit.scala 55:21 60:22]
   assign io_memory_write = 7'h33 == io_opcode ? 1'h0 : _GEN_148; // @[ControlUnit.scala 55:21 61:23]
   assign io_data_width = 7'h3 == io_opcode ? _GEN_76 : _GEN_80; // @[ControlUnit.scala 55:21]
 endmodule
@@ -991,39 +889,7 @@ module Registers(
   input  [4:0]  io_rd,
   input  [31:0] io_write_data,
   output [31:0] io_rs1_val,
-  output [31:0] io_rs2_val,
-  output [31:0] debug_io_reg_vals_0,
-  output [31:0] debug_io_reg_vals_1,
-  output [31:0] debug_io_reg_vals_2,
-  output [31:0] debug_io_reg_vals_3,
-  output [31:0] debug_io_reg_vals_4,
-  output [31:0] debug_io_reg_vals_5,
-  output [31:0] debug_io_reg_vals_6,
-  output [31:0] debug_io_reg_vals_7,
-  output [31:0] debug_io_reg_vals_8,
-  output [31:0] debug_io_reg_vals_9,
-  output [31:0] debug_io_reg_vals_10,
-  output [31:0] debug_io_reg_vals_11,
-  output [31:0] debug_io_reg_vals_12,
-  output [31:0] debug_io_reg_vals_13,
-  output [31:0] debug_io_reg_vals_14,
-  output [31:0] debug_io_reg_vals_15,
-  output [31:0] debug_io_reg_vals_16,
-  output [31:0] debug_io_reg_vals_17,
-  output [31:0] debug_io_reg_vals_18,
-  output [31:0] debug_io_reg_vals_19,
-  output [31:0] debug_io_reg_vals_20,
-  output [31:0] debug_io_reg_vals_21,
-  output [31:0] debug_io_reg_vals_22,
-  output [31:0] debug_io_reg_vals_23,
-  output [31:0] debug_io_reg_vals_24,
-  output [31:0] debug_io_reg_vals_25,
-  output [31:0] debug_io_reg_vals_26,
-  output [31:0] debug_io_reg_vals_27,
-  output [31:0] debug_io_reg_vals_28,
-  output [31:0] debug_io_reg_vals_29,
-  output [31:0] debug_io_reg_vals_30,
-  output [31:0] debug_io_reg_vals_31
+  output [31:0] io_rs2_val
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
@@ -1153,41 +1019,8 @@ module Registers(
   wire [31:0] _GEN_62 = 5'h1e == io_rs2 ? regs_30 : _GEN_61; // @[Registers.scala 25:{14,14}]
   wire  _T = io_cpu_state == 2'h1; // @[Registers.scala 26:21]
   wire  _T_1 = _T & io_write; // @[Registers.scala 27:5]
-  wire  _T_3 = _T_1 & io_rd != 5'h0; // @[Registers.scala 28:5]
   assign io_rs1_val = 5'h1f == io_rs1 ? regs_31 : _GEN_30; // @[Registers.scala 24:{14,14}]
   assign io_rs2_val = 5'h1f == io_rs2 ? regs_31 : _GEN_62; // @[Registers.scala 25:{14,14}]
-  assign debug_io_reg_vals_0 = regs_0; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_1 = regs_1; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_2 = regs_2; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_3 = regs_3; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_4 = regs_4; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_5 = regs_5; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_6 = regs_6; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_7 = regs_7; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_8 = regs_8; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_9 = regs_9; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_10 = regs_10; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_11 = regs_11; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_12 = regs_12; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_13 = regs_13; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_14 = regs_14; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_15 = regs_15; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_16 = regs_16; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_17 = regs_17; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_18 = regs_18; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_19 = regs_19; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_20 = regs_20; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_21 = regs_21; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_22 = regs_22; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_23 = regs_23; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_24 = regs_24; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_25 = regs_25; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_26 = regs_26; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_27 = regs_27; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_28 = regs_28; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_29 = regs_29; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_30 = regs_30; // @[Registers.scala 42:18]
-  assign debug_io_reg_vals_31 = regs_31; // @[Registers.scala 42:18]
   always @(posedge clock) begin
     if (reset) begin // @[Registers.scala 23:21]
       regs_0 <= 32'h0; // @[Registers.scala 23:21]
@@ -1413,17 +1246,6 @@ module Registers(
         regs_31 <= io_write_data; // @[Registers.scala 34:17]
       end
     end
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_3 & ~reset) begin
-          $fwrite(32'h80000002,"write to reg[%d] with data %d\n",io_rd,io_write_data); // @[Registers.scala 31:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
   end
 // Register and memory initialization
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
@@ -1659,46 +1481,13 @@ module CoreTop(
   input  [31:0] io_external_switches_switches,
   input  [7:0]  io_external_uart_rxData,
   input         io_external_uart_rxValid,
-  input         io_external_signal_load_data_mode,
-  output [31:0] debug_io_reg_vals_reg_vals_0,
-  output [31:0] debug_io_reg_vals_reg_vals_1,
-  output [31:0] debug_io_reg_vals_reg_vals_2,
-  output [31:0] debug_io_reg_vals_reg_vals_3,
-  output [31:0] debug_io_reg_vals_reg_vals_4,
-  output [31:0] debug_io_reg_vals_reg_vals_5,
-  output [31:0] debug_io_reg_vals_reg_vals_6,
-  output [31:0] debug_io_reg_vals_reg_vals_7,
-  output [31:0] debug_io_reg_vals_reg_vals_8,
-  output [31:0] debug_io_reg_vals_reg_vals_9,
-  output [31:0] debug_io_reg_vals_reg_vals_10,
-  output [31:0] debug_io_reg_vals_reg_vals_11,
-  output [31:0] debug_io_reg_vals_reg_vals_12,
-  output [31:0] debug_io_reg_vals_reg_vals_13,
-  output [31:0] debug_io_reg_vals_reg_vals_14,
-  output [31:0] debug_io_reg_vals_reg_vals_15,
-  output [31:0] debug_io_reg_vals_reg_vals_16,
-  output [31:0] debug_io_reg_vals_reg_vals_17,
-  output [31:0] debug_io_reg_vals_reg_vals_18,
-  output [31:0] debug_io_reg_vals_reg_vals_19,
-  output [31:0] debug_io_reg_vals_reg_vals_20,
-  output [31:0] debug_io_reg_vals_reg_vals_21,
-  output [31:0] debug_io_reg_vals_reg_vals_22,
-  output [31:0] debug_io_reg_vals_reg_vals_23,
-  output [31:0] debug_io_reg_vals_reg_vals_24,
-  output [31:0] debug_io_reg_vals_reg_vals_25,
-  output [31:0] debug_io_reg_vals_reg_vals_26,
-  output [31:0] debug_io_reg_vals_reg_vals_27,
-  output [31:0] debug_io_reg_vals_reg_vals_28,
-  output [31:0] debug_io_reg_vals_reg_vals_29,
-  output [31:0] debug_io_reg_vals_reg_vals_30,
-  output [31:0] debug_io_reg_vals_reg_vals_31
+  input         io_external_signal_load_data_mode
 );
   wire  memory_clock; // @[CoreTop.scala 20:22]
   wire  memory_reset; // @[CoreTop.scala 20:22]
   wire [1:0] memory_io_cpu_state; // @[CoreTop.scala 20:22]
   wire [31:0] memory_io_ins_addr; // @[CoreTop.scala 20:22]
   wire [31:0] memory_io_ins_out; // @[CoreTop.scala 20:22]
-  wire  memory_io_read_data; // @[CoreTop.scala 20:22]
   wire  memory_io_write_data; // @[CoreTop.scala 20:22]
   wire  memory_io_unsigned; // @[CoreTop.scala 20:22]
   wire [1:0] memory_io_data_width; // @[CoreTop.scala 20:22]
@@ -1721,12 +1510,10 @@ module CoreTop(
   wire  memInSelector_io_uart_in_mem_write; // @[CoreTop.scala 22:29]
   wire [31:0] memInSelector_io_uart_in_data_to_write; // @[CoreTop.scala 22:29]
   wire [31:0] memInSelector_io_uart_in_data_addr; // @[CoreTop.scala 22:29]
-  wire  memInSelector_io_cpu_read_data; // @[CoreTop.scala 22:29]
   wire  memInSelector_io_cpu_write_data; // @[CoreTop.scala 22:29]
   wire [1:0] memInSelector_io_cpu_data_width; // @[CoreTop.scala 22:29]
   wire [31:0] memInSelector_io_cpu_data_addr; // @[CoreTop.scala 22:29]
   wire [31:0] memInSelector_io_cpu_data_write; // @[CoreTop.scala 22:29]
-  wire  memInSelector_io_read_data; // @[CoreTop.scala 22:29]
   wire  memInSelector_io_write_data; // @[CoreTop.scala 22:29]
   wire [1:0] memInSelector_io_data_width; // @[CoreTop.scala 22:29]
   wire [31:0] memInSelector_io_data_addr; // @[CoreTop.scala 22:29]
@@ -1768,7 +1555,6 @@ module CoreTop(
   wire  CU_io_operand2_type; // @[CoreTop.scala 31:18]
   wire  CU_io_au_type; // @[CoreTop.scala 31:18]
   wire [2:0] CU_io_write_back_type; // @[CoreTop.scala 31:18]
-  wire  CU_io_memory_read; // @[CoreTop.scala 31:18]
   wire  CU_io_memory_write; // @[CoreTop.scala 31:18]
   wire [1:0] CU_io_data_width; // @[CoreTop.scala 31:18]
   wire  regs_clock; // @[CoreTop.scala 34:20]
@@ -1781,38 +1567,6 @@ module CoreTop(
   wire [31:0] regs_io_write_data; // @[CoreTop.scala 34:20]
   wire [31:0] regs_io_rs1_val; // @[CoreTop.scala 34:20]
   wire [31:0] regs_io_rs2_val; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_0; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_1; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_2; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_3; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_4; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_5; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_6; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_7; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_8; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_9; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_10; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_11; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_12; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_13; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_14; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_15; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_16; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_17; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_18; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_19; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_20; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_21; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_22; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_23; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_24; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_25; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_26; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_27; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_28; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_29; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_30; // @[CoreTop.scala 34:20]
-  wire [31:0] regs_debug_io_reg_vals_31; // @[CoreTop.scala 34:20]
   wire [19:0] immGen_io_raw_imm; // @[CoreTop.scala 35:22]
   wire  immGen_io_unsigned; // @[CoreTop.scala 35:22]
   wire [1:0] immGen_io_imm_width; // @[CoreTop.scala 35:22]
@@ -1852,15 +1606,12 @@ module CoreTop(
   wire [31:0] auSelector_io_alu_result; // @[CoreTop.scala 59:26]
   wire  auSelector_io_cmp_result; // @[CoreTop.scala 59:26]
   wire [31:0] auSelector_io_au_out; // @[CoreTop.scala 59:26]
-  wire  _T_1 = state_io_cpu_state != 2'h2 | memInSelector_io_write_data; // @[CoreTop.scala 155:62]
-  wire  _T_3 = ~reset; // @[CoreTop.scala 158:13]
   MemoryDispatch memory ( // @[CoreTop.scala 20:22]
     .clock(memory_clock),
     .reset(memory_reset),
     .io_cpu_state(memory_io_cpu_state),
     .io_ins_addr(memory_io_ins_addr),
     .io_ins_out(memory_io_ins_out),
-    .io_read_data(memory_io_read_data),
     .io_write_data(memory_io_write_data),
     .io_unsigned(memory_io_unsigned),
     .io_data_width(memory_io_data_width),
@@ -1887,12 +1638,10 @@ module CoreTop(
     .io_uart_in_mem_write(memInSelector_io_uart_in_mem_write),
     .io_uart_in_data_to_write(memInSelector_io_uart_in_data_to_write),
     .io_uart_in_data_addr(memInSelector_io_uart_in_data_addr),
-    .io_cpu_read_data(memInSelector_io_cpu_read_data),
     .io_cpu_write_data(memInSelector_io_cpu_write_data),
     .io_cpu_data_width(memInSelector_io_cpu_data_width),
     .io_cpu_data_addr(memInSelector_io_cpu_data_addr),
     .io_cpu_data_write(memInSelector_io_cpu_data_write),
-    .io_read_data(memInSelector_io_read_data),
     .io_write_data(memInSelector_io_write_data),
     .io_data_width(memInSelector_io_data_width),
     .io_data_addr(memInSelector_io_data_addr),
@@ -1942,7 +1691,6 @@ module CoreTop(
     .io_operand2_type(CU_io_operand2_type),
     .io_au_type(CU_io_au_type),
     .io_write_back_type(CU_io_write_back_type),
-    .io_memory_read(CU_io_memory_read),
     .io_memory_write(CU_io_memory_write),
     .io_data_width(CU_io_data_width)
   );
@@ -1956,39 +1704,7 @@ module CoreTop(
     .io_rd(regs_io_rd),
     .io_write_data(regs_io_write_data),
     .io_rs1_val(regs_io_rs1_val),
-    .io_rs2_val(regs_io_rs2_val),
-    .debug_io_reg_vals_0(regs_debug_io_reg_vals_0),
-    .debug_io_reg_vals_1(regs_debug_io_reg_vals_1),
-    .debug_io_reg_vals_2(regs_debug_io_reg_vals_2),
-    .debug_io_reg_vals_3(regs_debug_io_reg_vals_3),
-    .debug_io_reg_vals_4(regs_debug_io_reg_vals_4),
-    .debug_io_reg_vals_5(regs_debug_io_reg_vals_5),
-    .debug_io_reg_vals_6(regs_debug_io_reg_vals_6),
-    .debug_io_reg_vals_7(regs_debug_io_reg_vals_7),
-    .debug_io_reg_vals_8(regs_debug_io_reg_vals_8),
-    .debug_io_reg_vals_9(regs_debug_io_reg_vals_9),
-    .debug_io_reg_vals_10(regs_debug_io_reg_vals_10),
-    .debug_io_reg_vals_11(regs_debug_io_reg_vals_11),
-    .debug_io_reg_vals_12(regs_debug_io_reg_vals_12),
-    .debug_io_reg_vals_13(regs_debug_io_reg_vals_13),
-    .debug_io_reg_vals_14(regs_debug_io_reg_vals_14),
-    .debug_io_reg_vals_15(regs_debug_io_reg_vals_15),
-    .debug_io_reg_vals_16(regs_debug_io_reg_vals_16),
-    .debug_io_reg_vals_17(regs_debug_io_reg_vals_17),
-    .debug_io_reg_vals_18(regs_debug_io_reg_vals_18),
-    .debug_io_reg_vals_19(regs_debug_io_reg_vals_19),
-    .debug_io_reg_vals_20(regs_debug_io_reg_vals_20),
-    .debug_io_reg_vals_21(regs_debug_io_reg_vals_21),
-    .debug_io_reg_vals_22(regs_debug_io_reg_vals_22),
-    .debug_io_reg_vals_23(regs_debug_io_reg_vals_23),
-    .debug_io_reg_vals_24(regs_debug_io_reg_vals_24),
-    .debug_io_reg_vals_25(regs_debug_io_reg_vals_25),
-    .debug_io_reg_vals_26(regs_debug_io_reg_vals_26),
-    .debug_io_reg_vals_27(regs_debug_io_reg_vals_27),
-    .debug_io_reg_vals_28(regs_debug_io_reg_vals_28),
-    .debug_io_reg_vals_29(regs_debug_io_reg_vals_29),
-    .debug_io_reg_vals_30(regs_debug_io_reg_vals_30),
-    .debug_io_reg_vals_31(regs_debug_io_reg_vals_31)
+    .io_rs2_val(regs_io_rs2_val)
   );
   ImmGen immGen ( // @[CoreTop.scala 35:22]
     .io_raw_imm(immGen_io_raw_imm),
@@ -2045,43 +1761,10 @@ module CoreTop(
   );
   assign io_external_led_led = memory_io_external_led_led; // @[CoreTop.scala 126:22]
   assign io_external_seg7_seg7 = memory_io_external_seg7_seg7; // @[CoreTop.scala 126:22]
-  assign debug_io_reg_vals_reg_vals_0 = regs_debug_io_reg_vals_0; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_1 = regs_debug_io_reg_vals_1; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_2 = regs_debug_io_reg_vals_2; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_3 = regs_debug_io_reg_vals_3; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_4 = regs_debug_io_reg_vals_4; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_5 = regs_debug_io_reg_vals_5; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_6 = regs_debug_io_reg_vals_6; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_7 = regs_debug_io_reg_vals_7; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_8 = regs_debug_io_reg_vals_8; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_9 = regs_debug_io_reg_vals_9; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_10 = regs_debug_io_reg_vals_10; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_11 = regs_debug_io_reg_vals_11; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_12 = regs_debug_io_reg_vals_12; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_13 = regs_debug_io_reg_vals_13; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_14 = regs_debug_io_reg_vals_14; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_15 = regs_debug_io_reg_vals_15; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_16 = regs_debug_io_reg_vals_16; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_17 = regs_debug_io_reg_vals_17; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_18 = regs_debug_io_reg_vals_18; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_19 = regs_debug_io_reg_vals_19; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_20 = regs_debug_io_reg_vals_20; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_21 = regs_debug_io_reg_vals_21; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_22 = regs_debug_io_reg_vals_22; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_23 = regs_debug_io_reg_vals_23; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_24 = regs_debug_io_reg_vals_24; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_25 = regs_debug_io_reg_vals_25; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_26 = regs_debug_io_reg_vals_26; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_27 = regs_debug_io_reg_vals_27; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_28 = regs_debug_io_reg_vals_28; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_29 = regs_debug_io_reg_vals_29; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_30 = regs_debug_io_reg_vals_30; // @[CoreTop.scala 152:24]
-  assign debug_io_reg_vals_reg_vals_31 = regs_debug_io_reg_vals_31; // @[CoreTop.scala 152:24]
   assign memory_clock = clock;
   assign memory_reset = reset;
   assign memory_io_cpu_state = state_io_cpu_state; // @[CoreTop.scala 119:23]
   assign memory_io_ins_addr = pc_io_addr; // @[CoreTop.scala 67:22]
-  assign memory_io_read_data = memInSelector_io_read_data; // @[CoreTop.scala 124:23]
   assign memory_io_write_data = memInSelector_io_write_data; // @[CoreTop.scala 123:24]
   assign memory_io_unsigned = CU_io_unsigned; // @[CoreTop.scala 125:22]
   assign memory_io_data_width = memInSelector_io_data_width; // @[CoreTop.scala 122:24]
@@ -2098,7 +1781,6 @@ module CoreTop(
   assign memInSelector_io_uart_in_mem_write = uartLoader_io_mem_mem_write; // @[CoreTop.scala 49:28]
   assign memInSelector_io_uart_in_data_to_write = uartLoader_io_mem_data_to_write; // @[CoreTop.scala 49:28]
   assign memInSelector_io_uart_in_data_addr = uartLoader_io_mem_data_addr; // @[CoreTop.scala 49:28]
-  assign memInSelector_io_cpu_read_data = CU_io_memory_read; // @[CoreTop.scala 51:34]
   assign memInSelector_io_cpu_write_data = CU_io_memory_write; // @[CoreTop.scala 52:35]
   assign memInSelector_io_cpu_data_width = CU_io_data_width; // @[CoreTop.scala 53:35]
   assign memInSelector_io_cpu_data_addr = ALU_io_result; // @[CoreTop.scala 54:34]
@@ -2155,111 +1837,6 @@ module CoreTop(
   assign auSelector_io_au_type = CU_io_au_type; // @[CoreTop.scala 132:25]
   assign auSelector_io_alu_result = ALU_io_result; // @[CoreTop.scala 130:28]
   assign auSelector_io_cmp_result = CMP_io_result; // @[CoreTop.scala 131:28]
-  always @(posedge clock) begin
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & ~reset) begin
-          $fwrite(32'h80000002,"-------------State %d---------------\n",state_io_cpu_state); // @[CoreTop.scala 158:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"pc: %d\n",pc_io_addr); // @[CoreTop.scala 159:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"instructions: %x\n",memory_io_ins_out); // @[CoreTop.scala 160:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"reg operating rs_1:%d,rs_2:%d real_imm:%d\n",CU_io_rs1_out,CU_io_rs2_out,
-            immGen_io_real_imm); // @[CoreTop.scala 161:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"ALU with result: %d,",ALU_io_result); // @[CoreTop.scala 171:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"CMP with result: %d\n",CMP_io_result); // @[CoreTop.scala 172:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"nextPCGen with nextPC: %d\n",nextPCGen_io_nextPC); // @[CoreTop.scala 173:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,
-            "memory with read_data: %d, write_data: %d, unsigned: %d, data_width: %d,\n data_addr: %d, data_write: %x,data_out: %x\n"
-            ,memory_io_read_data,memory_io_write_data,memory_io_unsigned,memory_io_data_width,memory_io_data_addr,
-            memory_io_data_write,memory_io_data_out); // @[CoreTop.scala 174:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"uart out data: %x valid: %d\n",io_external_uart_rxData,io_external_uart_rxValid); // @[CoreTop.scala 177:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-  end
 endmodule
 module Led(
   input  [31:0] io_mmio_led,
@@ -2542,41 +2119,10 @@ module Top(
   input  [4:0]  io_btn_button,
   input  [23:0] io_switch_switches,
   input         io_uart_rx,
-  output        io_uart_tx,
-  output [31:0] debug_io_reg_vals_reg_vals_0,
-  output [31:0] debug_io_reg_vals_reg_vals_1,
-  output [31:0] debug_io_reg_vals_reg_vals_2,
-  output [31:0] debug_io_reg_vals_reg_vals_3,
-  output [31:0] debug_io_reg_vals_reg_vals_4,
-  output [31:0] debug_io_reg_vals_reg_vals_5,
-  output [31:0] debug_io_reg_vals_reg_vals_6,
-  output [31:0] debug_io_reg_vals_reg_vals_7,
-  output [31:0] debug_io_reg_vals_reg_vals_8,
-  output [31:0] debug_io_reg_vals_reg_vals_9,
-  output [31:0] debug_io_reg_vals_reg_vals_10,
-  output [31:0] debug_io_reg_vals_reg_vals_11,
-  output [31:0] debug_io_reg_vals_reg_vals_12,
-  output [31:0] debug_io_reg_vals_reg_vals_13,
-  output [31:0] debug_io_reg_vals_reg_vals_14,
-  output [31:0] debug_io_reg_vals_reg_vals_15,
-  output [31:0] debug_io_reg_vals_reg_vals_16,
-  output [31:0] debug_io_reg_vals_reg_vals_17,
-  output [31:0] debug_io_reg_vals_reg_vals_18,
-  output [31:0] debug_io_reg_vals_reg_vals_19,
-  output [31:0] debug_io_reg_vals_reg_vals_20,
-  output [31:0] debug_io_reg_vals_reg_vals_21,
-  output [31:0] debug_io_reg_vals_reg_vals_22,
-  output [31:0] debug_io_reg_vals_reg_vals_23,
-  output [31:0] debug_io_reg_vals_reg_vals_24,
-  output [31:0] debug_io_reg_vals_reg_vals_25,
-  output [31:0] debug_io_reg_vals_reg_vals_26,
-  output [31:0] debug_io_reg_vals_reg_vals_27,
-  output [31:0] debug_io_reg_vals_reg_vals_28,
-  output [31:0] debug_io_reg_vals_reg_vals_29,
-  output [31:0] debug_io_reg_vals_reg_vals_30,
-  output [31:0] debug_io_reg_vals_reg_vals_31
+  output        io_uart_tx
 );
   wire  clockSeparator_clock; // @[Top.scala 15:30]
+  wire  clockSeparator_reset; // @[Top.scala 15:30]
   wire  clockSeparator_io_cpuClock; // @[Top.scala 15:30]
   wire  cpu_clock; // @[Top.scala 17:11]
   wire  cpu_reset; // @[Top.scala 17:11]
@@ -2587,38 +2133,6 @@ module Top(
   wire [7:0] cpu_io_external_uart_rxData; // @[Top.scala 17:11]
   wire  cpu_io_external_uart_rxValid; // @[Top.scala 17:11]
   wire  cpu_io_external_signal_load_data_mode; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_0; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_1; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_2; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_3; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_4; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_5; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_6; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_7; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_8; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_9; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_10; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_11; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_12; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_13; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_14; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_15; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_16; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_17; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_18; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_19; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_20; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_21; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_22; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_23; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_24; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_25; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_26; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_27; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_28; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_29; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_30; // @[Top.scala 17:11]
-  wire [31:0] cpu_debug_io_reg_vals_reg_vals_31; // @[Top.scala 17:11]
   wire  device_clock; // @[Top.scala 19:22]
   wire  device_reset; // @[Top.scala 19:22]
   wire [31:0] device_io_mmio_led_led; // @[Top.scala 19:22]
@@ -2638,6 +2152,7 @@ module Top(
   wire  device_io_external_signal_load_data_mode; // @[Top.scala 19:22]
   ClockSeparator clockSeparator ( // @[Top.scala 15:30]
     .clock(clockSeparator_clock),
+    .reset(clockSeparator_reset),
     .io_cpuClock(clockSeparator_io_cpuClock)
   );
   CoreTop cpu ( // @[Top.scala 17:11]
@@ -2649,39 +2164,7 @@ module Top(
     .io_external_switches_switches(cpu_io_external_switches_switches),
     .io_external_uart_rxData(cpu_io_external_uart_rxData),
     .io_external_uart_rxValid(cpu_io_external_uart_rxValid),
-    .io_external_signal_load_data_mode(cpu_io_external_signal_load_data_mode),
-    .debug_io_reg_vals_reg_vals_0(cpu_debug_io_reg_vals_reg_vals_0),
-    .debug_io_reg_vals_reg_vals_1(cpu_debug_io_reg_vals_reg_vals_1),
-    .debug_io_reg_vals_reg_vals_2(cpu_debug_io_reg_vals_reg_vals_2),
-    .debug_io_reg_vals_reg_vals_3(cpu_debug_io_reg_vals_reg_vals_3),
-    .debug_io_reg_vals_reg_vals_4(cpu_debug_io_reg_vals_reg_vals_4),
-    .debug_io_reg_vals_reg_vals_5(cpu_debug_io_reg_vals_reg_vals_5),
-    .debug_io_reg_vals_reg_vals_6(cpu_debug_io_reg_vals_reg_vals_6),
-    .debug_io_reg_vals_reg_vals_7(cpu_debug_io_reg_vals_reg_vals_7),
-    .debug_io_reg_vals_reg_vals_8(cpu_debug_io_reg_vals_reg_vals_8),
-    .debug_io_reg_vals_reg_vals_9(cpu_debug_io_reg_vals_reg_vals_9),
-    .debug_io_reg_vals_reg_vals_10(cpu_debug_io_reg_vals_reg_vals_10),
-    .debug_io_reg_vals_reg_vals_11(cpu_debug_io_reg_vals_reg_vals_11),
-    .debug_io_reg_vals_reg_vals_12(cpu_debug_io_reg_vals_reg_vals_12),
-    .debug_io_reg_vals_reg_vals_13(cpu_debug_io_reg_vals_reg_vals_13),
-    .debug_io_reg_vals_reg_vals_14(cpu_debug_io_reg_vals_reg_vals_14),
-    .debug_io_reg_vals_reg_vals_15(cpu_debug_io_reg_vals_reg_vals_15),
-    .debug_io_reg_vals_reg_vals_16(cpu_debug_io_reg_vals_reg_vals_16),
-    .debug_io_reg_vals_reg_vals_17(cpu_debug_io_reg_vals_reg_vals_17),
-    .debug_io_reg_vals_reg_vals_18(cpu_debug_io_reg_vals_reg_vals_18),
-    .debug_io_reg_vals_reg_vals_19(cpu_debug_io_reg_vals_reg_vals_19),
-    .debug_io_reg_vals_reg_vals_20(cpu_debug_io_reg_vals_reg_vals_20),
-    .debug_io_reg_vals_reg_vals_21(cpu_debug_io_reg_vals_reg_vals_21),
-    .debug_io_reg_vals_reg_vals_22(cpu_debug_io_reg_vals_reg_vals_22),
-    .debug_io_reg_vals_reg_vals_23(cpu_debug_io_reg_vals_reg_vals_23),
-    .debug_io_reg_vals_reg_vals_24(cpu_debug_io_reg_vals_reg_vals_24),
-    .debug_io_reg_vals_reg_vals_25(cpu_debug_io_reg_vals_reg_vals_25),
-    .debug_io_reg_vals_reg_vals_26(cpu_debug_io_reg_vals_reg_vals_26),
-    .debug_io_reg_vals_reg_vals_27(cpu_debug_io_reg_vals_reg_vals_27),
-    .debug_io_reg_vals_reg_vals_28(cpu_debug_io_reg_vals_reg_vals_28),
-    .debug_io_reg_vals_reg_vals_29(cpu_debug_io_reg_vals_reg_vals_29),
-    .debug_io_reg_vals_reg_vals_30(cpu_debug_io_reg_vals_reg_vals_30),
-    .debug_io_reg_vals_reg_vals_31(cpu_debug_io_reg_vals_reg_vals_31)
+    .io_external_signal_load_data_mode(cpu_io_external_signal_load_data_mode)
   );
   DeviceTop device ( // @[Top.scala 19:22]
     .clock(device_clock),
@@ -2707,39 +2190,8 @@ module Top(
   assign io_seg7_seg7_low = device_io_board_seg7_seg7_low; // @[Top.scala 22:18]
   assign io_seg7_an = device_io_board_seg7_an; // @[Top.scala 22:18]
   assign io_uart_tx = device_io_board_uart_tx; // @[Top.scala 22:18]
-  assign debug_io_reg_vals_reg_vals_0 = cpu_debug_io_reg_vals_reg_vals_0; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_1 = cpu_debug_io_reg_vals_reg_vals_1; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_2 = cpu_debug_io_reg_vals_reg_vals_2; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_3 = cpu_debug_io_reg_vals_reg_vals_3; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_4 = cpu_debug_io_reg_vals_reg_vals_4; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_5 = cpu_debug_io_reg_vals_reg_vals_5; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_6 = cpu_debug_io_reg_vals_reg_vals_6; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_7 = cpu_debug_io_reg_vals_reg_vals_7; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_8 = cpu_debug_io_reg_vals_reg_vals_8; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_9 = cpu_debug_io_reg_vals_reg_vals_9; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_10 = cpu_debug_io_reg_vals_reg_vals_10; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_11 = cpu_debug_io_reg_vals_reg_vals_11; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_12 = cpu_debug_io_reg_vals_reg_vals_12; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_13 = cpu_debug_io_reg_vals_reg_vals_13; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_14 = cpu_debug_io_reg_vals_reg_vals_14; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_15 = cpu_debug_io_reg_vals_reg_vals_15; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_16 = cpu_debug_io_reg_vals_reg_vals_16; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_17 = cpu_debug_io_reg_vals_reg_vals_17; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_18 = cpu_debug_io_reg_vals_reg_vals_18; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_19 = cpu_debug_io_reg_vals_reg_vals_19; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_20 = cpu_debug_io_reg_vals_reg_vals_20; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_21 = cpu_debug_io_reg_vals_reg_vals_21; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_22 = cpu_debug_io_reg_vals_reg_vals_22; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_23 = cpu_debug_io_reg_vals_reg_vals_23; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_24 = cpu_debug_io_reg_vals_reg_vals_24; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_25 = cpu_debug_io_reg_vals_reg_vals_25; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_26 = cpu_debug_io_reg_vals_reg_vals_26; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_27 = cpu_debug_io_reg_vals_reg_vals_27; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_28 = cpu_debug_io_reg_vals_reg_vals_28; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_29 = cpu_debug_io_reg_vals_reg_vals_29; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_30 = cpu_debug_io_reg_vals_reg_vals_30; // @[Top.scala 34:17]
-  assign debug_io_reg_vals_reg_vals_31 = cpu_debug_io_reg_vals_reg_vals_31; // @[Top.scala 34:17]
   assign clockSeparator_clock = clock;
+  assign clockSeparator_reset = reset;
   assign cpu_clock = clockSeparator_io_cpuClock;
   assign cpu_reset = reset;
   assign cpu_io_external_btn_button = device_io_mmio_btn_button; // @[Top.scala 25:18]
