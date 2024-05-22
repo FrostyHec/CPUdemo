@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-| Date         : Thu May 23 00:39:53 2024
+| Date         : Thu May 23 00:51:14 2024
 | Host         : LAPTOP-OLOKS0CM running 64-bit major release  (build 9200)
 | Command      : report_timing_summary -max_paths 10 -file LoadVerify_timing_summary_routed.rpt -rpx LoadVerify_timing_summary_routed.rpx -warn_on_violation
 | Design       : LoadVerify
@@ -52,7 +52,7 @@ Table of Contents
 
 1. checking no_clock
 --------------------
- There are 136 register/latch pins with no clock driven by root clock pin: clock (HIGH)
+ There are 6272 register/latch pins with no clock driven by root clock pin: clock (HIGH)
 
 
 2. checking constant_clock
@@ -67,9 +67,9 @@ Table of Contents
 
 4. checking unconstrained_internal_endpoints
 --------------------------------------------
- There are 392 pins that are not constrained for maximum delay. (HIGH)
+ There are 57712 pins that are not constrained for maximum delay. (HIGH)
 
- There are 114688 pins that are not constrained for maximum delay due to constant clock. (MEDIUM)
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
 
 
 5. checking no_input_delay
@@ -81,7 +81,7 @@ Table of Contents
 
 6. checking no_output_delay
 ---------------------------
- There is 1 port with no output delay specified. (HIGH)
+ There are 17 ports with no output delay specified. (HIGH)
 
  There are 0 ports with no output delay but user has a false path constraint
 

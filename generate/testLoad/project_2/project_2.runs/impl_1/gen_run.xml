@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1716395888">
-  <File Type="OPT-HWDEF" Name="LoadVerify.hwdef"/>
-  <File Type="PA-DCP" Name="LoadVerify.dcp"/>
-  <File Type="OPT-DCP" Name="LoadVerify_opt.dcp"/>
+<GenRun Id="impl_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1716396554">
+  <File Type="PWROPT-DCP" Name="LoadVerify_pwropt.dcp"/>
   <File Type="ROUTE-PWR" Name="LoadVerify_power_routed.rpt"/>
   <File Type="PA-TCL" Name="LoadVerify.tcl"/>
   <File Type="ROUTE-PWR-SUM" Name="LoadVerify_power_summary_routed.pb"/>
@@ -10,9 +8,10 @@
   <File Type="BG-DRC" Name="LoadVerify.drc"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="LoadVerify_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="LoadVerify_timing_summary_init.rpt"/>
+  <File Type="OPT-HWDEF" Name="LoadVerify.hwdef"/>
+  <File Type="OPT-DCP" Name="LoadVerify_opt.dcp"/>
   <File Type="OPT-DRC" Name="LoadVerify_drc_opted.rpt"/>
   <File Type="OPT-TIMING" Name="LoadVerify_timing_summary_opted.rpt"/>
-  <File Type="PWROPT-DCP" Name="LoadVerify_pwropt.dcp"/>
   <File Type="PWROPT-DRC" Name="LoadVerify_drc_pwropted.rpt"/>
   <File Type="PWROPT-TIMING" Name="LoadVerify_timing_summary_pwropted.rpt"/>
   <File Type="PLACE-DCP" Name="LoadVerify_placed.dcp"/>

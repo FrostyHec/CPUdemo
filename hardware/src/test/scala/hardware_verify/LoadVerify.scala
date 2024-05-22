@@ -1,6 +1,7 @@
 package hardware_verify;
 
 import chisel3._
+import chisel3.util.Cat
 import core.config.CPUStateType
 import core.memory.{MemoryDispatch, UARTLoader}
 import device.UARTWrapper
@@ -43,7 +44,7 @@ class LoadVerify extends Module {
 
   //MemDispatch->Led
   mem_dispatch.io.ins_addr:=io.addr
-  io.led:=mem_dispatch.io.ins_out(15,0)
+  io.led:=Cat(uart.io.mmio.rxData,mem_dispatch.io.ins_out(7,0))
 }
 object LoadVerify extends App {
   println(

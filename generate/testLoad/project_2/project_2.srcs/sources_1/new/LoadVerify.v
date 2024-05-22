@@ -147,6 +147,7 @@ end // initial
 `endif // SYNTHESIS
 endmodule
 module DualPortRAM(
+  input         clock,
   input         io_write,
   input  [13:0] io_write_addr,
   input  [31:0] io_write_data,
@@ -154,13 +155,15 @@ module DualPortRAM(
   input  [13:0] io2_read_addr,
   output [31:0] io2_read_data
 );
-  wire [13:0] ip_mem_a; // @[MemoryPacket.scala 62:24]
-  wire [31:0] ip_mem_d; // @[MemoryPacket.scala 62:24]
-  wire [13:0] ip_mem_dpra; // @[MemoryPacket.scala 62:24]
-  wire  ip_mem_we; // @[MemoryPacket.scala 62:24]
-  wire [31:0] ip_mem_spo; // @[MemoryPacket.scala 62:24]
-  wire [31:0] ip_mem_dpo; // @[MemoryPacket.scala 62:24]
-  ins_mem ip_mem ( // @[MemoryPacket.scala 62:24]
+  wire  ip_mem_clk; // @[MemoryPacket.scala 63:24]
+  wire [13:0] ip_mem_a; // @[MemoryPacket.scala 63:24]
+  wire [31:0] ip_mem_d; // @[MemoryPacket.scala 63:24]
+  wire [13:0] ip_mem_dpra; // @[MemoryPacket.scala 63:24]
+  wire  ip_mem_we; // @[MemoryPacket.scala 63:24]
+  wire [31:0] ip_mem_spo; // @[MemoryPacket.scala 63:24]
+  wire [31:0] ip_mem_dpo; // @[MemoryPacket.scala 63:24]
+  ins_mem ip_mem ( // @[MemoryPacket.scala 63:24]
+    .clk(ip_mem_clk),
     .a(ip_mem_a),
     .d(ip_mem_d),
     .dpra(ip_mem_dpra),
@@ -168,14 +171,16 @@ module DualPortRAM(
     .spo(ip_mem_spo),
     .dpo(ip_mem_dpo)
   );
-  assign io_read_data = ip_mem_spo; // @[MemoryPacket.scala 67:17]
-  assign io2_read_data = ip_mem_dpo; // @[MemoryPacket.scala 68:18]
-  assign ip_mem_a = io_write ? io_write_addr : io2_read_addr; // @[MemoryPacket.scala 63:21]
-  assign ip_mem_d = io_write_data; // @[MemoryPacket.scala 64:16]
-  assign ip_mem_dpra = io2_read_addr; // @[MemoryPacket.scala 65:19]
-  assign ip_mem_we = io_write; // @[MemoryPacket.scala 66:17]
+  assign io_read_data = ip_mem_spo; // @[MemoryPacket.scala 69:18]
+  assign io2_read_data = ip_mem_dpo; // @[MemoryPacket.scala 70:19]
+  assign ip_mem_clk = clock; // @[MemoryPacket.scala 64:19]
+  assign ip_mem_a = io_write ? io_write_addr : io2_read_addr; // @[MemoryPacket.scala 65:23]
+  assign ip_mem_d = io_write_data; // @[MemoryPacket.scala 66:17]
+  assign ip_mem_dpra = io2_read_addr; // @[MemoryPacket.scala 67:20]
+  assign ip_mem_we = io_write; // @[MemoryPacket.scala 68:18]
 endmodule
 module InsRAM(
+  input         clock,
   input         io_write,
   input  [31:0] io_write_addr,
   input  [31:0] io_write_data,
@@ -183,6 +188,7 @@ module InsRAM(
   input  [31:0] io2_read_addr,
   output [31:0] io2_read_data
 );
+  wire  insRAM_clock; // @[InsRAM.scala 17:22]
   wire  insRAM_io_write; // @[InsRAM.scala 17:22]
   wire [13:0] insRAM_io_write_addr; // @[InsRAM.scala 17:22]
   wire [31:0] insRAM_io_write_data; // @[InsRAM.scala 17:22]
@@ -190,6 +196,7 @@ module InsRAM(
   wire [13:0] insRAM_io2_read_addr; // @[InsRAM.scala 17:22]
   wire [31:0] insRAM_io2_read_data; // @[InsRAM.scala 17:22]
   DualPortRAM insRAM ( // @[InsRAM.scala 17:22]
+    .clock(insRAM_clock),
     .io_write(insRAM_io_write),
     .io_write_addr(insRAM_io_write_addr),
     .io_write_data(insRAM_io_write_data),
@@ -199,47 +206,55 @@ module InsRAM(
   );
   assign io_read_data = insRAM_io_read_data; // @[InsRAM.scala 24:6]
   assign io2_read_data = insRAM_io2_read_data; // @[InsRAM.scala 25:7]
+  assign insRAM_clock = clock;
   assign insRAM_io_write = io_write; // @[InsRAM.scala 24:6]
   assign insRAM_io_write_addr = io_write_addr[13:0]; // @[InsRAM.scala 24:6]
   assign insRAM_io_write_data = io_write_data; // @[InsRAM.scala 24:6]
   assign insRAM_io2_read_addr = io2_read_addr[13:0]; // @[InsRAM.scala 25:7]
 endmodule
 module RAM(
+  input         clock,
   input         io_write,
   input  [13:0] io_read_addr,
   input  [13:0] io_write_addr,
   input  [31:0] io_write_data,
   output [31:0] io_read_data
 );
+  wire  ip_ram_clk; // @[MemoryPacket.scala 31:24]
   wire [31:0] ip_ram_a; // @[MemoryPacket.scala 31:24]
   wire [31:0] ip_ram_d; // @[MemoryPacket.scala 31:24]
   wire  ip_ram_we; // @[MemoryPacket.scala 31:24]
   wire [31:0] ip_ram_spo; // @[MemoryPacket.scala 31:24]
-  wire [13:0] _ip_ram_io_a_T = io_write ? io_write_addr : io_read_addr; // @[MemoryPacket.scala 32:21]
+  wire [13:0] _ip_ram_io_a_T = io_write ? io_write_addr : io_read_addr; // @[MemoryPacket.scala 33:23]
   data_mem ip_ram ( // @[MemoryPacket.scala 31:24]
+    .clk(ip_ram_clk),
     .a(ip_ram_a),
     .d(ip_ram_d),
     .we(ip_ram_we),
     .spo(ip_ram_spo)
   );
-  assign io_read_data = ip_ram_spo; // @[MemoryPacket.scala 35:17]
-  assign ip_ram_a = {{18'd0}, _ip_ram_io_a_T}; // @[MemoryPacket.scala 32:16]
-  assign ip_ram_d = io_write_data; // @[MemoryPacket.scala 33:16]
-  assign ip_ram_we = io_write; // @[MemoryPacket.scala 34:17]
+  assign io_read_data = ip_ram_spo; // @[MemoryPacket.scala 36:18]
+  assign ip_ram_clk = clock; // @[MemoryPacket.scala 32:19]
+  assign ip_ram_a = {{18'd0}, _ip_ram_io_a_T}; // @[MemoryPacket.scala 33:17]
+  assign ip_ram_d = io_write_data; // @[MemoryPacket.scala 34:17]
+  assign ip_ram_we = io_write; // @[MemoryPacket.scala 35:18]
 endmodule
 module DataRAM(
+  input         clock,
   input         io_write,
   input  [31:0] io_read_addr,
   input  [31:0] io_write_addr,
   input  [31:0] io_write_data,
   output [31:0] io_read_data
 );
+  wire  dataRAM_clock; // @[DataRAM.scala 12:23]
   wire  dataRAM_io_write; // @[DataRAM.scala 12:23]
   wire [13:0] dataRAM_io_read_addr; // @[DataRAM.scala 12:23]
   wire [13:0] dataRAM_io_write_addr; // @[DataRAM.scala 12:23]
   wire [31:0] dataRAM_io_write_data; // @[DataRAM.scala 12:23]
   wire [31:0] dataRAM_io_read_data; // @[DataRAM.scala 12:23]
   RAM dataRAM ( // @[DataRAM.scala 12:23]
+    .clock(dataRAM_clock),
     .io_write(dataRAM_io_write),
     .io_read_addr(dataRAM_io_read_addr),
     .io_write_addr(dataRAM_io_write_addr),
@@ -247,6 +262,7 @@ module DataRAM(
     .io_read_data(dataRAM_io_read_data)
   );
   assign io_read_data = dataRAM_io_read_data; // @[DataRAM.scala 18:7]
+  assign dataRAM_clock = clock;
   assign dataRAM_io_write = io_write; // @[DataRAM.scala 18:7]
   assign dataRAM_io_read_addr = io_read_addr[13:0]; // @[DataRAM.scala 18:7]
   assign dataRAM_io_write_addr = io_write_addr[13:0]; // @[DataRAM.scala 18:7]
@@ -376,12 +392,14 @@ module MemoryDispatch(
   input  [31:0] io_data_addr,
   input  [31:0] io_data_write
 );
+  wire  insRAM_clock; // @[MemoryDispatch.scala 36:22]
   wire  insRAM_io_write; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io_write_addr; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io_write_data; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io_read_data; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io2_read_addr; // @[MemoryDispatch.scala 36:22]
   wire [31:0] insRAM_io2_read_data; // @[MemoryDispatch.scala 36:22]
+  wire  dataRAM_clock; // @[MemoryDispatch.scala 37:23]
   wire  dataRAM_io_write; // @[MemoryDispatch.scala 37:23]
   wire [31:0] dataRAM_io_read_addr; // @[MemoryDispatch.scala 37:23]
   wire [31:0] dataRAM_io_write_addr; // @[MemoryDispatch.scala 37:23]
@@ -418,6 +436,7 @@ module MemoryDispatch(
   wire [31:0] _GEN_15 = 2'h2 == io_data_addr[1:0] ? _data_in_T_7 : _data_in_T_9; // @[MemoryDispatch.scala 121:34 129:19]
   wire [31:0] _GEN_16 = 2'h1 == io_data_addr[1:0] ? _data_in_T_4 : _GEN_15; // @[MemoryDispatch.scala 121:34 126:19]
   InsRAM insRAM ( // @[MemoryDispatch.scala 36:22]
+    .clock(insRAM_clock),
     .io_write(insRAM_io_write),
     .io_write_addr(insRAM_io_write_addr),
     .io_write_data(insRAM_io_write_data),
@@ -426,6 +445,7 @@ module MemoryDispatch(
     .io2_read_data(insRAM_io2_read_data)
   );
   DataRAM dataRAM ( // @[MemoryDispatch.scala 37:23]
+    .clock(dataRAM_clock),
     .io_write(dataRAM_io_write),
     .io_read_addr(dataRAM_io_read_addr),
     .io_write_addr(dataRAM_io_write_addr),
@@ -442,10 +462,12 @@ module MemoryDispatch(
     .io_mem_read_data(outRegisters_io_mem_read_data)
   );
   assign io_ins_out = insRAM_io2_read_data; // @[MemoryDispatch.scala 49:14]
+  assign insRAM_clock = clock;
   assign insRAM_io_write = io_data_addr <= 32'hffff & io_write_data; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 17:16]
   assign insRAM_io_write_addr = {{2'd0}, rw_mem_addr}; // @[MemoryPacket.scala 19:21]
   assign insRAM_io_write_data = 2'h0 == io_data_addr[1:0] ? _data_in_T_1 : _GEN_16; // @[MemoryDispatch.scala 121:34 123:19]
   assign insRAM_io2_read_addr = {{2'd0}, read_ins_addr}; // @[MemoryDispatch.scala 48:24]
+  assign dataRAM_clock = clock;
   assign dataRAM_io_write = io_data_addr <= 32'hffff ? 1'h0 : _GEN_7; // @[MemoryDispatch.scala 79:44 MemoryPacket.scala 17:16]
   assign dataRAM_io_read_addr = {{2'd0}, _GEN_11};
   assign dataRAM_io_write_addr = {{2'd0}, _GEN_11};
@@ -478,27 +500,27 @@ module LoadVerify(
   input  [15:0] io_addr,
   output [15:0] io_led
 );
-  wire  uart_clock; // @[LoadVerify.scala 15:20]
-  wire  uart_reset; // @[LoadVerify.scala 15:20]
-  wire  uart_io_board_rx; // @[LoadVerify.scala 15:20]
-  wire  uart_io_board_tx; // @[LoadVerify.scala 15:20]
-  wire [7:0] uart_io_mmio_rxData; // @[LoadVerify.scala 15:20]
-  wire  uart_io_mmio_rxValid; // @[LoadVerify.scala 15:20]
-  wire  loader_clock; // @[LoadVerify.scala 16:22]
-  wire  loader_reset; // @[LoadVerify.scala 16:22]
-  wire  loader_io_rxValid; // @[LoadVerify.scala 16:22]
-  wire [7:0] loader_io_rxData; // @[LoadVerify.scala 16:22]
-  wire  loader_io_mem_mem_write; // @[LoadVerify.scala 16:22]
-  wire [31:0] loader_io_mem_data_to_write; // @[LoadVerify.scala 16:22]
-  wire [31:0] loader_io_mem_data_addr; // @[LoadVerify.scala 16:22]
-  wire  mem_dispatch_clock; // @[LoadVerify.scala 17:28]
-  wire  mem_dispatch_reset; // @[LoadVerify.scala 17:28]
-  wire [31:0] mem_dispatch_io_ins_addr; // @[LoadVerify.scala 17:28]
-  wire [31:0] mem_dispatch_io_ins_out; // @[LoadVerify.scala 17:28]
-  wire  mem_dispatch_io_write_data; // @[LoadVerify.scala 17:28]
-  wire [31:0] mem_dispatch_io_data_addr; // @[LoadVerify.scala 17:28]
-  wire [31:0] mem_dispatch_io_data_write; // @[LoadVerify.scala 17:28]
-  UARTWrapper uart ( // @[LoadVerify.scala 15:20]
+  wire  uart_clock; // @[LoadVerify.scala 16:20]
+  wire  uart_reset; // @[LoadVerify.scala 16:20]
+  wire  uart_io_board_rx; // @[LoadVerify.scala 16:20]
+  wire  uart_io_board_tx; // @[LoadVerify.scala 16:20]
+  wire [7:0] uart_io_mmio_rxData; // @[LoadVerify.scala 16:20]
+  wire  uart_io_mmio_rxValid; // @[LoadVerify.scala 16:20]
+  wire  loader_clock; // @[LoadVerify.scala 17:22]
+  wire  loader_reset; // @[LoadVerify.scala 17:22]
+  wire  loader_io_rxValid; // @[LoadVerify.scala 17:22]
+  wire [7:0] loader_io_rxData; // @[LoadVerify.scala 17:22]
+  wire  loader_io_mem_mem_write; // @[LoadVerify.scala 17:22]
+  wire [31:0] loader_io_mem_data_to_write; // @[LoadVerify.scala 17:22]
+  wire [31:0] loader_io_mem_data_addr; // @[LoadVerify.scala 17:22]
+  wire  mem_dispatch_clock; // @[LoadVerify.scala 18:28]
+  wire  mem_dispatch_reset; // @[LoadVerify.scala 18:28]
+  wire [31:0] mem_dispatch_io_ins_addr; // @[LoadVerify.scala 18:28]
+  wire [31:0] mem_dispatch_io_ins_out; // @[LoadVerify.scala 18:28]
+  wire  mem_dispatch_io_write_data; // @[LoadVerify.scala 18:28]
+  wire [31:0] mem_dispatch_io_data_addr; // @[LoadVerify.scala 18:28]
+  wire [31:0] mem_dispatch_io_data_write; // @[LoadVerify.scala 18:28]
+  UARTWrapper uart ( // @[LoadVerify.scala 16:20]
     .clock(uart_clock),
     .reset(uart_reset),
     .io_board_rx(uart_io_board_rx),
@@ -506,7 +528,7 @@ module LoadVerify(
     .io_mmio_rxData(uart_io_mmio_rxData),
     .io_mmio_rxValid(uart_io_mmio_rxValid)
   );
-  UARTLoader loader ( // @[LoadVerify.scala 16:22]
+  UARTLoader loader ( // @[LoadVerify.scala 17:22]
     .clock(loader_clock),
     .reset(loader_reset),
     .io_rxValid(loader_io_rxValid),
@@ -515,7 +537,7 @@ module LoadVerify(
     .io_mem_data_to_write(loader_io_mem_data_to_write),
     .io_mem_data_addr(loader_io_mem_data_addr)
   );
-  MemoryDispatch mem_dispatch ( // @[LoadVerify.scala 17:28]
+  MemoryDispatch mem_dispatch ( // @[LoadVerify.scala 18:28]
     .clock(mem_dispatch_clock),
     .reset(mem_dispatch_reset),
     .io_ins_addr(mem_dispatch_io_ins_addr),
@@ -524,19 +546,19 @@ module LoadVerify(
     .io_data_addr(mem_dispatch_io_data_addr),
     .io_data_write(mem_dispatch_io_data_write)
   );
-  assign io_tx = uart_io_board_tx; // @[LoadVerify.scala 22:8]
-  assign io_led = mem_dispatch_io_ins_out[15:0]; // @[LoadVerify.scala 46:34]
+  assign io_tx = uart_io_board_tx; // @[LoadVerify.scala 23:8]
+  assign io_led = {uart_io_mmio_rxData,mem_dispatch_io_ins_out[7:0]}; // @[Cat.scala 33:92]
   assign uart_clock = clock;
   assign uart_reset = reset;
-  assign uart_io_board_rx = io_rx; // @[LoadVerify.scala 21:19]
+  assign uart_io_board_rx = io_rx; // @[LoadVerify.scala 22:19]
   assign loader_clock = clock;
   assign loader_reset = reset;
-  assign loader_io_rxValid = uart_io_mmio_rxValid; // @[LoadVerify.scala 26:21]
-  assign loader_io_rxData = uart_io_mmio_rxData; // @[LoadVerify.scala 25:20]
+  assign loader_io_rxValid = uart_io_mmio_rxValid; // @[LoadVerify.scala 27:21]
+  assign loader_io_rxData = uart_io_mmio_rxData; // @[LoadVerify.scala 26:20]
   assign mem_dispatch_clock = clock;
   assign mem_dispatch_reset = reset;
-  assign mem_dispatch_io_ins_addr = {{16'd0}, io_addr}; // @[LoadVerify.scala 45:27]
-  assign mem_dispatch_io_write_data = loader_io_mem_mem_write; // @[LoadVerify.scala 32:29]
-  assign mem_dispatch_io_data_addr = loader_io_mem_data_addr; // @[LoadVerify.scala 35:28]
-  assign mem_dispatch_io_data_write = loader_io_mem_data_to_write; // @[LoadVerify.scala 33:29]
+  assign mem_dispatch_io_ins_addr = {{16'd0}, io_addr}; // @[LoadVerify.scala 46:27]
+  assign mem_dispatch_io_write_data = loader_io_mem_mem_write; // @[LoadVerify.scala 33:29]
+  assign mem_dispatch_io_data_addr = loader_io_mem_data_addr; // @[LoadVerify.scala 36:28]
+  assign mem_dispatch_io_data_write = loader_io_mem_data_to_write; // @[LoadVerify.scala 34:29]
 endmodule
