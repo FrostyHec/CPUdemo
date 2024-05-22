@@ -29,7 +29,7 @@ case class GenConfig(
 
                       //clock
                       useIPClock: Boolean = false,
-                      ipClockName: Option[String] = None,
+                      ipClockName: Option[String] = Some("clk_wiz_0"),
 
                       useIPUART: Boolean = true
                     ) {

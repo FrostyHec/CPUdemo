@@ -150,30 +150,34 @@ class MemoryDispatch extends Module {
   io.data_out := DontCare
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
-      val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(7)))
       switch(io.data_addr(1, 0)) {
         is("b00".U) {
+          val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(7)))
           io.data_out := Cat(high_bit, data_out(7, 0))
         }
         is("b01".U) {
+          val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(15)))
           io.data_out := Cat(high_bit, data_out(15, 8))
         }
         is("b10".U) {
+          val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(23)))
           io.data_out := Cat(high_bit, data_out(23, 16))
         }
         is("b11".U) {
+          val high_bit = Fill(24, Mux(io.unsigned, 0.U, data_out(31)))
           io.data_out := Cat(high_bit, data_out(31, 24))
         }
       }
     }
     is(DataWidth.HalfWord.getUInt) {
       //doesn't support unaligned memory access
-      val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
       switch(io.data_addr(1, 0)) {
         is("b00".U) {
+          val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
           io.data_out := Cat(high_bit, data_out(15, 0))
         }
         is("b10".U) {
+          val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(31)))
           io.data_out := Cat(high_bit, data_out(31, 16))
         }
       }
