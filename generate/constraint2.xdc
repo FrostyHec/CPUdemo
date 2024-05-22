@@ -1,7 +1,7 @@
 # clock
 set_property PACKAGE_PIN Y18 [get_ports clock]
 set_property IOSTANDARD LVCMOS33 [get_ports clock]
-set_property PACKAGE_PIN K13 [get_ports reset] # which R?
+set_property PACKAGE_PIN AB8 [get_ports reset] # which R?
 set_property IOSTANDARD LVCMOS33 [get_ports reset]
 
 # io_led_led
