@@ -90,6 +90,22 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "lw 2" in {
+    /*
+        addi x1, x0, 255
+        sw x1, 0(x2)
+        lb x1, 0(x2)
+        sw x1, 0(x2)
+        addi x1, x0, 0
+        lw x1, 0(x2)
+     */
+    load_instructions("lw2.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 6)
+      checkRegsInCPU(cpu, 1, "h_ff_ff_ff_ff".U)
+    }
+  }
+
   it should "lb and sb (1)" in {
     //    addi x1, x0, 108
     //    sb x1, (x2)
@@ -243,6 +259,59 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInCPU(cpu, 3, 10.U)
       checkRegsInCPU(cpu, 4, 1.U)
       checkRegsInCPU(cpu, 5, 1.U)
+    }
+  }
+
+  it should "blt with sign" in {
+    /*
+        addi x1, x0, -1
+        addi x2, x0, 2
+        blt x1, x2, NEXT
+        addi x3, x0, 1
+        addi x4, x0, 1
+        addi x5, x0, 1
+        NEXT:
+        addi x3, x0, 10
+      -> x3=10,x4=0,x5=0
+     */
+    load_instructions("blt3.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 4)
+      checkRegsInCPU(cpu, 3, 10.U)
+      checkRegsInCPU(cpu, 4, 0.U)
+      checkRegsInCPU(cpu, 5, 0.U)
+    }
+  }
+
+  it should "blt with sign 2" in {
+    /*
+        addi x28, x0, 255
+        slli x28, x28, 8
+        addi x28, x28, 255
+        slli x28, x28, 8
+        addi x28, x28, 255
+        slli x28, x28, 8
+        addi x28, x28, 171
+        addi x2, x0, 2
+        blt x28, x2, NEXT
+        addi x3, x0, 1
+        addi x4, x0, 1
+        addi x5, x0, 1
+        NEXT:
+        addi x3, x0, 10
+        add x1, x0, x0
+        add x1, x0, x0
+        add x1, x0, x0
+        add x1, x0, x0
+      -> x3=10,x4=0,x5=0
+     */
+    load_instructions("blt4.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 15)
+      checkRegsInCPU(cpu, 28, "h_ff_ff_ff_ab".U)
+      checkRegsInCPU(cpu, 3, 10.U)
+      checkRegsInCPU(cpu, 4, 0.U)
+      checkRegsInCPU(cpu, 5, 0.U)
     }
   }
 

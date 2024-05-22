@@ -12,17 +12,6 @@ import utils.UARTUtils
 class TotalTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior of "Total Generate.Top Test"
 
-  it should "read data from switch" in {
-    load_instructions("switchRead1.txt")
-    test(new Top) { total =>
-      total.io.switch.switches.poke(1.U)
-      run_instructions(total, 2)
-      checkRegsInTop(total, 6, 1.U)
-    }
-  }
-
-  //TODO testing any wanted io operations
-
   it should "load instructions correctly from UART" in {
     //TODO 如果切换了时钟，这个要改
     //TODO 如果修改了signal的来源，这个也要改
@@ -54,8 +43,106 @@ class TotalTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "read data from switch 1.0" in {
+    load_instructions("switchRead1.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke(1.U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 6, 1.U)
+    }
+  }
 
-  it should "read data from button" in {
+  // todo 这个测试有问题，读不出switch的值
+  it should "read data from switch 1.1" in {
+    load_instructions("switchRead1.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_ff_ff_ff".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 6, "h_ff_ff_ff".U)
+    }
+  }
+
+  it should "read data from switch 3.1" in {
+    /*
+      addi x1,x0,-248 // x1 = 0xffffff08 -> switch
+      lw x2, 0(x1)
+     */
+    load_instructions("switchRead3.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_00_00_ff".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 2, "h_00_00_ff".U)
+    }
+  }
+
+  it should "read data from switch 3.2" in {
+    /*
+      addi x1,x0,-248 // x1 = 0xffffff08 -> switch
+      lw x2, 0(x1)
+     */
+    load_instructions("switchRead3.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_00_ff_ff".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 2, "h_00_ff_ff".U)
+    }
+  }
+
+  it should "read data from switch 3.3" in {
+    /*
+      addi x1,x0,-248 // x1 = 0xffffff08 -> switch
+      lw x2, 0(x1)
+     */
+    load_instructions("switchRead3.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_3f_ff_ff".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 2, "h_3f_ff_ff".U)
+    }
+  }
+
+  it should "read data from switch 3.4" in {
+    /*
+      addi x1,x0,-248 // x1 = 0xffffff08 -> switch
+      lw x2, 0(x1)
+     */
+    load_instructions("switchRead3.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_7f_ff_ff".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 2, "h_7f_ff_ff".U)
+    }
+  }
+
+  // todo 这里有问题
+  it should "read data from switch 3.5" in {
+    /*
+      addi x1,x0,-248 // x1 = 0xffffff08 -> switch
+      lw x2, 0(x1)
+     */
+    load_instructions("switchRead3.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_f0_00_00".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 2, "h_f0_00_00".U)
+    }
+  }
+
+  // todo 这里也有问题，疑似是如果第一位是 1 的话就会出问题
+  it should "read data from switch 3.6" in {
+    /*
+      addi x1,x0,-248 // x1 = 0xffffff08 -> switch
+      lw x2, 0(x1)
+     */
+    load_instructions("switchRead3.txt")
+    test(new Top) { total =>
+      total.io.switch.switches.poke("h_80_00_00".U)
+      run_instructions(total, 2)
+      checkRegsInTop(total, 2, "h_80_00_00".U)
+    }
+  }
+
+  it should "read data from button 1.0" in {
     /*
     addi x1,x0,-252 // x1 = 0xffffff04 -> btn
     lw x2, 0(x1)
@@ -68,7 +155,47 @@ class TotalTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  it should "write data to led" in {
+  it should "read data from button 1.1" in {
+    /*
+    addi x1,x0,-252 // x1 = 0xffffff04 -> btn
+    lw x2, 0(x1)
+    */
+    load_instructions("buttonRead1.txt")
+    test(new Top) { total =>
+      total.io.btn.button.poke(7.U)
+      run_instructions(total,2)
+      checkRegsInTop(total, 2, 7.U)
+    }
+  }
+
+  it should "read data from button 1.2" in {
+    /*
+    addi x1,x0,-252 // x1 = 0xffffff04 -> btn
+    lw x2, 0(x1)
+    */
+    load_instructions("buttonRead1.txt")
+    test(new Top) { total =>
+      total.io.btn.button.poke("b_10_100".U)
+      run_instructions(total,2)
+      checkRegsInTop(total, 2, "b_10_100".U)
+    }
+  }
+
+  it should "read data from button 1.3" in {
+    /*
+    addi x1,x0,-252 // x1 = 0xffffff04 -> btn
+    lw x2, 0(x1)
+    */
+    load_instructions("buttonRead1.txt")
+    test(new Top) { total =>
+      total.io.btn.button.poke("b_11111".U)
+      run_instructions(total,2)
+      checkRegsInTop(total, 2, "b_11111".U)
+    }
+  }
+
+
+  it should "write data to led 1.0" in {
     /*
     addi x1,x0,-256 // x1 = 0xffffff00 -> led
     addi x2,x0,15
@@ -79,6 +206,54 @@ class TotalTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.led.led.expect(0.U)
       run_instructions(total,3)
       total.io.led.led.expect(15.U)
+    }
+  }
+
+  it should "write data to led 2.0" in {
+    /*
+    addi x1,x0,-256 // x1 = 0xffffff00 -> led
+    addi x2, x0, 255
+    slli x2, x2, 24
+    sw x2, 0(x1)
+    */
+    load_instructions("ledWrite2.txt")
+    test(new Top) { total =>
+      total.io.led.led.expect(0.U)
+      run_instructions(total,4)
+      total.io.led.led.expect(0.U)
+    }
+  }
+
+  it should "write data to led 3.0" in {
+    /*
+    addi x1,x0,-256 // x1 = 0xffffff00 -> led
+    addi x2, x0, 255
+    slli x2, x2, 16
+    sw x2, 0(x1)
+    */
+    load_instructions("ledWrite3.txt")
+    test(new Top) { total =>
+      total.io.led.led.expect(0.U)
+      run_instructions(total,4)
+      total.io.led.led.expect("h_ff_00_00".U)
+    }
+  }
+
+  it should "write data to led 4.0" in {
+    /*
+    addi x1,x0,-256 // x1 = 0xffffff00 -> led
+    addi x2, x0, 255
+    slli x2, x2, 8
+    addi x2, x2, 255
+    slli x2, x2, 8
+    addi x2, x2, 255
+    sw x2, 0(x1)
+    */
+    load_instructions("ledWrite4.txt")
+    test(new Top) { total =>
+      total.io.led.led.expect(0.U)
+      run_instructions(total,7)
+      total.io.led.led.expect("h_ff_ff_ff".U)
     }
   }
 
