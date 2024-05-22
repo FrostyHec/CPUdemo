@@ -10,8 +10,8 @@ class MMIOSeg7Bundle extends Bundle {
 
 class BoardSeg7Bundle extends Bundle {
   //TODO seg7 out board bundle
-  val seg7_high = Output(UInt(GenConfig.s.board.seg7Width.W)) // 7段 + 1位启用信号
-  val seg7_low = Output(UInt(GenConfig.s.board.seg7Width.W)) // 7段 + 1位启用信号
+  val seg7 = Output(UInt(GenConfig.s.board.seg7Width.W)) // 7段 + 1位启用信号
+//  val seg7_low = Output(UInt(GenConfig.s.board.seg7Width.W)) // 7段 + 1位启用信号
   val an = Output(UInt(GenConfig.s.board.anWidth.W)) // 片选信号
 }
 
@@ -21,24 +21,28 @@ class Seg7 extends Module {
     val board = new BoardSeg7Bundle
   })
   //TODO seg7 logic
-  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
-  val digits_high = VecInit((4 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
+//  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
+  val digits = VecInit((0 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
 
   val counter = RegInit(0.U(3.W))
 
-  val seg7Module_low = Module(new HexToSeg7())
-  seg7Module_low.io.hexDigit := digits_low(counter)
-  io.board.seg7_low := seg7Module_low.io.seg7
+//  val seg7Module_low = Module(new HexToSeg7())
+//  seg7Module_low.io.hexDigit := digits_low(counter)
+//  io.board.seg7_low := seg7Module_low.io.seg7
 
-  val seg7Module_high = Module(new HexToSeg7())
-  seg7Module_high.io.hexDigit := digits_high(counter)
-  io.board.seg7_high := seg7Module_high.io.seg7
+  val seg7Module = Module(new HexToSeg7())
+  seg7Module.io.hexDigit := digits(counter)
+  io.board.seg7 := seg7Module.io.seg7
 
-  io.board.an := MuxLookup(counter(1, 0), "b1111_1111".U, Seq(
-    "b00".U -> "b1110_1110".U,
-    "b01".U -> "b1101_1101".U,
-    "b10".U -> "b1011_1011".U,
-    "b11".U -> "b0111_0111".U
+  io.board.an := MuxLookup(counter, "b1111_1111".U, Seq(
+    "b000".U -> "b1111_1110".U,
+    "b001".U -> "b1111_1101".U,
+    "b010".U -> "b1111_1011".U,
+    "b011".U -> "b1111_0111".U,
+    "b100".U -> "b1110_1111".U,
+    "b101".U -> "b1101_1111".U,
+    "b110".U -> "b1011_1111".U,
+    "b111".U -> "b0111_1111".U
   ))
 
   counter := counter + 1.U
