@@ -71,9 +71,11 @@ beq t0, zero, case1
 lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
-andi t2, t2, 5 # exponent
+andi t2, t2, 5 
+addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
+blt t2, zero, case1_end1
 
 
 # Round down
