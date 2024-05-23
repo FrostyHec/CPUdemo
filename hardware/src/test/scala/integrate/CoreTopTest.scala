@@ -155,7 +155,6 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  // todo 这个有一点问题
   it should "lb (2)" in {
     /*
         addi x1, x0, 128

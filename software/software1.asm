@@ -9,6 +9,8 @@ srli t0, a0, 16
 add a6, a6, t0		# 0x0001_ffff -> stack
 addi a4, zero, 7
 slli a4, a4, 20     # mask of the cases
+addi t0, zero, -1
+sw t0, (a0)
 
 # determine the cases
 ini:
@@ -27,6 +29,10 @@ check0:
 lw t0, (a1)
 andi t0, t0, 4
 bne t0, zero, check0
+
+# make the led to off state
+addi t6, zero, 0
+sw t6, (a0)
 
 beq a5, t1, case0
 addi a5, a5, 1
@@ -50,9 +56,9 @@ lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case0
 addi a5, zero, 255
-slli a5, a5, 8
 lw t3, (a2)
 and t3, t3, a5
+slli t3, t3, 8
 sw t3, (a0)
 check0c1:
 lw t0, (a1)
@@ -74,7 +80,7 @@ case1:
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case1
-lb t3, 1(a2)
+lb t3, (a2)
 sw t3, (a3) # 7-seg
 sw t3, (a6)
 beq zero, zero, ini
@@ -92,30 +98,35 @@ case3:
 lw t3, (a6)
 lw t4, -4(a6)
 beq t3, t4, label
-beq zero, zero, ini
+beq zero, zero, out
 
 case4:
 lw t3, (a6)
 lw t4, -4(a6)
 blt t3, t4, label
-beq zero, zero, ini
+beq zero, zero, out
 
 case5:
 lw t3, (a6)
 lw t4, -4(a6)
 bge t3, t4, label
-beq zero, zero, ini
+beq zero, zero, out
 
 case6:
 lw t3, (a6)
 lw t4, -4(a6)
 bltu t3, t4, label
-beq zero, zero, ini
+beq zero, zero, out
 
 case7:
 lw t3, (a6)
 lw t4, -4(a6)
 bgeu t3, t4, label
+beq zero, zero, out
+
+out:
+addi t6, zero, 0
+sw t6, (a0)
 beq zero, zero, ini
 
 label:
