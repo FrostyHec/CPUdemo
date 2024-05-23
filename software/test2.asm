@@ -14,7 +14,7 @@ addi s1, s0, 1024  # 0x0001_0800 -> pop
 addi a4, zero, 7
 slli a4, a4, 20     # mask of the cases
 addi a7, zero, 1
-slli a7, a7, 15 # get switch 16
+slli a7, a7, 16 	# get switch 16
 
 # 40000 interval
 addi s7, x0, 29
