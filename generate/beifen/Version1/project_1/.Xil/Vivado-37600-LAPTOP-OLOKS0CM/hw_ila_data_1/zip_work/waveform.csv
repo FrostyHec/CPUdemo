@@ -1,1 +1,0 @@
-Sample in Buffer,Sample in Window,TRIGGER,cpu/uartLoader/io_rxData[7:0],cpu/uartLoader/io_cpu_state[1:0],cpu/memory/io_data_addr[31:0],cpu/memory/io_data_width[1:0],cpu/memory/io_ins_out[31:0],cpu/memory/io_ins_addr[31:0],cpu/memory/io_data_out[31:0],cpu/memory/io_data_write[31:0],cpu/uartLoader/io_mem_mem_write,cpu/uartLoader/io_rxReady,cpu/uartLoader/io_rxValid
