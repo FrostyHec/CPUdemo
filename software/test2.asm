@@ -129,7 +129,22 @@ sw t3, (a0)
 sw t3, (a3)
 jal ini
 
+# little-endian -> big endian
 case5:
+lw t0, (a1)
+andi t0, t0, 4
+beq t0, zero, case4
+lw t0, (a2)
+addi t1, zero, 255 # mask
+and t2, t0, t1
+slli t1, t1, 8
+and t3, t0, t1
+slli t2, t2, 4
+srli t3, t3, 12
+or t0, t2, t3
+sw t0, (a0)
+sw, (a3)
+jal ini
 
 
 

@@ -50,9 +50,9 @@ lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case0
 addi a5, zero, 255
-slli a5, a5, 8
 lw t3, (a2)
 and t3, t3, a5
+slli t3, t3, 8
 sw t3, (a0)
 check0c1:
 lw t0, (a1)
@@ -74,7 +74,7 @@ case1:
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case1
-lb t3, 1(a2)
+lb t3, (a2)
 sw t3, (a3) # 7-seg
 sw t3, (a6)
 beq zero, zero, ini
