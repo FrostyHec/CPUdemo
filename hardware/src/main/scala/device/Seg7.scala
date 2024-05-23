@@ -51,6 +51,7 @@ class Seg7 extends Module {
       "b111".U -> "b0111_1111".U
     ))
 
+    clock_counter := 100000.U
     counter := counter + 1.U
   }.otherwise {
     io.board.seg7 := 1.U
