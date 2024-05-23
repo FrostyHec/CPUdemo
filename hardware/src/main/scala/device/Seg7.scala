@@ -21,31 +21,40 @@ class Seg7 extends Module {
     val board = new BoardSeg7Bundle
   })
   //TODO seg7 logic
-//  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
-  val digits = VecInit((0 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
+  val clock_counter = RegInit(100000.U(32.W))
+
+  clock_counter := clock_counter - 1.U
 
   val counter = RegInit(0.U(3.W))
 
-//  val seg7Module_low = Module(new HexToSeg7())
-//  seg7Module_low.io.hexDigit := digits_low(counter)
-//  io.board.seg7_low := seg7Module_low.io.seg7
+  when(clock_counter === 0.U) {
+    //  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
+    val digits = VecInit((0 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
 
-  val seg7Module = Module(new HexToSeg7())
-  seg7Module.io.hexDigit := digits(counter)
-  io.board.seg7 := seg7Module.io.seg7
+    //  val seg7Module_low = Module(new HexToSeg7())
+    //  seg7Module_low.io.hexDigit := digits_low(counter)
+    //  io.board.seg7_low := seg7Module_low.io.seg7
 
-  io.board.an := MuxLookup(counter, "b1111_1111".U, Seq(
-    "b000".U -> "b1111_1110".U,
-    "b001".U -> "b1111_1101".U,
-    "b010".U -> "b1111_1011".U,
-    "b011".U -> "b1111_0111".U,
-    "b100".U -> "b1110_1111".U,
-    "b101".U -> "b1101_1111".U,
-    "b110".U -> "b1011_1111".U,
-    "b111".U -> "b0111_1111".U
-  ))
+    val seg7Module = Module(new HexToSeg7())
+    seg7Module.io.hexDigit := digits(counter)
+    io.board.seg7 := seg7Module.io.seg7
 
-  counter := counter + 1.U
+    io.board.an := MuxLookup(counter, "b1111_1111".U, Seq(
+      "b000".U -> "b1111_1110".U,
+      "b001".U -> "b1111_1101".U,
+      "b010".U -> "b1111_1011".U,
+      "b011".U -> "b1111_0111".U,
+      "b100".U -> "b1110_1111".U,
+      "b101".U -> "b1101_1111".U,
+      "b110".U -> "b1011_1111".U,
+      "b111".U -> "b0111_1111".U
+    ))
+
+    counter := counter + 1.U
+  }.otherwise {
+    io.board.seg7 := 1.U
+    io.board.an := 1.U
+  }
 }
 
 class HexToSeg7 extends Module {
