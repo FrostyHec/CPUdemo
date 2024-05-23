@@ -17,6 +17,7 @@ class OutRegisters extends Module {
   //TODO urat来个MMIO
   io.external.uart.txData := DontCare
   io.external.uart.txStart := false.B
+  io.external.uart.rxReady := false.B
 
   //说实在我都在想是不是可以不用插这个reg
   //registers that write by board and read by cpu
