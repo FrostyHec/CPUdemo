@@ -70,3 +70,59 @@ set_property PACKAGE_PIN Y18 [get_ports clock]
 set_property PACKAGE_PIN AB8 [get_ports reset]
 set_property PACKAGE_PIN V18 [get_ports io_tx]
 set_property PACKAGE_PIN Y19 [get_ports io_rx]
+
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 4096 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list clock_IBUF_BUFG]]
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
+set_property port_width 32 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {mem_dispatch/io_data_addr[0]} {mem_dispatch/io_data_addr[1]} {mem_dispatch/io_data_addr[2]} {mem_dispatch/io_data_addr[3]} {mem_dispatch/io_data_addr[4]} {mem_dispatch/io_data_addr[5]} {mem_dispatch/io_data_addr[6]} {mem_dispatch/io_data_addr[7]} {mem_dispatch/io_data_addr[8]} {mem_dispatch/io_data_addr[9]} {mem_dispatch/io_data_addr[10]} {mem_dispatch/io_data_addr[11]} {mem_dispatch/io_data_addr[12]} {mem_dispatch/io_data_addr[13]} {mem_dispatch/io_data_addr[14]} {mem_dispatch/io_data_addr[15]} {mem_dispatch/io_data_addr[16]} {mem_dispatch/io_data_addr[17]} {mem_dispatch/io_data_addr[18]} {mem_dispatch/io_data_addr[19]} {mem_dispatch/io_data_addr[20]} {mem_dispatch/io_data_addr[21]} {mem_dispatch/io_data_addr[22]} {mem_dispatch/io_data_addr[23]} {mem_dispatch/io_data_addr[24]} {mem_dispatch/io_data_addr[25]} {mem_dispatch/io_data_addr[26]} {mem_dispatch/io_data_addr[27]} {mem_dispatch/io_data_addr[28]} {mem_dispatch/io_data_addr[29]} {mem_dispatch/io_data_addr[30]} {mem_dispatch/io_data_addr[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
+set_property port_width 32 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {mem_dispatch/io_ins_addr[0]} {mem_dispatch/io_ins_addr[1]} {mem_dispatch/io_ins_addr[2]} {mem_dispatch/io_ins_addr[3]} {mem_dispatch/io_ins_addr[4]} {mem_dispatch/io_ins_addr[5]} {mem_dispatch/io_ins_addr[6]} {mem_dispatch/io_ins_addr[7]} {mem_dispatch/io_ins_addr[8]} {mem_dispatch/io_ins_addr[9]} {mem_dispatch/io_ins_addr[10]} {mem_dispatch/io_ins_addr[11]} {mem_dispatch/io_ins_addr[12]} {mem_dispatch/io_ins_addr[13]} {mem_dispatch/io_ins_addr[14]} {mem_dispatch/io_ins_addr[15]} {mem_dispatch/io_ins_addr[16]} {mem_dispatch/io_ins_addr[17]} {mem_dispatch/io_ins_addr[18]} {mem_dispatch/io_ins_addr[19]} {mem_dispatch/io_ins_addr[20]} {mem_dispatch/io_ins_addr[21]} {mem_dispatch/io_ins_addr[22]} {mem_dispatch/io_ins_addr[23]} {mem_dispatch/io_ins_addr[24]} {mem_dispatch/io_ins_addr[25]} {mem_dispatch/io_ins_addr[26]} {mem_dispatch/io_ins_addr[27]} {mem_dispatch/io_ins_addr[28]} {mem_dispatch/io_ins_addr[29]} {mem_dispatch/io_ins_addr[30]} {mem_dispatch/io_ins_addr[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
+set_property port_width 32 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {mem_dispatch/io_data_write[0]} {mem_dispatch/io_data_write[1]} {mem_dispatch/io_data_write[2]} {mem_dispatch/io_data_write[3]} {mem_dispatch/io_data_write[4]} {mem_dispatch/io_data_write[5]} {mem_dispatch/io_data_write[6]} {mem_dispatch/io_data_write[7]} {mem_dispatch/io_data_write[8]} {mem_dispatch/io_data_write[9]} {mem_dispatch/io_data_write[10]} {mem_dispatch/io_data_write[11]} {mem_dispatch/io_data_write[12]} {mem_dispatch/io_data_write[13]} {mem_dispatch/io_data_write[14]} {mem_dispatch/io_data_write[15]} {mem_dispatch/io_data_write[16]} {mem_dispatch/io_data_write[17]} {mem_dispatch/io_data_write[18]} {mem_dispatch/io_data_write[19]} {mem_dispatch/io_data_write[20]} {mem_dispatch/io_data_write[21]} {mem_dispatch/io_data_write[22]} {mem_dispatch/io_data_write[23]} {mem_dispatch/io_data_write[24]} {mem_dispatch/io_data_write[25]} {mem_dispatch/io_data_write[26]} {mem_dispatch/io_data_write[27]} {mem_dispatch/io_data_write[28]} {mem_dispatch/io_data_write[29]} {mem_dispatch/io_data_write[30]} {mem_dispatch/io_data_write[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
+set_property port_width 32 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {mem_dispatch/io_ins_out[0]} {mem_dispatch/io_ins_out[1]} {mem_dispatch/io_ins_out[2]} {mem_dispatch/io_ins_out[3]} {mem_dispatch/io_ins_out[4]} {mem_dispatch/io_ins_out[5]} {mem_dispatch/io_ins_out[6]} {mem_dispatch/io_ins_out[7]} {mem_dispatch/io_ins_out[8]} {mem_dispatch/io_ins_out[9]} {mem_dispatch/io_ins_out[10]} {mem_dispatch/io_ins_out[11]} {mem_dispatch/io_ins_out[12]} {mem_dispatch/io_ins_out[13]} {mem_dispatch/io_ins_out[14]} {mem_dispatch/io_ins_out[15]} {mem_dispatch/io_ins_out[16]} {mem_dispatch/io_ins_out[17]} {mem_dispatch/io_ins_out[18]} {mem_dispatch/io_ins_out[19]} {mem_dispatch/io_ins_out[20]} {mem_dispatch/io_ins_out[21]} {mem_dispatch/io_ins_out[22]} {mem_dispatch/io_ins_out[23]} {mem_dispatch/io_ins_out[24]} {mem_dispatch/io_ins_out[25]} {mem_dispatch/io_ins_out[26]} {mem_dispatch/io_ins_out[27]} {mem_dispatch/io_ins_out[28]} {mem_dispatch/io_ins_out[29]} {mem_dispatch/io_ins_out[30]} {mem_dispatch/io_ins_out[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
+set_property port_width 2 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list {loader/cur_state[0]} {loader/cur_state[1]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
+set_property port_width 8 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list {uart/uart/m_axis_tdata[0]} {uart/uart/m_axis_tdata[1]} {uart/uart/m_axis_tdata[2]} {uart/uart/m_axis_tdata[3]} {uart/uart/m_axis_tdata[4]} {uart/uart/m_axis_tdata[5]} {uart/uart/m_axis_tdata[6]} {uart/uart/m_axis_tdata[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
+set_property port_width 1 [get_debug_ports u_ila_0/probe6]
+connect_debug_port u_ila_0/probe6 [get_nets [list mem_dispatch/io_write_data]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe7]
+set_property port_width 1 [get_debug_ports u_ila_0/probe7]
+connect_debug_port u_ila_0/probe7 [get_nets [list uart/uart/m_axis_tready]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe8]
+set_property port_width 1 [get_debug_ports u_ila_0/probe8]
+connect_debug_port u_ila_0/probe8 [get_nets [list uart/uart/m_axis_tvalid]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe9]
+set_property port_width 1 [get_debug_ports u_ila_0/probe9]
+connect_debug_port u_ila_0/probe9 [get_nets [list uart/uart/rxd]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clock_IBUF_BUFG]

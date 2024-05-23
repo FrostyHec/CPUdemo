@@ -526,6 +526,7 @@ class UARTrx extends Module {
 
     val data = Output(UInt(8.W)) // 并行输出数据
     val valid = Output(Bool()) // 数据有效信号
+//    val ready = Input(Bool()) // 接收器准备好信号
   })
   val baud_cout = GenConfig.s.board.uart_baud_count.U - 1.U
 

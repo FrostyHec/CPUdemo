@@ -16,9 +16,6 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
-set_param xicom.use_bs_reader 1
-set_msg_config -id {Synth 8-256} -limit 10000
-set_msg_config -id {Synth 8-638} -limit 10000
 create_project -in_memory -part xc7a100tfgg484-1
 
 set_param project.singleFileAddWarning.threshold 0
@@ -35,10 +32,10 @@ read_verilog -library xil_defaultlib {
   D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/new/UART.v
   D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/new/LoadVerify.v
 }
-read_ip -quiet d:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/ins_mem/ins_mem.xci
+read_ip -quiet D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/ins_mem/ins_mem.xci
 set_property used_in_implementation false [get_files -all d:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/ins_mem/ins_mem_ooc.xdc]
 
-read_ip -quiet d:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/data_mem/data_mem.xci
+read_ip -quiet D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/data_mem/data_mem.xci
 set_property used_in_implementation false [get_files -all d:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/data_mem/data_mem_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being

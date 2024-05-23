@@ -63,9 +63,9 @@ module ins_mem (
   dpo
 );
 
-input wire [13 : 0] a;
+input wire [11 : 0] a;
 input wire [31 : 0] d;
-input wire [13 : 0] dpra;
+input wire [11 : 0] dpra;
 input wire clk;
 input wire we;
 output wire [31 : 0] spo;
@@ -73,9 +73,9 @@ output wire [31 : 0] dpo;
 
   dist_mem_gen_v8_0_12 #(
     .C_FAMILY("artix7"),
-    .C_ADDR_WIDTH(14),
+    .C_ADDR_WIDTH(12),
     .C_DEFAULT_DATA("0"),
-    .C_DEPTH(16384),
+    .C_DEPTH(4096),
     .C_HAS_CLK(1),
     .C_HAS_D(1),
     .C_HAS_DPO(1),

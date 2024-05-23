@@ -33,3 +33,6 @@ set_property PACKAGE_PIN Y19 [get_ports io_board_rx]
 set_property PACKAGE_PIN V18 [get_ports io_board_tx]
 set_property PACKAGE_PIN K17 [get_ports io_signal]
 set_property PACKAGE_PIN Y9 [get_ports reset]
+
+set_property IOSTANDARD LVCMOS33 [get_ports rxReady]
+set_property PACKAGE_PIN W9 [get_ports reset]

@@ -25,3 +25,7 @@ set_property src_info {type:XDC file:1 line:34 export:INPUT save:INPUT read:READ
 set_property PACKAGE_PIN K17 [get_ports io_signal]
 set_property src_info {type:XDC file:1 line:35 export:INPUT save:INPUT read:READ} [current_design]
 set_property PACKAGE_PIN Y9 [get_ports reset]
+set_property src_info {type:XDC file:1 line:37 export:INPUT save:INPUT read:READ} [current_design]
+set_property IOSTANDARD LVCMOS33 [get_ports rxReady]
+set_property src_info {type:XDC file:1 line:38 export:INPUT save:INPUT read:READ} [current_design]
+set_property PACKAGE_PIN W9 [get_ports reset]

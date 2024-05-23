@@ -22,6 +22,7 @@ class LoadVerify extends Module {
   uart.io.board.rx:=io.rx
   io.tx:=uart.io.board.tx
   //uart -> loader
+  uart.io.mmio.rxReady:=loader.io.rxReady
   loader.io.cpu_state:=CPUStateType.sLoadMode.getUInt
   loader.io.rxData := uart.io.mmio.rxData
   loader.io.rxValid := uart.io.mmio.rxValid

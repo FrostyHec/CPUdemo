@@ -45,7 +45,7 @@ module UARTWrapper(
   assign uart_rst = reset; // @[UARTWrapper.scala 32:26]
   assign uart_s_axis_tdata = 8'h0; // @[UARTWrapper.scala 34:26]
   assign uart_s_axis_tvalid = 1'h0; // @[UARTWrapper.scala 35:27]
-  assign uart_m_axis_tready = 1'h0; // @[UARTWrapper.scala 43:27]
+  assign uart_m_axis_tready = 1'b1; // @[UARTWrapper.scala 43:27]
   assign uart_rxd = io_board_rx; // @[UARTWrapper.scala 38:17]
   assign uart_prescale = 16'h516; // @[UARTWrapper.scala 45:22]
 endmodule
@@ -62,7 +62,7 @@ module UARTLoader(
   reg [31:0] _RAND_0;
   reg [31:0] _RAND_1;
 `endif // RANDOMIZE_REG_INIT
-  reg [1:0] cur_state; // @[UARTLoader.scala 33:26]
+  (* MARK_DEBUG="true" *)reg [1:0] cur_state; // @[UARTLoader.scala 33:26]
   reg [31:0] data_addr; // @[UARTLoader.scala 34:26]
   wire [31:0] _data_addr_T_1 = data_addr + 32'h1; // @[UARTLoader.scala 64:34]
   wire [31:0] _GEN_4 = io_rxValid ? _data_addr_T_1 : data_addr; // @[UARTLoader.scala 63:37 64:21 34:26]
@@ -386,11 +386,11 @@ endmodule
 module MemoryDispatch(
   input         clock,
   input         reset,
-  input  [31:0] io_ins_addr,
-  output [31:0] io_ins_out,
-  input         io_write_data,
-  input  [31:0] io_data_addr,
-  input  [31:0] io_data_write
+  (* MARK_DEBUG="true" *)input  [31:0] io_ins_addr,
+  (* MARK_DEBUG="true" *)output [31:0] io_ins_out,
+  (* MARK_DEBUG="true" *)input         io_write_data,
+  (* MARK_DEBUG="true" *)input  [31:0] io_data_addr,
+  (* MARK_DEBUG="true" *)input  [31:0] io_data_write
 );
   wire  insRAM_clock; // @[MemoryDispatch.scala 36:22]
   wire  insRAM_io_write; // @[MemoryDispatch.scala 36:22]

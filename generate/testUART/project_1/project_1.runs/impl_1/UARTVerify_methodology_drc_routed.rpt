@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-| Date         : Wed May 22 01:43:34 2024
+| Date         : Thu May 23 19:23:08 2024
 | Host         : LAPTOP-OLOKS0CM running 64-bit major release  (build 9200)
 | Command      : report_methodology -file UARTVerify_methodology_drc_routed.rpt -pb UARTVerify_methodology_drc_routed.pb -rpx UARTVerify_methodology_drc_routed.rpx
 | Design       : UARTVerify
@@ -23,12 +23,13 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 76
-+-----------+----------+-----------------------------+------------+
-| Rule      | Severity | Description                 | Violations |
-+-----------+----------+-----------------------------+------------+
-| TIMING-17 | Warning  | Non-clocked sequential cell | 76         |
-+-----------+----------+-----------------------------+------------+
+             Violations found: 77
++-----------+----------+-------------------------------------------------+------------+
+| Rule      | Severity | Description                                     | Violations |
++-----------+----------+-------------------------------------------------+------------+
+| TIMING-17 | Warning  | Non-clocked sequential cell                     | 76         |
+| XDCC-5    | Warning  | User Non-Timing constraint/property overwritten | 1          |
++-----------+----------+-------------------------------------------------+------------+
 
 2. REPORT DETAILS
 -----------------
@@ -410,6 +411,13 @@ Related violations: <none>
 TIMING-17#76 Warning
 Non-clocked sequential cell  
 The clock pin uart/uart/uart_tx_inst/txd_reg_reg/C is not reached by a timing clock
+Related violations: <none>
+
+XDCC-5#1 Warning
+User Non-Timing constraint/property overwritten  
+A new XDC property PACKAGE_PIN on reset overrides a previous user property.
+New Source: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc (Line: 38)
+Previous Source: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc (Line: 35)
 Related violations: <none>
 
 

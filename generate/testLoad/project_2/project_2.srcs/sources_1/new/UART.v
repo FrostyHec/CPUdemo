@@ -16,14 +16,14 @@ module uart #
     /*
      * AXI output
      */
-    output wire [DATA_WIDTH-1:0]  m_axis_tdata,
-    output wire                   m_axis_tvalid,
-    input  wire                   m_axis_tready,
+    (* MARK_DEBUG="true" *)output wire [DATA_WIDTH-1:0]  m_axis_tdata,
+    (* MARK_DEBUG="true" *)output wire                   m_axis_tvalid,
+    (* MARK_DEBUG="true" *)input  wire                   m_axis_tready,
 
     /*
      * UART interface
      */
-    input  wire                   rxd,
+    (* MARK_DEBUG="true" *)input  wire                   rxd,
     output wire                   txd,
 
     /*

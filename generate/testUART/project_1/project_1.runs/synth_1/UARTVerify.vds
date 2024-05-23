@@ -2,8 +2,8 @@
 # Vivado v2017.4 (64-bit)
 # SW Build 2086221 on Fri Dec 15 20:55:39 MST 2017
 # IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
-# Start of session at: Wed May 22 01:42:31 2024
-# Process ID: 25744
+# Start of session at: Thu May 23 19:21:40 2024
+# Process ID: 39564
 # Current directory: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1
 # Command line: vivado.exe -log UARTVerify.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source UARTVerify.tcl
 # Log file: D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1/UARTVerify.vds
@@ -15,11 +15,11 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 54212 
+INFO: Helper process launched with PID 49404 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:03 . Memory (MB): peak = 388.703 ; gain = 98.070
+Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:03 . Memory (MB): peak = 388.066 ; gain = 99.047
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'UARTVerify' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:52]
+INFO: [Synth 8-638] synthesizing module 'UARTVerify' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:53]
 INFO: [Synth 8-638] synthesizing module 'UART' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:1]
 INFO: [Synth 8-638] synthesizing module 'uart' [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UART.v:1]
 	Parameter DATA_WIDTH bound to: 8 - type: integer 
@@ -31,9 +31,10 @@ INFO: [Synth 8-638] synthesizing module 'uart_rx' [D:/ComputerScience/Projects/C
 INFO: [Synth 8-256] done synthesizing module 'uart_rx' (2#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UART.v:87]
 INFO: [Synth 8-256] done synthesizing module 'uart' (3#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UART.v:1]
 INFO: [Synth 8-256] done synthesizing module 'UART' (4#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:1]
-INFO: [Synth 8-256] done synthesizing module 'UARTVerify' (5#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:52]
+WARNING: [Synth 8-350] instance 'uart' of module 'UART' requires 7 connections, but only 6 given [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:71]
+INFO: [Synth 8-256] done synthesizing module 'UARTVerify' (5#1) [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:53]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 440.336 ; gain = 149.703
+Finished RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:04 . Memory (MB): peak = 440.379 ; gain = 151.359
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -42,8 +43,9 @@ Report Check Netlist:
 +------+------------------+-------+---------+-------+------------------+
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
+WARNING: [Synth 8-3295] tying undriven pin uart:rxReady to constant 0 [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UARTVerify.v:71]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 440.336 ; gain = 149.703
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:01 ; elapsed = 00:00:04 . Memory (MB): peak = 440.379 ; gain = 151.359
 ---------------------------------------------------------------------------------
 INFO: [Device 21-403] Loading part xc7a100tfgg484-1
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -51,6 +53,9 @@ INFO: [Project 1-570] Preparing netlist for logic optimization
 Processing XDC Constraints
 Initializing timing engine
 Parsing XDC File [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc]
+WARNING: [Vivado 12-584] No ports matched 'rxReady'. [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc:37]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc:37]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
 Finished Parsing XDC File [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/constrs_1/new/cons.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/UARTVerify_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/UARTVerify_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
@@ -59,22 +64,22 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 787.723 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 787.254 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:14 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a100tfgg484-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:14 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:06 ; elapsed = 00:00:14 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5544] ROM "s_axis_tready_reg" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "txd_reg" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
@@ -82,7 +87,7 @@ WARNING: [Synth 8-6014] Unused sequential element prescale_reg_reg was removed. 
 INFO: [Synth 8-5544] ROM "bit_cnt" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
 WARNING: [Synth 8-6014] Unused sequential element prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UART.v:146]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:15 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -172,7 +177,7 @@ WARNING: [Synth 8-6014] Unused sequential element uart/uart/uart_rx_inst/frame_e
 WARNING: [Synth 8-6014] Unused sequential element uart/uart/uart_tx_inst/prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UART.v:248]
 WARNING: [Synth 8-6014] Unused sequential element uart/uart/uart_rx_inst/prescale_reg_reg was removed.  [D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.srcs/sources_1/new/brand_new/UART.v:146]
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:05 ; elapsed = 00:00:11 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:06 ; elapsed = 00:00:15 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -184,13 +189,13 @@ Report RTL Partitions:
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:23 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 787.723 ; gain = 497.090
+Finished Timing Optimization : Time (s): cpu = 00:00:10 ; elapsed = 00:00:23 . Memory (MB): peak = 787.254 ; gain = 498.234
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -202,7 +207,7 @@ Report RTL Partitions:
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Technology Mapping : Time (s): cpu = 00:00:10 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -226,7 +231,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:08 ; elapsed = 00:00:16 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished IO Insertion : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -239,7 +244,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -251,25 +256,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP and Shift Register Reporting
@@ -325,11 +330,11 @@ Report Instance Areas:
 |5     |      uart_tx_inst |uart_tx |    67|
 +------+-------------------+--------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 9 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:04 ; elapsed = 00:00:13 . Memory (MB): peak = 805.793 ; gain = 167.773
-Synthesis Optimization Complete : Time (s): cpu = 00:00:08 ; elapsed = 00:00:17 . Memory (MB): peak = 805.793 ; gain = 515.160
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:08 ; elapsed = 00:00:19 . Memory (MB): peak = 807.043 ; gain = 171.148
+Synthesis Optimization Complete : Time (s): cpu = 00:00:11 ; elapsed = 00:00:24 . Memory (MB): peak = 807.043 ; gain = 518.023
 INFO: [Project 1-571] Translating synthesized netlist
 INFO: [Netlist 29-17] Analyzing 13 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -339,10 +344,10 @@ INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 INFO: [Common 17-83] Releasing license: Synthesis
-25 Infos, 10 Warnings, 0 Critical Warnings and 0 Errors encountered.
+25 Infos, 13 Warnings, 1 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:09 ; elapsed = 00:00:19 . Memory (MB): peak = 805.809 ; gain = 527.852
+synth_design: Time (s): cpu = 00:00:13 ; elapsed = 00:00:28 . Memory (MB): peak = 807.043 ; gain = 530.352
 INFO: [Common 17-1381] The checkpoint 'D:/ComputerScience/Projects/CPUdemo/generate/testUART/project_1/project_1.runs/synth_1/UARTVerify.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file UARTVerify_utilization_synth.rpt -pb UARTVerify_utilization_synth.pb
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.023 . Memory (MB): peak = 805.809 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Wed May 22 01:42:53 2024...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.039 . Memory (MB): peak = 807.043 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Thu May 23 19:22:10 2024...

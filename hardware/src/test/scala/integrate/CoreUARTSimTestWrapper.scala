@@ -38,4 +38,18 @@ class CoreUARTSimTestWrapper extends FlatSpec with ChiselScalatestTester with Ma
       checkRegsInCPU(cpu, 1, 10.U)
     }
   }
+
+  it should "correctly load data from UART and stored into Mem with many ins" in {
+    test(new CoreTop) { cpu =>
+      cpu.io.external_signal.load_data_mode.poke(true.B)
+      word_transmit(cpu, "h00a0_0093".U, 3, 3) // transmit addi x1,x0,10
+      word_transmit(cpu, "h00a0_0113".U, 3, 3) // transmit addi x2,x0,10
+      word_transmit(cpu, "h0020_81b3".U, 3, 3) // transmit add x3,x1,x2
+      cpu.io.external_signal.load_data_mode.poke(false.B)
+      run_instructions(cpu,3)
+      checkRegsInCPU(cpu, 1, 10.U)
+      checkRegsInCPU(cpu, 2, 10.U)
+      checkRegsInCPU(cpu, 3, 20.U)
+    }
+  }
 }

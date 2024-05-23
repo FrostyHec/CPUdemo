@@ -60,14 +60,11 @@ proc step_failed { step } {
   close $ch
 }
 
-set_msg_config -id {Synth 8-256} -limit 10000
-set_msg_config -id {Synth 8-638} -limit 10000
 
 start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
-  set_param xicom.use_bs_reader 1
   create_project -in_memory -part xc7a100tfgg484-1
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
@@ -76,8 +73,8 @@ set rc [catch {
   set_property ip_output_repo D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   add_files -quiet D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.runs/synth_1/LoadVerify.dcp
-  read_ip -quiet d:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/ins_mem/ins_mem.xci
-  read_ip -quiet d:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/data_mem/data_mem.xci
+  read_ip -quiet D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/ins_mem/ins_mem.xci
+  read_ip -quiet D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/sources_1/ip/data_mem/data_mem.xci
   read_xdc D:/ComputerScience/Projects/CPUdemo/generate/testLoad/project_2/project_2.srcs/constrs_1/new/constrain.xdc
   link_design -top LoadVerify -part xc7a100tfgg484-1
   close_msg_db -file init_design.pb

@@ -3,6 +3,7 @@ module UART(
   input        reset,
   input        io_board_rx,
   output       io_board_tx,
+  input        rxReady,
   output [7:0] io_mmio_rxData,
   output       io_mmio_rxValid
 );
@@ -45,7 +46,7 @@ module UART(
   assign uart_rst = reset; // @[UART.scala 32:26]
   assign uart_s_axis_tdata = 8'h0; // @[UART.scala 34:26]
   assign uart_s_axis_tvalid = 1'h0; // @[UART.scala 35:27]
-  assign uart_m_axis_tready = 1'h0; // @[UART.scala 43:27]
+  assign uart_m_axis_tready = rxReady; // @[UART.scala 43:27]
   assign uart_rxd = io_board_rx; // @[UART.scala 38:17]
   assign uart_prescale = 16'h516; // @[UART.scala 45:22]
 endmodule
