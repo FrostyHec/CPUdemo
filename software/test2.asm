@@ -94,12 +94,12 @@ blt t2, zero, case1_end1 # exp < 0
 # shift
 ori t1, t1, 1024
 addi t2, t2, -10
-blt t2, zero case1_small # exp < 10
+blt t2, zero, case1_small # exp < 10
 sll t4, t1, t2
 beq zero, zero, case1_end2
 
 case1_small: # exp < 10
-not t2, t2,
+not t2, t2
 addi t2, t2, 1
 srl t4, t1, t2 # round down
 not t5, t4
@@ -141,12 +141,12 @@ blt t2, zero, case2_end1 # exp < 0
 # shift
 ori t1, t1, 1024
 addi t2, t2, -10
-blt t2, zero case2_small # exp < 10
+blt t2, zero, case2_small # exp < 10
 sll t4, t1, t2
 beq zero, zero, case2_end2
 
 case2_small: # exp < 10
-not t2, t2,
+not t2, t2
 addi t2, t2, 1
 srl t4, t1, t2 # round down
 beq t3, zero, case2_end2
@@ -184,12 +184,12 @@ blt t2, zero, case3_end1 # exp < 0
 # shift
 ori t1, t1, 1024
 addi t2, t2, -10
-blt t2, zero case3_small # exp < 10
+blt t2, zero, case3_small # exp < 10
 sll t4, t1, t2
 beq zero, zero, case3_end2
 
 case3_small: # exp < 10
-not t2, t2,
+not t2, t2
 addi t2, t2, 1
 srl t4, t1, t2 # round down
 not t5, t4
@@ -200,7 +200,7 @@ srl t5, t5, t2 # t5 = fraction part >= 0.5 ? 1 : 0
 beq t3, zero, case3_pass
 not t4, t4
 addi t4, t4, 1
-case1_pass:
+case3_pass:
 beq zero, t5, case3_end2 # fraction part < 0.5
 addi t4, t4, 1
 
@@ -347,7 +347,7 @@ sw t2, 0(a3)
 waitconfirm: # �ȴ������ջ��ջ����
 lw t0, (a1)
 andi t1, t0, 1
-bne t1, zero ini
+bne t1, zero, ini
 andi t0, t0, 2
 beq t0, zero, waitconfirm
 lw t1, (a2)
@@ -364,9 +364,9 @@ addi s4, s4, 4
 
 # 40000 interval
 addi s6, x0, 0
-while:
+while_pop:
 addi s6, s6, 1
-bne s6, s7, while
+bne s6, s7, while_pop
 
 beq x0, x0, pop_loop
 
@@ -380,10 +380,8 @@ addi s4, s4, 4
 
 # 40000 interval
 addi s6, x0, 0
-while:
+while_push:
 addi s6, s6, 1
-bne s6, s7, while
+bne s6, s7, while_push
 
 beq x0, x0, push_loop
-
-label:
