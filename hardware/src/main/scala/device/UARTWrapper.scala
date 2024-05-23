@@ -8,10 +8,12 @@ import chisel3.util._
 class MMIOUARTBundle extends Bundle {
   val rxData = Output(UInt(8.W)) // 接收数据
   val rxValid = Output(Bool()) // 接收数据有效信号
+  val rxReady = Input(Bool()) // 接收器准备好信号
 
   val txData = Input(UInt(8.W)) // 发送数据
   val txStart = Input(Bool()) // 发送开始信号
   val txReady = Output(Bool()) // 发送器准备好信号
+
 }
 
 class BoardUARTBundle extends Bundle {
@@ -40,7 +42,7 @@ class UARTWrapper extends Module {
 
     io.mmio.rxData := uart.io.m_axis_tdata
     io.mmio.rxValid := uart.io.m_axis_tvalid
-    uart.io.m_axis_tready := false.B //TODO check correctness
+    uart.io.m_axis_tready := io.mmio.rxReady
 
     uart.io.prescale := 1302.U // 10000000/(9600*8)
 

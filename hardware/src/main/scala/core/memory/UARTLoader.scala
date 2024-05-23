@@ -26,6 +26,7 @@ class UARTLoader extends Module {
     val rxData = Input(UInt(8.W))
 
     //output to mem
+    val rxReady = Output(Bool()) // data rcvd
     val mem = new UARTMemBundle
   })
   val idle :: start :: write_data :: wait_data :: Nil = Enum(4)
@@ -40,14 +41,19 @@ class UARTLoader extends Module {
   io.mem.mem_read := false.B
   io.mem.mem_write := false.B // default
 
+  val rxReadyReg = RegInit(false.B) //这样就不是组合式地输出了,会慢一拍，保证信号来得及
+  io.rxReady:=rxReadyReg
+
   switch(cur_state) {
     is(idle) {
+      rxReadyReg:=false.B
       when(io.cpu_state === CPUStateType.sLoadMode.getUInt) {
         data_addr := "hffff_ffff".U(32.W)
         cur_state := start
       }
     }
     is(start) {
+      rxReadyReg:=false.B
       when(io.cpu_state =/= CPUStateType.sLoadMode.getUInt) {
         cur_state := idle
       }.otherwise {
@@ -57,6 +63,7 @@ class UARTLoader extends Module {
       }
     }
     is(wait_data) {
+      rxReadyReg:=false.B
       when(io.cpu_state =/= CPUStateType.sLoadMode.getUInt) {
         cur_state := idle
       }.otherwise {
@@ -67,11 +74,13 @@ class UARTLoader extends Module {
       }
     }
     is(write_data) {
+      rxReadyReg:=false.B
       when(io.cpu_state =/= CPUStateType.sLoadMode.getUInt) {
         cur_state := idle
       }.otherwise {
         when(io.rxValid === true.B) {
           io.mem.mem_write := true.B
+          rxReadyReg:=true.B
         }.otherwise {
           cur_state := wait_data
         }
