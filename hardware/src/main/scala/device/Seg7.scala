@@ -1,6 +1,7 @@
 package device
 
 import Chisel.MuxLookup
+import Generate.Top
 import chisel3._
 import configs.GenConfig
 
