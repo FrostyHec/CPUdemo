@@ -102,6 +102,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  // case1 : FP16 向上取整
   it should "pass test case 1 _ v1.0.1" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
@@ -279,7 +280,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  it should "pass test case 1 _ v1.0.9 : corner case - very large" in {
+  it should "pass test case 1 _ v1.0.9 : corner case - very large (inf)" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
       run_instructions(total, 50)
@@ -302,7 +303,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  it should "pass test case 1 _ v1.0.10  : corner case - very large" in {
+  it should "pass test case 1 _ v1.0.10  : corner case - very large (-inf)" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
       run_instructions(total, 50)
@@ -321,11 +322,11 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 20)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 50)
-      total.io.led.led.expect("h_1_00000_000000".U)
+      total.io.led.led.expect("h_1_0000".U)
     }
   }
 
-  it should "pass test case 1 _ v1.0.11  : corner case - very large" in {
+  it should "pass test case 1 _ v1.0.11  : corner case - very large (NaN)" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
       run_instructions(total, 50)
@@ -367,6 +368,29 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.btn.button.poke(0.U)
       run_instructions(total, 50)
       total.io.led.led.expect(1.U)
+    }
+  }
+
+  // case2 : FP16 向下取整
+  it should "pass test case 2 _ v1.0.1" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case0
+      total.io.switch.switches.poke("h_10_12_00".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("b0_10001_00100_00000".U) // 4.5
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect(5.U)
     }
   }
 }
