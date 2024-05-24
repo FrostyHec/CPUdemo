@@ -284,15 +284,21 @@ andi t0, t0, 4
 beq t0, zero, case6
 lw t1, (a2)
 andi t1, t1, 255 # a
-beq t1, zero, c6_no # 0 is not the power of 2
-addi t1, t1, -1
-beq t1, zero, c6_yes # 1 is the power of 2
-andi t1, t1, 1
-addi t1, t1, -1
-beq t1, zero, c6_yes
+addi t3, zero, 8
+c6_loop:
+	andi t2, t1, 1
+	bne t2, zero, c6_loop_out
+	srli t1, t1, 1
+	addi t3, t3, -1
+	beq t3, zero, c6_no
+	beq zero, zero, c6_loop 
+
+c6_loop_out:
+srli t1, t1, 1
 bne t1, zero, c6_no
+
 c6_yes:
-addi t3, zero, -1
+addi t3, zero, 1
 sw t3, (a0)
 beq zero, zero, ini
 c6_no:

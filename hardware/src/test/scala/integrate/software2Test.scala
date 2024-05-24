@@ -702,5 +702,91 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
   }
 
   // case6: is power of 2
-  
+  it should "pass test case 6 _ v1.0.1" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case
+      total.io.switch.switches.poke("h_60_cd_34".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("h_00_00".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect(0.U)
+    }
+  }
+
+  it should "pass test case 6 _ v1.0.2" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case
+      total.io.switch.switches.poke("h_60_cd_34".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("h_00_80".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect(1.U)
+    }
+  }
+
+  it should "pass test case 6 _ v1.0.3" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case
+      total.io.switch.switches.poke("h_60_cd_34".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("h_ba_04".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect(1.U)
+    }
+  }
+
+  it should "pass test case 6 _ v1.0.4" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case
+      total.io.switch.switches.poke("h_60_cd_34".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("h_ba_a4".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect(0.U)
+    }
+  }
 }
