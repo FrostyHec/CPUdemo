@@ -70,11 +70,11 @@ c0_loop:
 	beq t0, zero, c0_out
 	srli t0, t0, 1
 	addi t2, t2, -1
-	jal c0_loop
+	beq zero, zero, c0_loop
 c0_out:
 sw t2, (a0)
 sw t2, (a3)
-jal ini
+beq zero, zero, ini
 
 
 
@@ -86,7 +86,7 @@ beq t0, zero, case1
 lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
-andi t2, t2, 5 
+andi t2, t2, 31
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -104,6 +104,7 @@ addi t2, t2, 1
 srl t4, t1, t2 # round down
 not t5, t4
 addi t5, t5, 1
+sll t5, t5, t2
 add t5, t1, t5 # origin number - t4
 beq t3, zero, case1_pass
 not t4, t4
@@ -115,13 +116,13 @@ addi t4, t4, 1
 case1_end2: # exp >= 0
 sw t4, (a0)
 sw t4, (a3)
-jal ini
+beq zero, zero, ini
 
 case1_end1: # exp < 0
-not t3, t3
+xori t3, t3, 1
 sw t3, (a0)
 sw t3, (a3)
-jal ini
+beq zero, zero, ini
 
 
 
@@ -133,7 +134,7 @@ beq t0, zero, case2
 lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
-andi t2, t2, 5 
+andi t2, t2, 31
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -156,14 +157,14 @@ addi t4, t4, 1
 case2_end2: # exp >= 0
 sw t4, (a0)
 sw t4, (a3)
-jal ini
+beq zero, zero, ini
 
 case2_end1: # exp < 0
-not t3, t3
+xori t3, t3, 1
 addi t3, t3, -1
 sw t3, (a0)
 sw t3, (a3)
-jal ini
+beq zero, zero, ini
 
 
 
@@ -176,7 +177,7 @@ beq t0, zero, case3
 lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
-andi t2, t2, 5 
+andi t2, t2, 31
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -194,6 +195,7 @@ addi t2, t2, 1
 srl t4, t1, t2 # round down
 not t5, t4
 addi t5, t5, 1
+sll t5, t5, t2
 add t5, t1, t5 # origin number - t4
 slli t5, t5, 1
 srl t5, t5, t2 # t5 = fraction part >= 0.5 ? 1 : 0
@@ -207,13 +209,19 @@ addi t4, t4, 1
 case3_end2: # exp >= 0
 sw t4, (a0)
 sw t4, (a3)
-jal ini
+beq zero, zero, ini
 
-case3_end1: # exp < 0
-not t3, t3
+case3_end1: # exp < 0 here there will be something wrong
+not t2, t2
+bne t2, zero, case3_end1_other
+xori t3, t3, 1
 sw t3, (a0)
 sw t3, (a3)
-jal ini
+beq zero, zero, ini
+case3_end1_other:
+addi t3, zero, 0
+sw t3, (a0)
+sw t3, (a3)
 
 
 
@@ -244,7 +252,7 @@ not t3, t3
 c4_out:
 sw t3, (a0)
 sw t3, (a3)
-jal ini
+beq zero, zero, ini
 
 
 
@@ -264,7 +272,7 @@ srli t3, t3, 12
 or t0, t2, t3
 sw t0, (a0)
 sw t0, (a3)
-jal ini
+beq zero, zero, ini
 
 
 
@@ -285,11 +293,11 @@ bne t1, zero, c6_no
 c6_yes:
 addi t3, zero, -1
 sw t3, (a0)
-jal ini
+beq zero, zero, ini
 c6_no:
 addi t3, zero, 0
 sw t3, (a0)
-jal ini
+beq zero, zero, ini
 
 # Fib
 case7:
