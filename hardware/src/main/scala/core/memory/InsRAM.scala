@@ -10,14 +10,17 @@ class InsRAM extends Module {
     GenConfig.s.addressWidth,
     GenConfig.s.dataWidth
   ))
-  val insRAM = Module(new RAM(
+  val io2 = IO(new RMemoryPort(
     GenConfig.s.addressWidth,
+    GenConfig.s.dataWidth
+  ))
+  val insRAM = Module(new DualPortRAM(
+    GenConfig.s.ramAddressWidth,
     GenConfig.s.dataWidth,
     GenConfig.s.insMemSize,
-    GenConfig.s.insMemIPCoreName,
+    if(GenConfig.s.useIPMemory) GenConfig.s.insMemIPCoreName else None,
     GenConfig.s.initInsFile //debugging,support ins initialize
   ))
   io <> insRAM.io
-
-
+  io2 <> insRAM.io2
 }

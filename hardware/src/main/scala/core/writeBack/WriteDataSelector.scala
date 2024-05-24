@@ -1,21 +1,19 @@
 package core.writeBack
-
 import chisel3._
 import core.config._
 import chisel3.util._
+class WriteDataSelector extends Module{
+  val io=IO(new Bundle{
+    val write_back_type=Input(WriteBackType.getWidth)
 
-class WriteDataSelector extends Module {
-  val io = IO(new Bundle {
-    val write_back_type = Input(WriteBackType.getWidth)
-
-    val imm = Input(UInt(32.W))
-    val mem_out = Input(UInt(32.W))
-    val au_out = Input(UInt(32.W))
-    val pc4 = Input(UInt(32.W))
-    val pcImm = Input(UInt(32.W))
+    val imm=Input(UInt(32.W))
+    val mem_out=Input(UInt(32.W))
+    val au_out=Input(UInt(32.W))
+    val pc4=Input(UInt(32.W))
+    val pcImm=Input(UInt(32.W))
     val csr = Input(UInt(32.W))
 
-    val write_data = Output(UInt(32.W))
+    val write_data=Output(UInt(32.W))
   })
 
   io.write_data := DontCare
@@ -33,17 +31,20 @@ class WriteDataSelector extends Module {
     is(WriteBackType.PC4.getUInt) {
       io.write_data := io.pc4
     }
+    is(WriteBackType.PCImm.getUInt) {
+      io.write_data := io.pcImm
+    }
     is(WriteBackType.CSR.getUInt) {
       io.write_data := io.csr
     }
   }
 }
 
-object WriteDataSelector extends App { //name had better to be same as class name, put under the class file
+object WriteDataSelector extends App {//name had better to be same as class name, put under the class file
   // These lines generate the Verilog output
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
-      new WriteDataSelector(), //use your module class
+      new WriteDataSelector(),//use your module class
       Array(
         "--target-dir", "generated_dut/"
       )

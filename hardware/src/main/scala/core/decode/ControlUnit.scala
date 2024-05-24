@@ -261,26 +261,26 @@ class ControlUnit extends Module {
     }
 
     is("b110_1111".U) { // J-type jal
-      io.nextPC_type := NextPCType.Branch.getUInt
+      io.nextPC_type := NextPCType.BranchFromALU.getUInt
       io.regs_write := "b1".U
-      io.au_type := DontCare
-      io.memory_read := "b0".U
-      io.memory_write := "b0".U
-      io.operand2_type := Operand2Type.Imm.getUInt
-      io.write_back_type := WriteBackType.PC4.getUInt
-      io.imm_width_type := ImmWidthType.Twenty.getUInt
-      io.unsigned := "b0".U
-      io.alu_type := DontCare
-    }
-
-    is("b110_0111".U) { // I-type jalr
-      io.nextPC_type := NextPCType.Branch.getUInt
-      io.regs_write := "b1".U
+      io.au_type := AUType.ALU.getUInt
       io.memory_read := "b0".U
       io.memory_write := "b0".U
       io.operand2_type := Operand2Type.Imm.getUInt
       io.write_back_type := WriteBackType.PC4.getUInt
       io.imm_width_type := ImmWidthType.Twelve.getUInt
+      io.unsigned := "b0".U
+      io.alu_type := ALUType.ADD.getUInt
+    }
+
+    is("b110_0111".U) { // I-type jalr
+      io.nextPC_type := NextPCType.BranchFromALU.getUInt
+      io.regs_write := "b1".U
+      io.memory_read := "b0".U
+      io.memory_write := "b0".U
+      io.operand2_type := Operand2Type.Imm.getUInt
+      io.write_back_type := WriteBackType.PC4.getUInt
+      io.imm_width_type := ImmWidthType.Eleven.getUInt
       io.unsigned := "b0".U
       io.au_type := AUType.ALU.getUInt
       io.alu_type := ALUType.ADD.getUInt
@@ -299,12 +299,12 @@ class ControlUnit extends Module {
     }
 
     is("b001_0111".U) { // U-type auipc
-      io.nextPC_type := NextPCType.BranchFromALU.getUInt
+      io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.memory_read := "b0".U
       io.memory_write := "b0".U
       io.imm_width_type := ImmWidthType.ThirtyOne.getUInt
-      io.write_back_type := WriteBackType.PC4.getUInt
+      io.write_back_type := WriteBackType.PCImm.getUInt
       io.unsigned := "b0".U
       io.au_type := DontCare
       io.alu_type := DontCare

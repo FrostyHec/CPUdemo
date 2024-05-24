@@ -17,8 +17,9 @@ case class GenConfig(
                       board: BoardConfig = BoardConfig.selected,
 
                       //ip core name
-                      insMemIPCoreName: Option[String] = None,
-                      dataMemIPCoreName: Option[String] = None,
+                      insMemIPCoreName: Option[String] = Some("ins_mem"),
+                      dataMemIPCoreName: Option[String] = Some("data_mem"),
+                      ramAddressWidth:Int = 14,
 
                       // for debug use
                       debugMode: Boolean,
@@ -29,16 +30,21 @@ case class GenConfig(
 
                       //clock
                       useIPClock: Boolean = false,
-                      ipClockName: Option[String] = None,
+                      ipClockName: Option[String] = Some("clk_wiz_0"),
+
+                      useIPUART: Boolean = false
                     ) {
 }
 
 object GenConfig {
-  def s = forTest
+//  def s = forTest
+  def s = onBoard
 
   private val onBoard = GenConfig(
     debugMode = false,
-    useIPMemory = true
+    useIPMemory = true,
+    useIPUART = true,
+    useIPClock = true,
   )
 
   private val forTest = GenConfig(
