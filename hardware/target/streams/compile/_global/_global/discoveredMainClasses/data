@@ -1,1 +1,0 @@
-["Generate.Top","core.CoreTop","core.decode.ControlUnit","core.decode.InstructionDecoder","core.execute.ALU","core.execute.CMP","core.execute.ImmGen","core.execute.NextPCGen","core.execute.OperandSelector","core.execute.Registers","core.insFetch.PC","core.memory.MemoryDispatch","core.memory.OutRegisters","core.writeBack.AUSelector","core.writeBack.WriteDataSelector"]

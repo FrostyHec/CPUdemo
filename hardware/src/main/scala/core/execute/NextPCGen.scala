@@ -35,6 +35,10 @@ class NextPCGen extends Module{
       io.nextPC := io.alu_result//io.pc + io.alu_result//4.U
       io.pcImm := io.pc + io.alu_result
     }
+    is(NextPCType.BranchFromImm.getUInt){
+      io.nextPC := io.pc + io.imm
+      io.pcImm := io.pc + io.imm
+    }
   }
 }
 

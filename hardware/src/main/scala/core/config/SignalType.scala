@@ -10,7 +10,7 @@ object CMPType extends ExtendEnum{
   val LT,GE,EQ,NE = Value
 }
 object NextPCType extends ExtendEnum{
-  val PC4,Branch,BranchFromALU = Value
+  val PC4,Branch,BranchFromALU,BranchFromImm = Value
 }
 object ImmWidthType extends ExtendEnum{
   val Eleven,Twelve,Twenty,ThirtyOne = Value
