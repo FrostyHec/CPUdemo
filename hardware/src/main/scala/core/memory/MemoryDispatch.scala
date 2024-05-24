@@ -11,6 +11,7 @@ import utils.ExtendEnum
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
+    val fault_occurs = Input(Bool())
     //ins mem io
     val ins_addr = Input(UInt(32.W))
     val ins_out = Output(UInt(32.W))
@@ -51,7 +52,7 @@ class MemoryDispatch extends Module {
   val data_out = Wire(UInt(32.W))
 
   //判断是否是写周期
-  val is_write_clk = io.cpu_state === CPUStateType.sWriteRegs.getUInt || io.cpu_state === CPUStateType.sLoadMode.getUInt
+  val is_write_clk = (io.cpu_state === CPUStateType.sWriteRegs.getUInt || io.cpu_state === CPUStateType.sLoadMode.getUInt)&&(!io.fault_occurs)
 
   //Ins read
   insRAM.io2.read_addr := read_ins_addr

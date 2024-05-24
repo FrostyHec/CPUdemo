@@ -59,7 +59,7 @@ class CSR extends Module {
   def handleCSR(csr: UInt, reg: UInt): Unit = {
     when(io.csr === csr) { //输出值不需要no_fault
       io.csr_val := reg
-      when(io.cpu_state === CPUStateType.sWriteRegs.getUInt && io.write) {
+      when(io.cpu_state === CPUStateType.sWriteRegs.getUInt && io.write&&no_fault) {
         reg := io.write_data
         if (GenConfig.s.logDetails) {
           printf("write to csr[%x] with data %d\n", io.csr, io.write_data)

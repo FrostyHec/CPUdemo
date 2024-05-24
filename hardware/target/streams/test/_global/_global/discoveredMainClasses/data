@@ -1,1 +1,1 @@
-["hardware_verify.UARTVerify"]
+["hardware_verify.LoadVerify","hardware_verify.Seg7VerifyTop","hardware_verify.UARTVerify"]

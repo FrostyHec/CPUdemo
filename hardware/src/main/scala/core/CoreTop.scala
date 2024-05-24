@@ -28,9 +28,9 @@ class CoreTop extends Module {
   val uartLoader = Module(new UARTLoader())
   val memInSelector = Module(new MemWriteSelector())
   //clock FSM
-//  val state = withClock((!clock.asBool).asClock) {//TODO 要不要下降沿有待商榷
-//    Module(new CPUState())
-//  }
+  //  val state = withClock((!clock.asBool).asClock) {//TODO 要不要下降沿有待商榷
+  //    Module(new CPUState())
+  //  }
   val state = Module(new CPUState())
 
 
@@ -53,7 +53,8 @@ class CoreTop extends Module {
   uartLoader.io.cpu_state := state.io.cpu_state
   uartLoader.io.rxValid := io.external.uart.rxValid
   uartLoader.io.rxData := io.external.uart.rxData
-  io.external.uart.rxReady:=uartLoader.io.rxReady
+  io.external.uart.rxReady := uartLoader.io.rxReady
+
 
   //data access
   //TODO WIRES ON DATA ACCESS,from 2 select 1
@@ -84,6 +85,10 @@ class CoreTop extends Module {
   //mtval generation
   CU.io.instruction := memory.io.ins_out
   memory.io.pc := pc.io.addr
+  pc.io.fault_occurs := CSR.io.fault_state
+  memory.io.fault_occurs := CSR.io.fault_state
+  regs.io.fault_occurs := CSR.io.fault_state
+
 
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
@@ -180,10 +185,10 @@ class CoreTop extends Module {
   regs.io.write := CU.io.regs_write
   regs.io.write_data := writeDataSelector.io.write_data
 
-  when(state.io.cpu_state===CPUStateType.sLoadMode.getUInt){
+  when(state.io.cpu_state === CPUStateType.sLoadMode.getUInt) {
     //因为output reg那里会赋值把前面的抵消掉，所以这里要再赋值一次
     //本来应该用一个mux的
-    io.external.uart.rxReady:=uartLoader.io.rxReady
+    io.external.uart.rxReady := uartLoader.io.rxReady
   }
 
   //--------------------debugging code----------------------------

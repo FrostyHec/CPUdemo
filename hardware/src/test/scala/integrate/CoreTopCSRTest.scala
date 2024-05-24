@@ -55,11 +55,11 @@ class CoreTopCSRTest extends FlatSpec with ChiselScalatestTester with Matchers {
     //    csrrs x4,mepc,x0
     //    addi x4,x4,4
     //    csrrw x0,mepc,x4
-    //    mret
-    //    beqz x0, interrupt // should be useless
+    //    mret //28
+    //    beqz x0, interrupt // should be useless //32
     //
     //test:
-    //    ecall
+    //    ecall  //36
     //    addi x2,x0,10
     // 3->20.U, 2->10.U
     load_instructions("fault/faultIns1.txt")

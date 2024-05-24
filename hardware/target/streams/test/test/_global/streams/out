@@ -1,4 +1,4 @@
-[debug] Running TaskDef(core.memory.MemoryDispatchTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.memory.MemoryDispatchTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] MemoryDispatchTest:
 [info] MemoryDispatch
 [info] - should correctly store instructions
@@ -7,7 +7,7 @@
 [info] - should correctly mapping the mmio result
 [info] - should correctly avoid writing into non-writable reg(for cpu side)
 [info] - should correctly sb/sh with different aligned
-[debug] Running TaskDef(integrate.software1Test, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(integrate.software1Test, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] software1Test:
 [info] Software1 Test
 [info] - should correctly initialize the data address
@@ -18,44 +18,50 @@
 [info] - should jump to the correct place3 : jump to case 1 if input 1 in button
 [info] - should jump to the correct place4 : jump to case 2 if input 2 in button
 [info] - should jump to the correct place5 : jump to case 3 if input 3 in button
-[info] - should jump to the correct place5 : jump to case 3 if input 3 in button _ test jump
-[info] - should jump to the correct place5.1 : jump to case 3 if input 3 in button
-[info] - should jump to the correct place6 : jump to case 4 if input 4 in button
-[info] - should jump to the correct place6.2 : jump to case 4 if input 4 in button *** FAILED ***
-[info]   debug_io_reg_vals_reg_vals_19=4198964 (0x401234) did not equal expected=8393268 (0x801234) (lines in software1Test.scala: 403, 358) (InsUtils.scala:39)
+[info] - should jump to the correct place5 : jump to case 3 if input 3 in button _ test jump *** FAILED ***
+[info]   debug_io_reg_vals_reg_vals_31=0 (0x0) did not equal expected=1 (0x1) (lines in software1Test.scala: 238, 191) (InsUtils.scala:51)
+[info] - should jump to the correct place5.1 : jump to case 3 if input 3 in button *** FAILED ***
+[info]   debug_io_reg_vals_reg_vals_31=0 (0x0) did not equal expected=1 (0x1) (lines in software1Test.scala: 292, 246) (InsUtils.scala:51)
+[info] - should jump to the correct place6 : jump to case 4 if input 4 in button *** FAILED ***
+[info]   debug_io_reg_vals_reg_vals_31=0 (0x0) did not equal expected=1 (0x1) (lines in software1Test.scala: 348, 300) (InsUtils.scala:51)
 [info] - should jump to the correct place7 : jump to case 5 if input 5 in button
-[info] - should jump to the correct place7.1 : jump to case 5 if input 5 in button *** FAILED ***
-[info]   debug_io_reg_vals_reg_vals_19=4198964 (0x401234) did not equal expected=10490420 (0xa01234) (lines in software1Test.scala: 518, 473) (InsUtils.scala:39)
 [info] - should jump to the correct place7.2 : jump to case 5 if input 5 in button *** FAILED ***
-[info]   debug_io_reg_vals_reg_vals_29=178 (0xb2) did not equal expected=2 (0x2) (lines in software1Test.scala: 566, 535) (InsUtils.scala:39)
+[info]   debug_io_reg_vals_reg_vals_31=0 (0x0) did not equal expected=1 (0x1) (lines in software1Test.scala: 455, 410) (InsUtils.scala:51)
 [info] - should jump to the correct place8 : jump to case 6 if input 6 in button
-[info] - should jump to the correct place9 : jump to case 7 if input 7 in button
-[debug] Running TaskDef(core.execute.ImmGenTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[info] - should jump to the correct place9 : jump to case 7 if input 7 in button *** FAILED ***
+[info]   debug_io_reg_vals_reg_vals_31=0 (0x0) did not equal expected=1 (0x1) (lines in software1Test.scala: 561, 516) (InsUtils.scala:51)
+[debug] Running TaskDef(core.execute.ImmGenTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] ImmGenTest:
 [info] NextPCGen
 [info] - should correctly generate imm when MSB is 11
 [info] - should correctly generate imm when MSB is 12
 [info] - should correctly generate imm when MSB is 20
 [info] - should correctly generate imm when MSB is 31
-[debug] Running TaskDef(core.execute.OperandSelectorTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.OperandSelectorTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] OperandSelectorTest:
 [info] OperandSelector
 [info] - should correctly select the Operand
 [info] - should perform robustly under corner cases
-[debug] Running TaskDef(core.execute.CMPTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(integrate.CoreTopCSRTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
+[info] CoreTopCSRTest:
+[info] CPU Core on CSR
+[info] - should behave correctly on csr instructions
+[info] - should correctly interrupt on trap instructions
+[info] - should avoid illegal mem access
+[debug] Running TaskDef(core.execute.CMPTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] CMPTest:
 [info] CMP
 [info] - should compare correctly in less than(LT) mode
 [info] - should compare correctly in greater or equal(GE) mode
 [info] - should compare correctly in equal(EQ) mode
 [info] - should compare correctly in not equal(NE) mode
-[debug] Running TaskDef(core.decode.InstructionDecoderTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.decode.InstructionDecoderTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] InstructionDecoderTest:
 [info] InstructionDecoder
 [info] - should correctly decode R-type instructions
 [info] - should correctly decode I-type instructions
 [info] - should correctly decode U-type instructions with zero extension
-[debug] Running TaskDef(core.utils.UARTWrapperTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.utils.UARTWrapperTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] UARTWrapperTest:
 [info] UART
 [info] - should receive data correctly *** FAILED ***
@@ -84,20 +90,24 @@
 [info]   at chiseltest.internal.Context$.$anonfun$run$1(Testers2.scala:34)
 [info]   at scala.util.DynamicVariable.withValue(DynamicVariable.scala:62)
 [info]   ...
-[debug] Running TaskDef(core.execute.ALUTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.ALUTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] ALUTest:
 [info] ALU
 [info] - should correctly do sth
 [info] - should pass corner cases
-[debug] Running TaskDef(core.writeBack.AUSelectorTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.writeBack.AUSelectorTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] AUSelectorTest:
 [info] AUSelector
 [info] - should correctly do sth
-[debug] Running TaskDef(core.writeBack.WriteDataSelectorTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(integrate.software2Test, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
+[info] software2Test:
+[info] Software1 Test
+[info] - should correctly initialize the data address
+[debug] Running TaskDef(core.writeBack.WriteDataSelectorTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] WriteDataSelectorTest:
 [info] WriteDataSelector
 [info] - should correctly do sth
-[debug] Running TaskDef(core.execute.RegistersTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.RegistersTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] RegistersTest:
 [info] Registers
 [info] - should correctly store&read value
@@ -105,7 +115,7 @@
 [info] - should avoid write in non-write stage
 [info] - should avoid write when write is not enable
 [info] - should correctly output rs1_val and rs2_val
-[debug] Running TaskDef(integrate.CoreTopTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(integrate.CoreTopTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] CoreTopTest:
 [info] CPU Core
 [info] - should addi x1,x0,1 -> x1=1
@@ -136,22 +146,23 @@
 [info] - should auipc
 [info] - should be able to self write
 [info] - should load and save
-[debug] Running TaskDef(integrate.CoreUARTSimTestWrapper, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(integrate.CoreUARTSimTestWrapper, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] CoreUARTSimTestWrapper:
 [info] CPU load from UART
 [info] - should correctly load data from UART and stored into Mem
-[debug] Running TaskDef(core.insFetch.PCTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[info] - should correctly load data from UART and stored into Mem with many ins
+[debug] Running TaskDef(core.insFetch.PCTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] PCTest:
 [info] PCTest
 [info] - should be zero at initial
 [info] - should correctly store at sWritePC state
 [info] - should avoid change value at other state
-[debug] Running TaskDef(core.utils.RAMTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.utils.RAMTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] RAMTest:
 [info] RAM
 [info] - should correctly store value
 [info] - should correctly load file
-[debug] Running TaskDef(core.execute.NextPCGenTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.execute.NextPCGenTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] NextPCGenTest:
 [info] NextPCGen
 [info] - should correctly perform pc + 4 *** FAILED ***
@@ -159,22 +170,18 @@
 [info] - should correctly perform branch
 [info] - should correctly perform branch from ALU *** FAILED ***
 [info]   io_nextPC=0 (0x0) did not equal expected=8 (0x8) (lines in NextPCGenTest.scala: 144, 130) (NextPCGenTest.scala:29)
-[debug] Running TaskDef(integrate.TotalTopTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(integrate.TotalTopTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] TotalTopTest:
 [info] Total Generate.Top Test
 [info] - should load instructions correctly from UART
 [info] - should load instructions correctly from UART ——complex version
 [info] - should read data from switch 1.0
-[info] - should read data from switch 1.1 *** FAILED ***
-[info]   debug_io_reg_vals_reg_vals_6=0 (0x0) did not equal expected=16777215 (0xffffff) (lines in TotalTopTest.scala: 61, 58) (InsUtils.scala:39)
+[info] - should read data from switch 1.1
 [info] - should read data from switch 3.1
 [info] - should read data from switch 3.2
 [info] - should read data from switch 3.3
 [info] - should read data from switch 3.4
-[info] - should read data from switch 3.5 *** FAILED ***
-[info]   debug_io_reg_vals_reg_vals_2=0 (0x0) did not equal expected=15728640 (0xf00000) (lines in TotalTopTest.scala: 127, 124) (InsUtils.scala:39)
-[info] - should read data from switch 3.6 *** FAILED ***
-[info]   debug_io_reg_vals_reg_vals_2=0 (0x0) did not equal expected=8388608 (0x800000) (lines in TotalTopTest.scala: 141, 138) (InsUtils.scala:39)
+[info] - should read data from switch 3.5
 [info] - should read data from button 1.0
 [info] - should read data from button 1.1
 [info] - should read data from button 1.2
@@ -183,33 +190,35 @@
 [info] - should write data to led 2.0
 [info] - should write data to led 3.0
 [info] - should write data to led 4.0
-[debug] Running TaskDef(core.decode.ControlUnitTest, org.scalatest.tools.Framework$$anon$1@262609ad, false, [SuiteSelector])
+[debug] Running TaskDef(core.decode.ControlUnitTest, org.scalatest.tools.Framework$$anon$1@43cd8aed, false, [SuiteSelector])
 [info] ControlUnitTest:
 [info] ALU
 [info] - should correctly do sth
-[info] Run completed in 1 minute, 9 seconds.
-[info] Total number of tests run: 103
-[info] Suites: completed 18, aborted 0
-[info] Tests: succeeded 93, failed 10, canceled 0, ignored 0, pending 0
-[info] *** 10 TESTS FAILED ***
+[info] Run completed in 1 minute, 15 seconds.
+[info] Total number of tests run: 105
+[info] Suites: completed 20, aborted 0
+[info] Tests: succeeded 96, failed 9, canceled 0, ignored 0, pending 0
+[info] *** 9 TESTS FAILED ***
 [debug] Passed tests:
 [debug] 	core.memory.MemoryDispatchTest
 [debug] 	core.execute.ImmGenTest
 [debug] 	core.execute.OperandSelectorTest
+[debug] 	integrate.CoreTopCSRTest
 [debug] 	core.execute.CMPTest
 [debug] 	core.decode.InstructionDecoderTest
 [debug] 	core.execute.ALUTest
 [debug] 	core.writeBack.AUSelectorTest
+[debug] 	integrate.software2Test
 [debug] 	core.writeBack.WriteDataSelectorTest
 [debug] 	core.execute.RegistersTest
 [debug] 	integrate.CoreTopTest
 [debug] 	integrate.CoreUARTSimTestWrapper
 [debug] 	core.insFetch.PCTest
 [debug] 	core.utils.RAMTest
+[debug] 	integrate.TotalTopTest
 [debug] 	core.decode.ControlUnitTest
 [error] Failed tests:
 [error] 	integrate.software1Test
 [error] 	core.utils.UARTWrapperTest
 [error] 	core.execute.NextPCGenTest
-[error] 	integrate.TotalTopTest
 [error] (Test / test) sbt.TestsFailedException: Tests unsuccessful
