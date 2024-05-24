@@ -46,8 +46,8 @@ class CoreTopCSRTest extends FlatSpec with ChiselScalatestTester with Matchers {
   }
 
   it should "correctly interrupt on trap instructions" in {
-    //    addi x1,x0,16
-    //    csrrw x0,mtvec,t0
+    //    addi x1,x0,12
+    //    csrrw x0,mtvec,x1
     //    beqz x0, test
     //
     //interrupt:
@@ -77,6 +77,40 @@ class CoreTopCSRTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInCPU(cpu,3,20.U)
       checkRegsInCPU(cpu,6,1000.U)
     }
-
+  }
+  it should "correctly avoid U mode running CSR ins " in {
+//    la x1,(interrupt)
+//    csrrw x0,mtvec,x1
+//    addi x3,zero,128 /*MPIE = 1*/
+//    csrrw x0,mstatus,x3 /*interruption enable*/
+//    /*由于寄存器默认为0，所以MPP为0*/
+//    la x2,(program)
+//    csrrw x0,mepc,x2
+//    mret
+// interrupt:
+//    addi x11,zero,666
+//    csrrs x12,mtval,zero
+//    csrrs x4,mepc,x0
+//    addi x4,x4,4
+//    csrrw x0,mepc,x4
+//    mret
+//    addi x13,zero,777
+//program:
+//    addi x31,zero,10
+//    csrrw x0,mtval,x31 /*should not!*/
+//    addi x30,zero,100
+//    /* check x11 ->666, x12->44
+//    x30 -> 100, x31 ->10
+//    x13-> 0
+//    */
+    load_instructions("fault/PrivilegeFault.txt")
+    test(new CoreTop){cpu=>
+      run_instructions(cpu,18)
+      checkRegsInCPU(cpu,11,666.U)
+      checkRegsInCPU(cpu,30,100.U)
+      checkRegsInCPU(cpu,31,10.U)
+      checkRegsInCPU(cpu,13,0.U)
+      checkRegsInCPU(cpu,12,"h343f9073".U)
+    }
   }
 }
