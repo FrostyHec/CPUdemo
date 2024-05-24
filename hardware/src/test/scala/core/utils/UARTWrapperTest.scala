@@ -31,6 +31,7 @@ class UARTWrapperTest extends AnyFlatSpec with ChiselScalatestTester with Matche
 
   it should "transmit data correctly" in {
     test(new UARTWrapper) { dut =>
+      dut.clock.setTimeout(0)
       for (dt <- 0 to 255) {
         println(s"cur val::$dt")
         for (wt <- 1 to baud_count) {
