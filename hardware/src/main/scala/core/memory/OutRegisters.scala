@@ -34,6 +34,26 @@ class OutRegisters extends Module {
   val seg7 = RegInit(0.U(GenConfig.s._MMIO.seg7Width.W))
   io.external.seg7.seg7 := seg7
 
+  //uart
+  //rx
+  val rxData = RegInit(0.U(GenConfig.s._MMIO.uartRxDataWidth.W))
+  rxData := io.external.uart.rxData
+
+  val rxVlaid = RegInit(0.U(GenConfig.s._MMIO.uartTxDataWidth.W))
+  rxVlaid := io.external.uart.rxValid
+
+  val rxReady = RegInit(0.U(GenConfig.s._MMIO.uartTxDataWidth.W))
+  io.external.uart.rxReady := rxReady
+  //tx
+  val txData = RegInit(0.U(GenConfig.s._MMIO.uartTxDataWidth.W))
+  io.external.uart.txData := txData
+
+  val txStart = RegInit(0.U(GenConfig.s._MMIO.uartTxDataWidth.W))
+  io.external.uart.txStart := txStart
+
+  val txReady = RegInit(0.U(GenConfig.s._MMIO.uartTxDataWidth.W))
+  txReady := io.external.uart.txReady
+
   //cpu read and write by analyzing addr
   val addr: UInt = Mux(io.mem.write, io.mem.write_addr, io.mem.read_addr)
   io.mem.read_data := DontCare
@@ -62,8 +82,44 @@ class OutRegisters extends Module {
     }.otherwise {
       io.mem.read_data := seg7
     }
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartRxAddr >> 2).asUInt) {
+    when(io.mem.write) {
+      printf("UART cannot write") //TODO throw err when write
+    }.otherwise {
+      io.mem.read_data := rxData
+    }
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartRxValidAddr >> 2).asUInt) {
+    when(io.mem.write) {
+      printf("UART cannot write") //TODO throw err when write
+    }.otherwise {
+      io.mem.read_data := rxVlaid
+    }
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartRxReadyAddr >> 2).asUInt) {
+    when(io.mem.write) {
+      rxReady := io.mem.write_data
+    }.otherwise {
+      io.mem.read_data := rxReady
+    }
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxDAddr >> 2).asUInt) {
+    when(io.mem.write) {
+      txData := io.mem.write_data
+    }.otherwise {
+      io.mem.read_data := txData
+    }
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxValid >> 2).asUInt) {
+    when(io.mem.write) {
+      txStart := io.mem.write_data
+    }.otherwise {
+      io.mem.read_data := txReady
+    }
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxValid >> 2).asUInt) {
+    when(io.mem.write) {
+      printf("UART cannot write") //TODO throw err when write
+    }.otherwise {
+      io.mem.read_data := txReady
+    }
   }.otherwise {
-    //do nothing
+    //TODO throw err when read or write
   }
 }
 
