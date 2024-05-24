@@ -33,9 +33,9 @@ case class MMIOConfig(begin: UInt = "hffffff00".U,
                       uartRxAddr: UInt = "hffff_ff14".U,
                       uartRxValidAddr: UInt = "hffff_ff18".U,
                       uartRxReadyAddr: UInt = "hffff_ff1c".U,
-                      uartTxDAddr:UInt = "hffff_ff20".U,
+                      uartTxAddr:UInt = "hffff_ff20".U,
                       uartTxValid:UInt = "hffff_ff24".U,
-                      uartTxReady:UInt = "hffff_ff28".U
+                      uartTxStart:UInt = "hffff_ff28".U
                      ) {
 
 }

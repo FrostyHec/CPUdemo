@@ -15,9 +15,10 @@ class OutRegisters extends Module {
     val external = Flipped(new MMIOOutBundle()) // from board
   })
   //TODO urat来个MMIO
-  io.external.uart.txData := DontCare
-  io.external.uart.txStart := false.B
-  io.external.uart.rxReady := false.B
+//  io.external.uart.txData := DontCare
+//  io.external.uart.txStart := false.B
+//  io.external.uart.rxReady := false.B
+  io.external.vga.value:=DontCare
 
   //说实在我都在想是不是可以不用插这个reg
   //registers that write by board and read by cpu
@@ -100,13 +101,13 @@ class OutRegisters extends Module {
     }.otherwise {
       io.mem.read_data := rxReady
     }
-  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxDAddr >> 2).asUInt) {
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxAddr >> 2).asUInt) {
     when(io.mem.write) {
       txData := io.mem.write_data
     }.otherwise {
       io.mem.read_data := txData
     }
-  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxValid >> 2).asUInt) {
+  }.elsewhen(addr === (GenConfig.s._MMIO.uartTxStart >> 2).asUInt) {
     when(io.mem.write) {
       txStart := io.mem.write_data
     }.otherwise {
