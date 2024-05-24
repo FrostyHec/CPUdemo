@@ -23,6 +23,18 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "correctly initialize the data address: final" in {
+    load_instructions("software1_final.txt")
+    test(new Top) { total =>
+      run_instructions(total, 10)
+      checkRegsInTop(total, 10, "h_ff_ff_ff_00".U) // led
+      checkRegsInTop(total, 11, "h_ff_ff_ff_04".U) // btn
+      checkRegsInTop(total, 12, "h_ff_ff_ff_08".U) // swi
+      checkRegsInTop(total, 13, "h_ff_ff_ff_0c".U) // 7seg
+      checkRegsInTop(total, 14, "h_70_00_00".U) // mask
+    }
+  }
+
   it should "correctly initialize the data address : t1" in {
     load_instructions("software1_t1.txt")
     test(new Top) { total =>
@@ -560,6 +572,36 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInTop(total, 29, "h_cd".U)
       checkRegsInTop(total, 31, 1.U)
       run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+    }
+  }
+
+  it should "perform good in case 0" in {
+    load_instructions("software1_final.txt")
+    test(new Top) { total =>
+      run_instructions(total, 30)
+      checkRegsInTop(total, 15, 0.U)
+      total.io.switch.switches.poke("h_00_12_34".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_ab_cd".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_cd_00".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      total.io.switch.switches.poke("h_00_24_ef".U)
+      run_instructions(total, 30)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_cd_ef".U)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 30)
+      checkRegsInTop(total, 28, "h_cd_ef".U)
       checkRegsInTop(total, 15, 0.U)
     }
   }
