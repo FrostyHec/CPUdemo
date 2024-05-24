@@ -24,13 +24,13 @@ class CPUState extends Module {
     }.elsewhen(io.fault_state) {//&& state =/= CPUStateType.faultWrite.getUInt
       //TODO check correctness ,这个是保证faultWriteState只有一个时钟周期
       //TODO check correctness ,直接放弃掉在状态机中存在faultWrite这个状态
-      io.cpu_state:=CPUStateType.faultWrite.getUInt
+      io.cpu_state:= CPUStateType.faultWrite.getUInt
       //    state := CPUStateType.faultWrite.getUInt
     }.elsewhen(state === CPUStateType.sWriteRegs.getUInt) {
-        state := CPUStateType.sWritePC.getUInt
+      state := CPUStateType.sWritePC.getUInt
       }.otherwise {
-        state := CPUStateType.sWriteRegs.getUInt
-      }
+      state := CPUStateType.sWriteRegs.getUInt
+    }
   }.otherwise{
     io.cpu_state:=CPUStateType.sLoadMode.getUInt // immediate switch mode
     state:=CPUStateType.sLoadMode.getUInt

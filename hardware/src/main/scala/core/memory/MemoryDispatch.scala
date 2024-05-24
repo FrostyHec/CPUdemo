@@ -85,8 +85,11 @@ class MemoryDispatch extends Module {
   //注意优先级：必须是MEM先IF后
   //MEM错误
   def setFault(faultType: MemFaultType.Value, mtval: UInt): Unit = {
-    io.fault.mem_fault_type := faultType.getUInt
-    io.fault.mtval := mtval
+    //只有在非loadMode才能触发中断
+    when(io.cpu_state=/=CPUStateType.sLoadMode.getUInt) {
+      io.fault.mem_fault_type := faultType.getUInt
+      io.fault.mtval := mtval
+    }
   }
 
 
@@ -99,8 +102,6 @@ class MemoryDispatch extends Module {
     when(io.write_data) {
       insRAM.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-      printf("Cant read insRAM")
-      setFault(MemFaultType.LoadFault, io.data_addr)
     }.otherwise {
       //do nothing
     }
@@ -200,24 +201,25 @@ class MemoryDispatch extends Module {
     }
     is(DataWidth.HalfWord.getUInt) {
       //doesn't support unaligned memory access
-      when(io.data_addr(0)===0.U){
-      switch(io.data_addr(1)) {
-        is("b0".U) {
-          val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
-          io.data_out := Cat(high_bit, data_out(15, 0))
+      when(io.data_addr(0) === 0.U) {
+        switch(io.data_addr(1, 0)) {
+          is("b00".U) {
+            val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
+            io.data_out := Cat(high_bit, data_out(15, 0))
+          }
+          is("b10".U) {
+            val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(31)))
+            io.data_out := Cat(high_bit, data_out(31, 16))
+          }
         }
-        is("b1".U) {
-          val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(31)))
-          io.data_out := Cat(high_bit, data_out(31, 16))
-        }
-      }
-        }.otherwise { //misAligned
+      }.otherwise { //misAligned
         when(io.read_data) {
           setFault(MemFaultType.LoadMisaligned, io.data_addr)
         }
         when(io.write_data) {
           setFault(MemFaultType.StoreMisaligned, io.data_addr)
         }
+      }
     }
     is(DataWidth.Word.getUInt) {
       when(io.data_addr(1, 0) === 0.U) {
@@ -244,6 +246,7 @@ class MemoryDispatch extends Module {
     io.fault.mtval := io.pc
   }
 }
+
 
 object MemoryDispatch extends App {
   println(
