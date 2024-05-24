@@ -249,6 +249,7 @@ srli t4, t3, 8
 beq t4, zero, c4_out
 addi t3, t3, 1
 not t3, t3
+andi t3, t3, 255
 c4_out:
 sw t3, (a0)
 sw t3, (a3)
@@ -261,7 +262,7 @@ beq zero, zero, ini
 case5:
 lw t0, (a1)
 andi t0, t0, 4
-beq t0, zero, case4
+beq t0, zero, case5
 lw t0, (a2)
 addi t1, zero, 255 # mask
 and t2, t0, t1
