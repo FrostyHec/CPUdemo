@@ -390,7 +390,7 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  it should "jal" in {
+  it should "jal 1" in {
     //      jal x1, 8
     //      addi x2, x0, 1
     //      addi x3, x0, 1
@@ -403,6 +403,20 @@ class CoreTopTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInCPU(cpu, 2, 0.U)
       checkRegsInCPU(cpu, 3, 1.U)
       checkRegsInCPU(cpu, 4, 1.U)
+    }
+  }
+
+  it should "jal 2" in {
+    /*
+        addi x2, x0, 1
+        lab:
+        addi x2, x2, 1
+        jal lab
+     */
+    load_instructions("jal2.txt")
+    test(new CoreTop) { cpu =>
+      run_instructions(cpu, 4)
+      checkRegsInCPU(cpu, 2, 3.U)
     }
   }
 
