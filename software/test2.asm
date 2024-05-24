@@ -16,10 +16,10 @@ slli a4, a4, 20     # mask of the cases
 addi a7, zero, 1
 slli a7, a7, 16 	# get switch 16
 
-# 40000 interval
-addi s7, x0, 29
+# 40000 interval (waiting for test)
+addi s7, x0, 0
 slli s7, s7, 16
-addi s7, s7, -1792
+addi s7, s7, 1792
 
 # determine the cases
 ini:
@@ -329,6 +329,10 @@ addi s2, s2, 4
 bgt t2, t5, call_add
 addi t6, x0, 1
 
+lw t2, 4(t3)
+sw t2, 0(s3) # store pop
+addi s3, s3, 4
+
 addi t3, t3, 12
 jr ra
 
@@ -352,7 +356,7 @@ out:
 addi t2, t2, -1
 sw t2, 0(a3)
 
-waitconfirm: # �ȴ������ջ��ջ����
+waitconfirm: # print push & pop list
 lw t0, (a1)
 andi t1, t0, 1
 bne t1, zero, ini
@@ -363,7 +367,7 @@ and t1, t1, a7 # get switch 16
 beq t1, zero, print_push # print push
 
 print_pop:
-add s4, x0, s1
+add s4, x0, s1 # s4: pop begin
 pop_loop:
 beq s4, s3, waitconfirm
 lw s5, 0(s4)
