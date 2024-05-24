@@ -3,6 +3,7 @@ package core.decode
 import chisel3._
 import core.config._
 import chisel3.util._
+
 class ControlUnit extends Module {
   val io = IO(new Bundle {
     val opcode = Input(UInt(7.W))
@@ -239,7 +240,7 @@ class ControlUnit extends Module {
     }
 
     is("b110_1111".U) { // J-type jal
-      io.nextPC_type := NextPCType.BranchFromALU.getUInt
+      io.nextPC_type := NextPCType.BranchFromImm.getUInt
       io.regs_write := "b1".U
       io.au_type := AUType.ALU.getUInt
       io.memory_read := "b0".U
@@ -271,9 +272,9 @@ class ControlUnit extends Module {
       io.memory_write := "b0".U
       io.imm_width_type := ImmWidthType.ThirtyOne.getUInt
       io.write_back_type := WriteBackType.ImmGen.getUInt
-      io.unsigned :="b0".U
+      io.unsigned := "b0".U
       io.au_type := DontCare
-      io.alu_type :=DontCare
+      io.alu_type := DontCare
     }
 
     is("b001_0111".U) { // U-type auipc
@@ -290,11 +291,11 @@ class ControlUnit extends Module {
   }
 }
 
-object ControlUnit extends App {//name had better to be same as class name, put under the class file
+object ControlUnit extends App { //name had better to be same as class name, put under the class file
   // These lines generate the Verilog output
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
-      new ControlUnit(),//use your module class
+      new ControlUnit(), //use your module class
       Array(
         "--target-dir", "generated_dut/"
       )
