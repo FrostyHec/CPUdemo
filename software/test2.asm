@@ -252,13 +252,13 @@ sw t3, (a3)
 
 case123_end3: # exp very large -> this might be changed
 beq t1, zero, case123_end3_inf
-addi t3, zero, 1
+addi t3, zero, 3
 slli t3, t3, 31
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
 case123_end3_inf:
-addi t3, zero, 3
+addi t3, zero, 1
 slli t3, t3, 30
 sw t3, (a0)
 sw t3, (a3)
