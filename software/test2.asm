@@ -285,6 +285,7 @@ beq zero, zero, ini
 
 
 # Add two numbers
+# todo : 判断输入的是a还是b （test1里面应该也有别的需要做这个支持）
 case4:
 lw t0, (a1)
 andi t0, t0, 4
@@ -316,6 +317,7 @@ beq zero, zero, ini
 
 
 # little-endian -> big endian
+# 这里要支持 16bit
 case5:
 lw t0, (a1)
 andi t0, t0, 4
