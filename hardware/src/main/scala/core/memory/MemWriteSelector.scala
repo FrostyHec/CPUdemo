@@ -4,7 +4,7 @@ import core.config._
 class MemWriteSelector extends Module {
   //就是个selector
   val io = IO(new Bundle() {
-    val cpu_state = Input(CPUStateType.getWidth)
+    val uart_load = Input(Bool())
     //uart
     val uart_in = Flipped(new UARTMemBundle)
 

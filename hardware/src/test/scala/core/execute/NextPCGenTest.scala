@@ -3,6 +3,7 @@ package core.execute
 import chisel3._
 import chiseltest._
 import core.config._
+import core.insFetch.NextPCGen
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import testutils._

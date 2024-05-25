@@ -18,7 +18,7 @@ class UARTMemBundle extends Bundle {
 class UARTLoader extends Module {
   val io = IO(new Bundle() {
     //state
-    val cpu_state = Input(CPUStateType.getWidth)
+    val uart_load = Input(Bool())
 
     //input from uart
     val rxValid = Input(Bool())

@@ -4,14 +4,14 @@ import chisel3.util._
 import chisel3._
 import configs.GenConfig
 import core.config._
-import core.csr.MemFault
+import core.csr.{IFFault, MEMFault}
 import device._
 import utils.ExtendEnum
 
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
-    val fault_occurs = Input(Bool())
+
     //ins mem io
     val ins_addr = Input(UInt(32.W))
     val ins_out = Output(UInt(32.W))
@@ -31,11 +31,12 @@ class MemoryDispatch extends Module {
     val external = Flipped(new MMIOOutBundle())
 
     //fault
-    val fault = new MemFault()
-    val pc = Input(UInt(32.W)) // to generate mtval
+    //generate mtval use pc is just ins_addr
+    val IF_fault = Output(new IFFault())
+    val MEM_fault = Output(new MEMFault())
   })
   //fault
-  io.fault.mem_fault_type := MemFaultType.No.getUInt
+  io.fault.mem_fault_type := MEMFaultType.No.getUInt
   io.fault.mtval := DontCare
 
   //32读取深度导致的
@@ -85,7 +86,7 @@ class MemoryDispatch extends Module {
   //如果探测到错误，一定要屏蔽写操作，其它无所谓
   //注意优先级：必须是MEM先IF后
   //MEM错误
-  def setFault(faultType: MemFaultType.Value, mtval: UInt): Unit = {
+  def setFault(faultType: MEMFaultType.Value, mtval: UInt): Unit = {
     //只有在非loadMode才能触发中断
     when(io.cpu_state=/=CPUStateType.sLoadMode.getUInt) {
       io.fault.mem_fault_type := faultType.getUInt
@@ -135,10 +136,10 @@ class MemoryDispatch extends Module {
   }.otherwise {
     when(io.read_data) {
       printf("Unexpected Mem address %x", io.data_addr)
-      setFault(MemFaultType.LoadFault, io.data_addr)
+      setFault(MEMFaultType.LoadFault, io.data_addr)
     }.elsewhen(io.write_data) {
       printf("Unexpected Mem address %x", io.data_addr)
-      setFault(MemFaultType.StoreFault, io.data_addr)
+      setFault(MEMFaultType.StoreFault, io.data_addr)
     }.otherwise {
       //do nothing
     }
@@ -215,10 +216,10 @@ class MemoryDispatch extends Module {
         }
       }.otherwise { //misAligned
         when(io.read_data) {
-          setFault(MemFaultType.LoadMisaligned, io.data_addr)
+          setFault(MEMFaultType.LoadMisaligned, io.data_addr)
         }
         when(io.write_data) {
-          setFault(MemFaultType.StoreMisaligned, io.data_addr)
+          setFault(MEMFaultType.StoreMisaligned, io.data_addr)
         }
       }
     }
@@ -228,10 +229,10 @@ class MemoryDispatch extends Module {
       }.otherwise {
         //misAligned
         when(io.read_data) {
-          setFault(MemFaultType.LoadMisaligned, io.data_addr)
+          setFault(MEMFaultType.LoadMisaligned, io.data_addr)
         }
         when(io.write_data) {
-          setFault(MemFaultType.StoreMisaligned, io.data_addr)
+          setFault(MEMFaultType.StoreMisaligned, io.data_addr)
         }
       }
     }
@@ -240,10 +241,10 @@ class MemoryDispatch extends Module {
   //IF的中断的优先级要排在最后面
   //IF 错误
   when(io.ins_addr(1, 0) =/= 0.U) {
-    io.fault.mem_fault_type := MemFaultType.InsMisaligned.getUInt
+    io.fault.mem_fault_type := MEMFaultType.InsMisaligned.getUInt
     io.fault.mtval := io.pc
   }.elsewhen(io.ins_addr > GenConfig.s.insEnd) {
-    io.fault.mem_fault_type := MemFaultType.InsFault.getUInt
+    io.fault.mem_fault_type := MEMFaultType.InsFault.getUInt
     io.fault.mtval := io.pc
   }
 }

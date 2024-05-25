@@ -1,4 +1,5 @@
-package core.execute
+package core.decode
+
 import chisel3._
 import configs.GenConfig
 import core.config.{CPUStateType, RegDebugIO}

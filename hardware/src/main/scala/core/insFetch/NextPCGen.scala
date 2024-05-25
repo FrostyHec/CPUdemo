@@ -1,4 +1,4 @@
-package core.execute
+package core.insFetch
 
 import chisel3._
 import chisel3.util._
@@ -6,16 +6,12 @@ import core.config._
 
 class NextPCGen extends Module{
   val io=IO(new Bundle() {
-    val nextPC_type: UInt = Input(NextPCType.getWidth)
+    val nextPC_type: UInt = Input(NextPCControlSignal.getWidth)
 
-    val cmp_result: Bool = Input(Bool())
-    val alu_result: UInt = Input(UInt(32.W))
-    val imm: UInt = Input(UInt(32.W))
     val pc: UInt = Input(UInt(32.W))
+    val new_pc = Input(UInt(32.W))
 
     val nextPC: UInt = Output(UInt(32.W))
-    val pc4: UInt = Output(UInt(32.W))
-    val pcImm: UInt = Output(UInt(32.W))
   })
   io.pc4 := io.pc + 4.U
   io.pcImm := 0.U//io.imm+io.pc//0.U

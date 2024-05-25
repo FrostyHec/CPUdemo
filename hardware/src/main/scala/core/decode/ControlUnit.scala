@@ -3,7 +3,7 @@ package core.decode
 import chisel3._
 import core.config._
 import chisel3.util._
-import core.csr.InsFault
+import core.csr.{IDFault, IFFault}
 
 
 class ControlUnit extends Module {
@@ -43,13 +43,15 @@ class ControlUnit extends Module {
     val data_width = Output(DataWidth.getWidth)
     val csr_write = Output(Bool())
     val operand1_type = Output(Bool())
+    val result_stage = Output(ResultStageType.getWidth)//TODO result stage
+    val branch_type = Output(BranchType.getWidth)
 
     //fault
-    val fault = new InsFault
+    val fault =Output(new IDFault())
   })
   //fault置为0
   //TODO 我都懒得搞illegal instruction的判断了，开摆
-  io.fault.ins_fault_type := InsFaultType.No.getUInt
+  io.fault.ins_fault_type := IDFaultType.No.getUInt
   io.fault.mtval := 0.U
 
   io.csr_out := io.csr
@@ -324,7 +326,7 @@ class ControlUnit extends Module {
       switch(io.func3) {
         is("b001".U) { //csrrw
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.operand1_type := Operand1Type.Reg1.getUInt
@@ -335,7 +337,7 @@ class ControlUnit extends Module {
         }
         is("b010".U) { //csrrs
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.alu_type := ALUType.OR.getUInt
@@ -344,7 +346,7 @@ class ControlUnit extends Module {
         }
         is("b011".U) { //csrrc
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.alu_type := ALUType.Not2And.getUInt
@@ -353,7 +355,7 @@ class ControlUnit extends Module {
         }
         is("b101".U) { //csrrwi
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.operand1_type := Operand1Type.Reg1.getUInt
@@ -365,7 +367,7 @@ class ControlUnit extends Module {
         }
         is("b110".U) { //csrrsi\
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
@@ -375,7 +377,7 @@ class ControlUnit extends Module {
         }
         is("b111".U) { //csrrci
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
@@ -386,17 +388,17 @@ class ControlUnit extends Module {
         is("b000".U) { //ecall/ebreak
           switch(io.raw_imm) {
             is(0.U) { //ecall
-              io.fault.ins_fault_type := InsFaultType.EcallM.getUInt
+              io.fault.ins_fault_type := IDFaultType.EcallM.getUInt
             }
             is(1.U) { //ebreak
-              io.fault.ins_fault_type := InsFaultType.BreakPoint.getUInt
+              io.fault.ins_fault_type := IDFaultType.BreakPoint.getUInt
             }
             is("b0011000_00010".U) { //mret
               when(io.cur_privilege === "b00".U) { // User无权限
-                io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+                io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
                 io.fault.mtval := io.instruction
               }.otherwise {
-                io.fault.ins_fault_type := InsFaultType.Mret.getUInt
+                io.fault.ins_fault_type := IDFaultType.Mret.getUInt
               }
             }
           }

@@ -16,21 +16,22 @@ class CSR extends Module {
 
     //csr_instructions
     val write = Input(Bool())
-
-    val csr = Input(UInt(12.W))
+    val csr_idx_write = Input(UInt(12.W))
     val write_data = Input(UInt(32.W))
 
+    val csr_idx_read = Input(UInt(12.W))
     val csr_val = Output(UInt(32.W))
 
     //fault handling
-    val mem_fault = Flipped(new MemFault)
-    val ins_fault = Flipped(new InsFault)
+    val IF_fault = Input(new IFFault)
+    val ID_fault = Input(new IDFault)
+    val MEM_fault = Input(new MEMFault)
     val io_interruption = Flipped(new IOFault)
 
     val pc = Input(UInt(32.W))
 
-    val fault_state = Output(Bool())
-    val fault_write_PC = Output(UInt(32.W))
+    val fault_occurs = Output(Bool())
+    val fault_new_PC = Output(UInt(32.W))
   })
   val cur_privilege = RegInit(PrivilegeType.Machine)
   io.cur_privilege := cur_privilege
@@ -52,8 +53,8 @@ class CSR extends Module {
   //  mip(11):= global_interrupt_en & io_interrupt_en & io.io_interruption.io_fault_occur
   mip := mip.bitSet(11.U, read_MIE & read_MEIE & io.io_interruption.io_fault_occur)
 
-  val no_fault = (io.mem_fault.mem_fault_type === MemFaultType.No.getUInt) &
-    (io.ins_fault.ins_fault_type === InsFaultType.No.getUInt) &
+  val no_fault = (io.mem_fault.mem_fault_type === MEMFaultType.No.getUInt) &
+    (io.ins_fault.ins_fault_type === IDFaultType.No.getUInt) &
     !(read_MIE & read_MEIE & io.io_interruption.io_fault_occur) // io fault
 
   def handleCSR(csr: UInt, reg: UInt): Unit = {
@@ -105,34 +106,34 @@ class CSR extends Module {
   when(!no_fault) {
     val fault_type = Wire(FaultHandlerType.getWidth)
     fault_type := FaultHandlerType.writeFault.getUInt // 除了mret都是writeFault
-    when(io.ins_fault.ins_fault_type === InsFaultType.Mret.getUInt) {
+    when(io.ins_fault.ins_fault_type === IDFaultType.Mret.getUInt) {
       fault_type := FaultHandlerType.leaveFault.getUInt
     }
     //带优先级地查询中断源并进行操作
     //MEM阶段的错误
     when(fault_type === FaultHandlerType.writeFault.getUInt) {
-      when(io.mem_fault.mem_fault_type === MemFaultType.LoadMisaligned.getUInt) {
+      when(io.mem_fault.mem_fault_type === MEMFaultType.LoadMisaligned.getUInt) {
         handleWrite(4.U, io.mem_fault.mtval)
-      }.elsewhen(io.mem_fault.mem_fault_type === MemFaultType.LoadFault.getUInt) {
+      }.elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.LoadFault.getUInt) {
           handleWrite(5.U, io.mem_fault.mtval)
-        }.elsewhen(io.mem_fault.mem_fault_type === MemFaultType.StoreMisaligned.getUInt) {
+        }.elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.StoreMisaligned.getUInt) {
           handleWrite(6.U, io.mem_fault.mtval)
-        }.elsewhen(io.mem_fault.mem_fault_type === MemFaultType.StoreFault.getUInt) {
+        }.elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.StoreFault.getUInt) {
           handleWrite(7.U, io.mem_fault.mtval)
         }
         //ID阶段的错误
-        .elsewhen(io.ins_fault.ins_fault_type === InsFaultType.IllegalIns.getUInt) {
+        .elsewhen(io.ins_fault.ins_fault_type === IDFaultType.IllegalIns.getUInt) {
           handleWrite(2.U, io.ins_fault.mtval)
-        }.elsewhen(io.ins_fault.ins_fault_type === InsFaultType.BreakPoint.getUInt) {
+        }.elsewhen(io.ins_fault.ins_fault_type === IDFaultType.BreakPoint.getUInt) {
           handleWrite(3.U, io.ins_fault.mtval)
-        }.elsewhen(io.ins_fault.ins_fault_type === InsFaultType.EcallM.getUInt) {
+        }.elsewhen(io.ins_fault.ins_fault_type === IDFaultType.EcallM.getUInt) {
           handleWrite(11.U, io.ins_fault.mtval)
         }
         //IF阶段的错误
-        .elsewhen(io.mem_fault.mem_fault_type === MemFaultType.InsMisaligned.getUInt) {
+        .elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.InsMisaligned.getUInt) {
           handleWrite(0.U, io.mem_fault.mtval)
         }
-        .elsewhen(io.mem_fault.mem_fault_type === MemFaultType.InsFault.getUInt) {
+        .elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.InsFault.getUInt) {
           handleWrite(1.U, io.mem_fault.mtval)
         }
         //IO错误

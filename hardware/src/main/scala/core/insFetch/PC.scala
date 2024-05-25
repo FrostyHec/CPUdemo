@@ -9,11 +9,8 @@ import core.config._
 class PC extends Module{
   val io=IO(new Bundle {
     val cpu_state=Input(CPUStateType.getWidth)
-    val fault_occurs = Input(Bool())
 
     val next_addr =Input(UInt(32.W))
-
-    val fault_write_PC = Input(UInt(32.W))
 
     val addr=Output(UInt(32.W))
   })
