@@ -51,6 +51,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  /*
 //  it should "pass test case 0 _ v1.t1.1" in {
 //    // 用于确认是否正确进入某一个case
 //    load_instructions("software2_t1.txt")
@@ -101,6 +102,8 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
 ////      total.io.seg7.seg7.expect(2.U)
 //    }
 //  }
+  */
+
 
   // case1 : FP16 向上取整
   it should "pass test case 1 _ v1.0.1" in {
@@ -225,7 +228,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.btn.button.poke(0.U)
       run_instructions(total, 50)
       // 拨码开关输入
-      total.io.switch.switches.poke("b0_00000_00010_00000".U) // very small
+      total.io.switch.switches.poke("b0_00000_00010_00000".U) // a very small number
       run_instructions(total, 50)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 20)
@@ -247,8 +250,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.btn.button.poke(0.U)
       run_instructions(total, 50)
       // 拨码开关输入
-      //todo 这种情况没有考虑到
-      total.io.switch.switches.poke("b0_00000_00000_00000".U) // 0
+      total.io.switch.switches.poke("b0_00000_00000_00000".U) // 0.0
       run_instructions(total, 50)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 20)
@@ -270,7 +272,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 50)
       // 拨码开关输入
       //todo 这种情况没有考虑到
-      total.io.switch.switches.poke("b1_00000_00000_00000".U) // 0
+      total.io.switch.switches.poke("b1_00000_00000_00000".U) // - 0.0
       run_instructions(total, 50)
       total.io.btn.button.poke(4.U)
       run_instructions(total, 20)

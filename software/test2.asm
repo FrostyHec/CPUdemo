@@ -88,6 +88,8 @@ lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
 andi t2, t2, 31
+addi t3, zero, 31 # very large
+beq t2, t3, case123_end3
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -120,10 +122,20 @@ sw t4, (a3)
 beq zero, zero, ini
 
 case1_end1: # exp < 0
+addi t2, t2, 15
+beq t2, zero, case1_end1_other # deal with the corner case of very small
+case1_end1_back:
 xori t3, t3, 1
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
+case1_end1_other:
+bne t1, zero, case1_end1_back
+addi t3, zero, 0
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+
 
 
 
@@ -136,6 +148,8 @@ lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
 andi t2, t2, 31
+addi t3, zero, 31 # very large
+beq t2, t3, case123_end3
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -161,8 +175,17 @@ sw t4, (a3)
 beq zero, zero, ini
 
 case2_end1: # exp < 0
+addi t2, t2, 15
+beq t2, zero, case2_end1_other # deal with the corner case of very small
+case2_end1_back:
 xori t3, t3, 1
 addi t3, t3, -1
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+case2_end1_other:
+bne t1, zero, case2_end1_back
+addi t3, zero, 0
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
@@ -179,6 +202,8 @@ lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
 andi t2, t2, 31
+addi t3, zero, 31 # very large
+beq t2, t3, case123_end3
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -223,6 +248,21 @@ case3_end1_other:
 addi t3, zero, 0
 sw t3, (a0)
 sw t3, (a3)
+
+
+case123_end3: # exp very large -> this might be changed
+beq t1, zero, case123_end3_inf
+addi t3, zero, 1
+slli t3, t3, 31
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+case123_end3_inf:
+addi t3, zero, 3
+slli t3, t3, 30
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
 
 
 
