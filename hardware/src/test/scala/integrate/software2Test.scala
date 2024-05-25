@@ -789,4 +789,45 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.led.led.expect(0.U)
     }
   }
+
+  it should "pass test 7" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case 7
+      total.io.switch.switches.poke("h_70_00_00".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U) // 确认键
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+
+      total.io.btn.button.poke(4.U)
+      total.io.switch.switches.poke("h_00_00_05".U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      checkRegsInTop(total, 6, "h_05".U)
+      checkRegsInTop(total, 30, 2.U) // t5
+      checkRegsInTop(total, 7, 1.U) // t2: counter
+      run_instructions(total, 5)
+      checkRegsInTop(total, 31, 1.U) // t6
+      run_instructions(total, 5)
+      checkRegsInTop(total, 7, 2.U) // t2: counter
+      checkRegsInTop(total, 31, 1.U) // t6
+      run_instructions(total, 14) // t2 counts to 3
+      checkRegsInTop(total, 7, 3.U) // t2: counter
+      run_instructions(total, 23) // t2 decreases to 1
+      checkRegsInTop(total, 7, 1.U)
+      run_instructions(total, 17)
+      checkRegsInTop(total, 7, 3.U) // t2 back to 3
+
+      run_instructions(total, 6)
+      checkRegsInTop(total, 7, 4.U) // t2 counts to 4
+      run_instructions(total, 8)
+      checkRegsInTop(total, 7, 3.U) // t2 decreases to 3
+
+      run_instructions(total, 400)
+      checkRegsInTop(total, 7, 4.U)
+    }
+  }
 }
