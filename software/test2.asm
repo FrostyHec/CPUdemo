@@ -6,7 +6,8 @@ addi a3, a0, 12     # 0xffff_ff0c -> 7seg
 addi a6, zero, 1
 slli a6, a6, 16
 srli t0, a0, 16
-add a6, a6, t0		# 0x0001_ffff -> stack
+add a6, a6, t0		
+addi a6, a6, -3	# 0x0001_fffc -> stack
 addi s0, zero, 1
 slli s0, s0, 16
 addi s0, s0, 1024  # 0x0001_0400 -> push
@@ -87,6 +88,8 @@ lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
 andi t2, t2, 31
+addi t3, zero, 31 # very large
+beq t2, t3, case123_end3
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -119,10 +122,20 @@ sw t4, (a3)
 beq zero, zero, ini
 
 case1_end1: # exp < 0
+addi t2, t2, 15
+beq t2, zero, case1_end1_other # deal with the corner case of very small
+case1_end1_back:
 xori t3, t3, 1
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
+case1_end1_other:
+bne t1, zero, case1_end1_back
+addi t3, zero, 0
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+
 
 
 
@@ -135,6 +148,8 @@ lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
 andi t2, t2, 31
+addi t3, zero, 31 # very large
+beq t2, t3, case123_end3
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -160,8 +175,17 @@ sw t4, (a3)
 beq zero, zero, ini
 
 case2_end1: # exp < 0
+addi t2, t2, 15
+beq t2, zero, case2_end1_other # deal with the corner case of very small
+case2_end1_back:
 xori t3, t3, 1
 addi t3, t3, -1
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+case2_end1_other:
+bne t1, zero, case2_end1_back
+addi t3, zero, 0
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
@@ -178,6 +202,8 @@ lw t0, (a2) # the original float-16 unmber
 andi t1, t0, 1023 # fraction
 srli t2, t0, 10
 andi t2, t2, 31
+addi t3, zero, 31 # very large
+beq t2, t3, case123_end3
 addi t2, t2, -15 # exponent
 srli t3, t0, 15
 andi t3, t3, 1 # sign
@@ -211,17 +237,48 @@ sw t4, (a0)
 sw t4, (a3)
 beq zero, zero, ini
 
-case3_end1: # exp < 0 here there will be something wrong
-not t2, t2
-bne t2, zero, case3_end1_other
-xori t3, t3, 1
+case3_end1: # exp < 0 
+# here: 
+# -1   , -0.5x  -> -1
+# -0.5 , 0.4x   -> 0
+# 0.5  , 1      -> 1
+addi t2, t2, 1
+beq t2, zero, case3_end1_other
+addi t3, zero, 0
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
 case3_end1_other:
+# t3:1 -> -1, 0
+# t3:0 -> 1
+beq t3, zero, case3_end1_other_pos
+addi t3, zero, -1
+bne t1, zero, case3_end1_other_neg
 addi t3, zero, 0
+case3_end1_other_neg:
 sw t3, (a0)
 sw t3, (a3)
+beq zero, zero, ini
+case3_end1_other_pos:
+addi t3, zero, 1
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+
+
+case123_end3: # exp very large -> this might be changed
+beq t1, zero, case123_end3_inf
+addi t3, zero, 3
+slli t3, t3, 22
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
+case123_end3_inf:
+addi t3, zero, 1
+slli t3, t3, 23
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
 
 
 
