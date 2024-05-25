@@ -29,34 +29,33 @@ class Seg7 extends Module {
   val counter = RegInit(0.U(3.W))
 
   when(clock_counter === 0.U) {
-    //  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
-    val digits = VecInit((0 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
-
-    //  val seg7Module_low = Module(new HexToSeg7())
-    //  seg7Module_low.io.hexDigit := digits_low(counter)
-    //  io.board.seg7_low := seg7Module_low.io.seg7
-
-    val seg7Module = Module(new HexToSeg7())
-    seg7Module.io.hexDigit := digits(counter)
-    io.board.seg7 := seg7Module.io.seg7
-
-    io.board.an := MuxLookup(counter, "b1111_1111".U, Seq(
-      "b000".U -> "b1111_1110".U,
-      "b001".U -> "b1111_1101".U,
-      "b010".U -> "b1111_1011".U,
-      "b011".U -> "b1111_0111".U,
-      "b100".U -> "b1110_1111".U,
-      "b101".U -> "b1101_1111".U,
-      "b110".U -> "b1011_1111".U,
-      "b111".U -> "b0111_1111".U
-    ))
-
     clock_counter := 100000.U
     counter := counter + 1.U
   }.otherwise {
-    io.board.seg7 := 1.U
-    io.board.an := 1.U
+    // do nothing
   }
+
+  //  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
+  val digits = VecInit((0 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
+
+  //  val seg7Module_low = Module(new HexToSeg7())
+  //  seg7Module_low.io.hexDigit := digits_low(counter)
+  //  io.board.seg7_low := seg7Module_low.io.seg7
+
+  val seg7Module = Module(new HexToSeg7())
+  seg7Module.io.hexDigit := digits(counter)
+  io.board.seg7 := seg7Module.io.seg7
+
+  io.board.an := MuxLookup(counter, "b1111_1111".U, Seq(
+    "b000".U -> "b1111_1110".U,
+    "b001".U -> "b1111_1101".U,
+    "b010".U -> "b1111_1011".U,
+    "b011".U -> "b1111_0111".U,
+    "b100".U -> "b1110_1111".U,
+    "b101".U -> "b1101_1111".U,
+    "b110".U -> "b1011_1111".U,
+    "b111".U -> "b0111_1111".U
+  ))
 }
 
 class HexToSeg7 extends Module {
@@ -68,7 +67,7 @@ class HexToSeg7 extends Module {
         "h1".U -> "b10011111".U, // 1
         "h2".U -> "b00100101".U, // 2
         "h3".U -> "b00001101".U, // 3
-        "h4".U -> "b10011011".U, // 4
+        "h4".U -> "b10011001".U, // 4
         "h5".U -> "b01001001".U, // 5
         "h6".U -> "b01000001".U, // 6
         "h7".U -> "b00011111".U, // 7
@@ -76,7 +75,7 @@ class HexToSeg7 extends Module {
         "h9".U -> "b00001001".U, // 9
         "ha".U -> "b00010001".U, // A
         "hb".U -> "b11000001".U, // B
-        "hc".U -> "b01100001".U, // C
+        "hc".U -> "b01100011".U, // C
         "hd".U -> "b10000101".U, // D
         "he".U -> "b01100001".U, // E
         "hf".U -> "b01110001".U  // F
