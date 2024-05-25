@@ -1194,7 +1194,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "pass test 7" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
-      run_instructions(total, 50)
+      run_instructions(total, 51)
       // 选择 case 7
       total.io.switch.switches.poke("h_70_00_00".U)
       run_instructions(total, 50)
