@@ -26,8 +26,7 @@ class MemWriteSelector extends Module {
     val data_addr = Output(UInt(32.W))
     val data_write = Output(UInt(32.W))
   })
-  //TODO 这个When语句造成combinational loop
-  when(io.cpu_state===CPUStateType.sLoadMode.getUInt){
+  when(io.uart_load){
     io.read_data:=io.uart_in.mem_read
     io.write_data:=io.uart_in.mem_write
     io.data_width:=io.uart_in.data_width

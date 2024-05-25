@@ -33,7 +33,6 @@ class WBSelectorTop extends Module{
   wb_selector.io.write_back_type := io.write_back_type
   wb_selector.io.imm := io.imm
   wb_selector.io.mem_out := io.mem_out
-  wb_selector.io.au_out := wb_selector.io.au_out
   wb_selector.io.pc4 := io.pc4
   wb_selector.io.pcImm := io.pcImm
   wb_selector.io.csr := io.csr_val

@@ -10,6 +10,7 @@ import utils.ExtendEnum
 
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
+    val uart_load = Input(Bool())
     val cpu_state = Input(CPUStateType.getWidth)
 
     //ins mem io
@@ -35,9 +36,11 @@ class MemoryDispatch extends Module {
     val IF_fault = Output(new IFFault())
     val MEM_fault = Output(new MEMFault())
   })
-  //fault
-  io.fault.mem_fault_type := MEMFaultType.No.getUInt
-  io.fault.mtval := DontCare
+  //fault default
+  io.IF_fault.IF_fault_type := IFFaultType.No.getUInt
+  io.IF_fault.mtval:=DontCare
+  io.MEM_fault.mem_fault_type := MEMFaultType.No.getUInt
+  io.MEM_fault.mtval:=DontCare
 
   //32读取深度导致的
   val rw_mem_addr = io.data_addr >> 2
@@ -53,7 +56,7 @@ class MemoryDispatch extends Module {
   val data_out = Wire(UInt(32.W))
 
   //判断是否是写周期
-  val is_write_clk = (io.cpu_state === CPUStateType.sWriteRegs.getUInt || io.cpu_state === CPUStateType.sLoadMode.getUInt)&&(!io.fault_occurs)
+  val is_write_clk = io.cpu_state === CPUStateType.cycle2_write.getUInt
 
   //Ins read
   insRAM.io2.read_addr := read_ins_addr
@@ -83,14 +86,23 @@ class MemoryDispatch extends Module {
   )
   outRegisters.io.external <> io.external
 
+  //IF错误处理
+  when(io.ins_addr(1, 0) =/= 0.U) {
+    io.IF_fault.IF_fault_type := IFFaultType.InsMisaligned.getUInt
+    io.IF_fault.mtval := io.ins_addr
+  }.elsewhen(io.ins_addr > GenConfig.s.insEnd) {
+    io.IF_fault.IF_fault_type := IFFaultType.InsFault.getUInt
+    io.IF_fault.mtval := io.ins_addr
+  }
+
   //如果探测到错误，一定要屏蔽写操作，其它无所谓
   //注意优先级：必须是MEM先IF后
   //MEM错误
   def setFault(faultType: MEMFaultType.Value, mtval: UInt): Unit = {
     //只有在非loadMode才能触发中断
-    when(io.cpu_state=/=CPUStateType.sLoadMode.getUInt) {
-      io.fault.mem_fault_type := faultType.getUInt
-      io.fault.mtval := mtval
+    when(!io.uart_load) {
+      io.MEM_fault.mem_fault_type := faultType.getUInt
+      io.MEM_fault.mtval := mtval
     }
   }
 
@@ -236,16 +248,6 @@ class MemoryDispatch extends Module {
         }
       }
     }
-  }
-
-  //IF的中断的优先级要排在最后面
-  //IF 错误
-  when(io.ins_addr(1, 0) =/= 0.U) {
-    io.fault.mem_fault_type := MEMFaultType.InsMisaligned.getUInt
-    io.fault.mtval := io.pc
-  }.elsewhen(io.ins_addr > GenConfig.s.insEnd) {
-    io.fault.mem_fault_type := MEMFaultType.InsFault.getUInt
-    io.fault.mtval := io.pc
   }
 }
 

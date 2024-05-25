@@ -9,12 +9,12 @@ class MEMFault extends Bundle {
 }
 
 class IFFault extends Bundle {
-  val IF_fault_type = IFFaultType.No.getUInt(IFFaultType.getWidth)
+  val IF_fault_type = IFFaultType.getWidth
   val mtval = UInt(32.W)
 }
 
 class IDFault extends Bundle {
-  val ID_fault_type = IDFaultType.No.getUInt(IDFaultType.getWidth)
+  val ID_fault_type = IDFaultType.getWidth
   val mtval = UInt(32.W)
 }
 

@@ -51,7 +51,7 @@ class ControlUnit extends Module {
   })
   //fault置为0
   //TODO 我都懒得搞illegal instruction的判断了，开摆
-  io.fault.ins_fault_type := IDFaultType.No.getUInt
+  io.fault.ID_fault_type := IDFaultType.No.getUInt
   io.fault.mtval := 0.U
 
   io.csr_out := io.csr
@@ -73,12 +73,42 @@ class ControlUnit extends Module {
   io.memory_write := false.B
   io.data_width := DontCare
 
+  def using_regs(rs1:Boolean=true,
+                 rs2:Boolean=true,
+                 csr:Boolean=true,
+                 rd:Boolean=true): Unit = {
+    if(!rs1){
+      io.rs1_out:=0.U
+    }
+    if(!rs2){
+      io.rs2_out:=0.U
+    }
+    if(!csr){
+      io.csr_out:=0.U
+    }
+    if(!rd){
+      io.rd_out:=0.U
+    }
+  }
+  def set_branch_type_and_res_stage(
+                                   result_stage:ResultStageType.Value,
+                                   branch_type:BranchType.Value): Unit = {
+    io.result_stage := result_stage.getUInt
+    io.branch_type := branch_type.getUInt
+  }
   //csr
   io.csr_write := false.B
   io.operand1_type := Operand1Type.Reg1.getUInt
 
+  set_branch_type_and_res_stage(ResultStageType.EX,BranchType.No)
+
   switch(io.opcode) {
     is("b011_0011".U) { // R-type
+      using_regs(csr = false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No
+      )
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.au_type := AUType.ALU.getUInt
@@ -124,6 +154,11 @@ class ControlUnit extends Module {
       }
     }
     is("b001_0011".U) { // I-type
+      using_regs(rs2=false,csr = false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No
+      )
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.au_type := AUType.ALU.getUInt
@@ -172,6 +207,11 @@ class ControlUnit extends Module {
     }
 
     is("b000_0011".U) { // I-type load
+      using_regs(rs2=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.MEM,
+        BranchType.No
+      )
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.au_type := AUType.ALU.getUInt
@@ -204,6 +244,11 @@ class ControlUnit extends Module {
     }
 
     is("b010_0011".U) { // S-type
+      using_regs(rd=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No
+      )
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b0".U
       io.au_type := AUType.ALU.getUInt
@@ -228,6 +273,11 @@ class ControlUnit extends Module {
     }
 
     is("b110_0011".U) { // B-type
+      using_regs(rd=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.BType
+      )
       io.nextPC_type := NextPCType.Branch.getUInt
       io.regs_write := "b0".U
       io.au_type := AUType.CMP.getUInt
@@ -263,6 +313,11 @@ class ControlUnit extends Module {
     }
 
     is("b110_1111".U) { // J-type jal
+      using_regs(rs1=false,rs2=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No //branch can be known in nextPCGen
+      )
       io.nextPC_type := NextPCType.BranchFromImm.getUInt
       io.regs_write := "b1".U
       io.au_type := AUType.ALU.getUInt
@@ -276,6 +331,11 @@ class ControlUnit extends Module {
     }
 
     is("b110_0111".U) { // I-type jalr
+      using_regs(rs2=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.JALR
+      )
       io.nextPC_type := NextPCType.BranchFromALU.getUInt
       io.regs_write := "b1".U
       io.memory_read := "b0".U
@@ -289,6 +349,11 @@ class ControlUnit extends Module {
     }
 
     is("b011_0111".U) { // U-type lui
+      using_regs(rs1=false,rs2=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No
+      )
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.memory_read := "b0".U
@@ -301,6 +366,11 @@ class ControlUnit extends Module {
     }
 
     is("b001_0111".U) { // U-type auipc
+      using_regs(rs1=false,rs2=false,csr=false)
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No
+      )
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
       io.memory_read := "b0".U
@@ -312,6 +382,10 @@ class ControlUnit extends Module {
       io.alu_type := DontCare
     }
     is("b111_0011".U) { //csr
+      set_branch_type_and_res_stage(
+        ResultStageType.EX,
+        BranchType.No
+      )
       io.unsigned := true.B
       io.nextPC_type := NextPCType.PC4.getUInt
       io.au_type := AUType.ALU.getUInt
@@ -321,12 +395,13 @@ class ControlUnit extends Module {
       io.memory_write := false.B
       io.csr_write := true.B
       io.operand1_type := Operand1Type.CSR.getUInt
-      io.rs2_out := io.rs1
+      io.rs2_out := io.rs1 // using rs2,so rs1=false, rs2=true
 
       switch(io.func3) {
         is("b001".U) { //csrrw
+          using_regs(rs1=false)
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+            io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.operand1_type := Operand1Type.Reg1.getUInt
@@ -336,8 +411,9 @@ class ControlUnit extends Module {
           }
         }
         is("b010".U) { //csrrs
+          using_regs(rs1=false)
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+            io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.alu_type := ALUType.OR.getUInt
@@ -345,8 +421,9 @@ class ControlUnit extends Module {
           }
         }
         is("b011".U) { //csrrc
+          using_regs(rs1=false)
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+            io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.alu_type := ALUType.Not2And.getUInt
@@ -354,8 +431,9 @@ class ControlUnit extends Module {
           }
         }
         is("b101".U) { //csrrwi
+          using_regs(rs1=false,rs2=false)
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+            io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.operand1_type := Operand1Type.Reg1.getUInt
@@ -366,8 +444,9 @@ class ControlUnit extends Module {
           }
         }
         is("b110".U) { //csrrsi\
+          using_regs(rs1=false,rs2=false)
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+            io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
@@ -376,8 +455,9 @@ class ControlUnit extends Module {
           }
         }
         is("b111".U) { //csrrci
+          using_regs(rs1=false,rs2=false)
           when(io.cur_privilege === "b00".U) { // User无权限
-            io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+            io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
             io.fault.mtval := io.instruction
           }.otherwise {
             io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
@@ -386,19 +466,20 @@ class ControlUnit extends Module {
           }
         }
         is("b000".U) { //ecall/ebreak
+          using_regs(rs1=false,rs2=false,rd=false,csr=false)//由于会触发fault，这里没用，输出会被替换为NOP
           switch(io.raw_imm) {
             is(0.U) { //ecall
-              io.fault.ins_fault_type := IDFaultType.EcallM.getUInt
+              io.fault.ID_fault_type := IDFaultType.EcallM.getUInt
             }
             is(1.U) { //ebreak
-              io.fault.ins_fault_type := IDFaultType.BreakPoint.getUInt
+              io.fault.ID_fault_type := IDFaultType.BreakPoint.getUInt
             }
             is("b0011000_00010".U) { //mret
               when(io.cur_privilege === "b00".U) { // User无权限
-                io.fault.ins_fault_type := IDFaultType.IllegalIns.getUInt
+                io.fault.ID_fault_type := IDFaultType.IllegalIns.getUInt
                 io.fault.mtval := io.instruction
               }.otherwise {
-                io.fault.ins_fault_type := IDFaultType.Mret.getUInt
+                io.fault.ID_fault_type := IDFaultType.Mret.getUInt
               }
             }
           }

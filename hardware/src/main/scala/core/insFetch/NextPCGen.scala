@@ -6,34 +6,26 @@ import core.config._
 
 class NextPCGen extends Module{
   val io=IO(new Bundle() {
-    val nextPC_type: UInt = Input(NextPCControlSignal.getWidth)
+    val nextPC_control_signal: UInt = Input(NextPCControlSignal.getWidth)
+    val instruction = Input(UInt(32.W))
 
     val pc: UInt = Input(UInt(32.W))
     val new_pc = Input(UInt(32.W))
 
     val nextPC: UInt = Output(UInt(32.W))
   })
-  io.pc4 := io.pc + 4.U
-  io.pcImm := 0.U//io.imm+io.pc//0.U
-  io.nextPC := DontCare//io.pc+4.U
-  switch(io.nextPC_type){
-    is(NextPCType.PC4.getUInt){
-      io.nextPC := io.pc + 4.U
-      io.pcImm := io.pc + io.alu_result
+  //Ins can be used for prediction
+  //TODO JAL UNCONDITIONAL BRANCH
+  io.nextPC:=io.pc
+  switch(io.nextPC_control_signal){
+    is(NextPCControlSignal.Normal.getUInt){
+      io.nextPC:=io.pc+4.U//TODO  prediction when j
     }
-    // J type 的移位直接在immGen里面解决了，这里不再处理
-    is(NextPCType.Branch.getUInt){
-      io.nextPC := Mux(io.cmp_result, io.pc + io.imm, io.pc + 4.U)
-      io.pcImm := io.pc + 4.U
+    is(NextPCControlSignal.Stall.getUInt){
+      io.nextPC:=io.pc
     }
-    is(NextPCType.BranchFromALU.getUInt){
-//      io.nextPC := 4.U//io.pc + io.alu_result//4.U
-      io.nextPC := io.alu_result//io.pc + io.alu_result//4.U
-      io.pcImm := io.pc + io.alu_result
-    }
-    is(NextPCType.BranchFromImm.getUInt){
-      io.nextPC := io.pc + io.imm
-      io.pcImm := io.pc + io.imm
+    is(NextPCControlSignal.NewPC.getUInt){
+      io.nextPC:=io.new_pc
     }
   }
 }

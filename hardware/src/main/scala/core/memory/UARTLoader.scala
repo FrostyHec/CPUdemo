@@ -47,14 +47,14 @@ class UARTLoader extends Module {
   switch(cur_state) {
     is(idle) {
       rxReadyReg:=false.B
-      when(io.cpu_state === CPUStateType.sLoadMode.getUInt) {
+      when(io.uart_load) {
         data_addr := "hffff_ffff".U(32.W)
         cur_state := start
       }
     }
     is(start) {
       rxReadyReg:=false.B
-      when(io.cpu_state =/= CPUStateType.sLoadMode.getUInt) {
+      when(!io.uart_load) {
         cur_state := idle
       }.otherwise {
         when(io.rxValid === false.B) {
@@ -64,7 +64,7 @@ class UARTLoader extends Module {
     }
     is(wait_data) {
       rxReadyReg:=false.B
-      when(io.cpu_state =/= CPUStateType.sLoadMode.getUInt) {
+      when(!io.uart_load) {
         cur_state := idle
       }.otherwise {
         when(io.rxValid === true.B) {
@@ -75,7 +75,7 @@ class UARTLoader extends Module {
     }
     is(write_data) {
       rxReadyReg:=false.B
-      when(io.cpu_state =/= CPUStateType.sLoadMode.getUInt) {
+      when(!io.uart_load) {
         cur_state := idle
       }.otherwise {
         when(io.rxValid === true.B) {

@@ -10,7 +10,6 @@ import core.config.{CPUStateType, RegDebugIO}
 class Registers extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
-    val fault_occurs = Input(Bool())
 
     val write = Input(Bool())
 
@@ -25,16 +24,13 @@ class Registers extends Module {
   val regs = RegInit(VecInit(Seq.fill(32)(0.U(32.W))))
   io.rs1_val := regs(io.rs1)
   io.rs2_val := regs(io.rs2)
-  when(io.cpu_state === CPUStateType.sWriteRegs.getUInt
+  when(io.cpu_state === CPUStateType.cycle1_read.getUInt//先写后读，在cycle1写在cycle2读
     && io.write
     && io.rd =/= 0.U
-    && (!io.fault_occurs)
   ) {
-
     if(GenConfig.s.logDetails){
       printf("write to reg[%d] with data %d\n", io.rd, io.write_data)
     }
-
     regs(io.rd) := io.write_data
   }.otherwise {
     //不写入

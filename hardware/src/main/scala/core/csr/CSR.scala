@@ -53,30 +53,33 @@ class CSR extends Module {
   //  mip(11):= global_interrupt_en & io_interrupt_en & io.io_interruption.io_fault_occur
   mip := mip.bitSet(11.U, read_MIE & read_MEIE & io.io_interruption.io_fault_occur)
 
-  val no_fault = (io.mem_fault.mem_fault_type === MEMFaultType.No.getUInt) &
-    (io.ins_fault.ins_fault_type === IDFaultType.No.getUInt) &
+  val no_fault = (io.IF_fault.IF_fault_type === IFFaultType.No.getUInt) &
+    (io.ID_fault.ID_fault_type === IDFaultType.No.getUInt) &
+    (io.MEM_fault.mem_fault_type === MEMFaultType.No.getUInt) &
     !(read_MIE & read_MEIE & io.io_interruption.io_fault_occur) // io fault
 
   def handleCSR(csr: UInt, reg: UInt): Unit = {
-    when(io.csr === csr) { //输出值不需要no_fault
+    when(io.csr_idx_read === csr) { //输出值不需要no_fault
       io.csr_val := reg
-      when(io.cpu_state === CPUStateType.sWriteRegs.getUInt && io.write&&no_fault) {
-        reg := io.write_data
-        if (GenConfig.s.logDetails) {
-          printf("write to csr[%x] with data %d\n", io.csr, io.write_data)
-        }
+    }
+    when(io.cpu_state === CPUStateType.cycle1_read.getUInt
+      && io.write
+      &&io.csr_idx_write === csr) {
+      reg := io.write_data
+      if (GenConfig.s.logDetails) {
+        printf("write to csr[%x] with data %d\n", io.csr_idx_write, io.write_data)
       }
     }
   }
 
   def handleWrite(_mcause: UInt, _mtval: UInt): Unit = {
-    if(GenConfig.s.logDetails){
+    if (GenConfig.s.logDetails) {
       printf("Writing for err handle\n")
     }
 
-    io.fault_state := true.B
+    io.fault_occurs := true.B
     mepc := io.pc
-    io.fault_write_PC := mtvec
+    io.fault_new_PC := mtvec
     mcause := _mcause
     mtval := _mtval
     mstatus := mstatus.bitSet(3.U, false.B) //MIE禁用中断写为0
@@ -91,8 +94,8 @@ class CSR extends Module {
   //default value
   //TODO ILLEGAL INSTRUCTION
   io.csr_val := DontCare
-  io.fault_state := false.B
-  io.fault_write_PC := DontCare
+  io.fault_occurs := false.B
+  io.fault_new_PC := DontCare
   // normal csr reading and writing
   //输出时不需要no fault检查，只要保证fault不会写入到reg即可，而这个是由外面这个大状态机保证的
   handleCSR(0x300.U, mstatus)
@@ -106,43 +109,43 @@ class CSR extends Module {
   when(!no_fault) {
     val fault_type = Wire(FaultHandlerType.getWidth)
     fault_type := FaultHandlerType.writeFault.getUInt // 除了mret都是writeFault
-    when(io.ins_fault.ins_fault_type === IDFaultType.Mret.getUInt) {
+    when(io.ID_fault.ID_fault_type === IDFaultType.Mret.getUInt) {
       fault_type := FaultHandlerType.leaveFault.getUInt
     }
     //带优先级地查询中断源并进行操作
     //MEM阶段的错误
     when(fault_type === FaultHandlerType.writeFault.getUInt) {
-      when(io.mem_fault.mem_fault_type === MEMFaultType.LoadMisaligned.getUInt) {
-        handleWrite(4.U, io.mem_fault.mtval)
-      }.elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.LoadFault.getUInt) {
-          handleWrite(5.U, io.mem_fault.mtval)
-        }.elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.StoreMisaligned.getUInt) {
-          handleWrite(6.U, io.mem_fault.mtval)
-        }.elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.StoreFault.getUInt) {
-          handleWrite(7.U, io.mem_fault.mtval)
+      when(io.MEM_fault.mem_fault_type === MEMFaultType.LoadMisaligned.getUInt) {
+        handleWrite(4.U, io.MEM_fault.mtval)
+      }.elsewhen(io.MEM_fault.mem_fault_type === MEMFaultType.LoadFault.getUInt) {
+          handleWrite(5.U, io.MEM_fault.mtval)
+        }.elsewhen(io.MEM_fault.mem_fault_type === MEMFaultType.StoreMisaligned.getUInt) {
+          handleWrite(6.U, io.MEM_fault.mtval)
+        }.elsewhen(io.MEM_fault.mem_fault_type === MEMFaultType.StoreFault.getUInt) {
+          handleWrite(7.U, io.MEM_fault.mtval)
         }
         //ID阶段的错误
-        .elsewhen(io.ins_fault.ins_fault_type === IDFaultType.IllegalIns.getUInt) {
-          handleWrite(2.U, io.ins_fault.mtval)
-        }.elsewhen(io.ins_fault.ins_fault_type === IDFaultType.BreakPoint.getUInt) {
-          handleWrite(3.U, io.ins_fault.mtval)
-        }.elsewhen(io.ins_fault.ins_fault_type === IDFaultType.EcallM.getUInt) {
-          handleWrite(11.U, io.ins_fault.mtval)
+        .elsewhen(io.ID_fault.ID_fault_type === IDFaultType.IllegalIns.getUInt) {
+          handleWrite(2.U, io.ID_fault.mtval)
+        }.elsewhen(io.ID_fault.ID_fault_type === IDFaultType.BreakPoint.getUInt) {
+          handleWrite(3.U, io.ID_fault.mtval)
+        }.elsewhen(io.ID_fault.ID_fault_type === IDFaultType.EcallM.getUInt) {
+          handleWrite(11.U, io.ID_fault.mtval)
         }
         //IF阶段的错误
-        .elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.InsMisaligned.getUInt) {
-          handleWrite(0.U, io.mem_fault.mtval)
+        .elsewhen(io.IF_fault.IF_fault_type === IFFaultType.InsMisaligned.getUInt) {
+          handleWrite(0.U, io.IF_fault.mtval)
         }
-        .elsewhen(io.mem_fault.mem_fault_type === MEMFaultType.InsFault.getUInt) {
-          handleWrite(1.U, io.mem_fault.mtval)
+        .elsewhen(io.IF_fault.IF_fault_type === IFFaultType.InsFault.getUInt) {
+          handleWrite(1.U, io.IF_fault.mtval)
         }
         //IO错误
         .elsewhen(io.io_interruption.io_fault_occur) {
           handleWrite(((1.U << 31.U).asUInt + 11.U), io.io_interruption.mtval) //最高位为1，后面最后为11的二进制数
         }
     }.otherwise { // 暂时只有mret
-      io.fault_state := true.B
-      io.fault_write_PC := mepc
+      io.fault_occurs := true.B
+      io.fault_new_PC := mepc
       //      read_MIE := read_MPIE // MIE <- MPIE
       mstatus := mstatus.bitSet(3.U, read_MPIE)
       cur_privilege := read_MPP
@@ -164,8 +167,8 @@ class CSR extends Module {
   })
   if (GenConfig.s.logDetails) {
     when(!no_fault) {
-      printf("Fault occurs! mem_fault:%d, ins_fault:%d, io_fault:%d, jump to:%d\n",
-        io.mem_fault.mem_fault_type, io.ins_fault.ins_fault_type, io.io_interruption.io_fault_occur, io.fault_write_PC)
+      printf("Fault occurs! mem_fault:%d, ID_fault:%d,IF_fault:%d, io_fault:%d, jump to:%d\n",
+        io.MEM_fault.mem_fault_type, io.ID_fault.ID_fault_type,io.IF_fault.IF_fault_type, io.io_interruption.io_fault_occur, io.fault_new_PC)
     }
   }
 }

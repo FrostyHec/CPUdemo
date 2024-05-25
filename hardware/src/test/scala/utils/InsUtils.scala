@@ -9,7 +9,7 @@ import core.config.CSRDebugIO
 
 object InsUtils {
   private val file_root_path = "src/test/scala/integrate/inst_file/"
-  private val INS_TIME = 2 // cycles for ins to run
+  private val INS_TIME = 3 // cycles for ins to run
 
   def load_instructions(file_path: String): Unit = {
     GenConfig.s.initInsFile = Option(file_root_path + file_path)
@@ -20,6 +20,7 @@ object InsUtils {
       println("============================Time " + i + "============================\n")
       cpu.clock.step(INS_TIME)
     }
+    cpu.clock.step(4*INS_TIME)
   }
 
   def checkRegsInCPU(cpu: CoreTop, targetReg: Int, targetValue: UInt): Unit = {
