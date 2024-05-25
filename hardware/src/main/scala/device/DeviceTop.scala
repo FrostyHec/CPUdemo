@@ -63,7 +63,7 @@ class DeviceTop extends Module {
   btn.io.board <> io.board.btn
   switches.io.board <> io.board.switch
   uart.io.board <> io.board.uart
-//  vga.io.board <> io.board.vga
+//  vga.io.board <> io.board.vga //TODO  VGA ENABLE
 
   //external signal TODO set it
   io.external_signal.load_data_mode := io.board.switch.switches(23)

@@ -17,6 +17,7 @@ case class MMIOConfig(begin: UInt = "hffffff00".U,
                       uartTxDataWidth: Int = 32,
                       uartTxValidWidth: Int = 32,
                       uartTxReadyWidth: Int = 32,
+                      vgaWidth: Int = 32,
 
                       //mmio address
                       ledAddr: UInt = "hffffff00".U,
