@@ -237,29 +237,45 @@ sw t4, (a0)
 sw t4, (a3)
 beq zero, zero, ini
 
-case3_end1: # exp < 0 here there will be something wrong
-not t2, t2
-bne t2, zero, case3_end1_other
-xori t3, t3, 1
+case3_end1: # exp < 0 
+# here: 
+# -1   , -0.5x  -> -1
+# -0.5 , 0.4x   -> 0
+# 0.5  , 1      -> 1
+addi t2, t2, 1
+beq t2, zero, case3_end1_other
+addi t3, zero, 0
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
 case3_end1_other:
+# t3:1 -> -1, 0
+# t3:0 -> 1
+beq t3, zero, case3_end1_other_pos
+addi t3, zero, -1
+bne t1, zero, case3_end1_other_neg
 addi t3, zero, 0
+case3_end1_other_neg:
 sw t3, (a0)
 sw t3, (a3)
+beq zero, zero, ini
+case3_end1_other_pos:
+addi t3, zero, 1
+sw t3, (a0)
+sw t3, (a3)
+beq zero, zero, ini
 
 
 case123_end3: # exp very large -> this might be changed
 beq t1, zero, case123_end3_inf
 addi t3, zero, 3
-slli t3, t3, 31
+slli t3, t3, 22
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini
 case123_end3_inf:
 addi t3, zero, 1
-slli t3, t3, 30
+slli t3, t3, 23
 sw t3, (a0)
 sw t3, (a3)
 beq zero, zero, ini

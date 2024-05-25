@@ -803,8 +803,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.led.led.expect(4.U)
     }
   }
-
-  // todo 这四个非常小的有问题
+  
   it should "pass test case 3 _ v1.0.6 : corner case - very small" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
@@ -912,7 +911,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.led.led.expect("b_100_000_000_000_000_000_000_000".U)
     }
   }
-  it should "pass test case 3 _ v1.0.11  : corner case - very large (-inf)" in {
+  it should "pass test case 3 _ v1.0.11 : corner case - very large (-inf)" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
       run_instructions(total, 50)
@@ -934,7 +933,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  it should "pass test case 3 _ v1.0.12  : corner case - very large (NaN)" in {
+  it should "pass test case 3 _ v1.0.12 : corner case - very large (NaN)" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
       run_instructions(total, 50)
@@ -955,7 +954,7 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
       total.io.led.led.expect("b_110_000_000_000_000_000_000_000".U)
     }
   }
-  it should "pass test case 3 _ v1.0.13  : corner case - very large (-NaN)" in {
+  it should "pass test case 3 _ v1.0.13 : corner case - very large (-NaN)" in {
     load_instructions("software2.txt")
     test(new Top) { total =>
       run_instructions(total, 50)
@@ -977,7 +976,27 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
-  //todo add some corner cases
+  it should "pass test case 3 _ v1.0.14 : corner case - -0.5" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case
+      total.io.switch.switches.poke("h_30_12_00".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("b1_01110_00000_00000".U) // - 0.5
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect(0.U)
+    }
+  }
 
   // case4: add two numbers
   it should "pass test case 4 _ v1.0.1" in {
