@@ -58,7 +58,7 @@ object PrivilegeType {
 }
 
 object LayerControlSignal extends ExtendEnum {
-  val Normal, STALL, NOP = Value
+  val Normal, Stall, NOP = Value
 }
 object ResultStageType extends ExtendEnum {
   val EX, MEM = Value
@@ -70,5 +70,5 @@ object ForwardType extends ExtendEnum {
   val No, EXForward,MEMForward = Value
 }
 object NextPCControlSignal extends ExtendEnum {
-  val Normal,STALL,NewPC = Value
+  val Normal,Stall,NewPC = Value
 }
