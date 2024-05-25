@@ -216,8 +216,8 @@ class CoreTop extends Module {
       //          CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
       //          CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
       //        printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
-      //        printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
-      //        printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
+              printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
+//              printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
       printf("ALU with result: %d,", ALU.io.result)
       printf("CMP with result: %d\n", CMP.io.result)
       printf("nextPCGen with nextPC: %d\n", nextPCGen.io.nextPC)
