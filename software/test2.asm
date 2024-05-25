@@ -18,7 +18,7 @@ addi a7, zero, 1
 slli a7, a7, 16 	# get switch 16
 
 # 40000 interval (waiting for test)
-addi s7, x0, 0
+addi s7, x0, 61
 slli s7, s7, 16
 addi s7, s7, 1792
 
@@ -306,7 +306,6 @@ srli t4, t3, 8
 beq t4, zero, c4_out
 addi t3, t3, 1
 not t3, t3
-andi t3, t3, 255
 c4_out:
 sw t3, (a0)
 sw t3, (a3)
@@ -319,7 +318,7 @@ beq zero, zero, ini
 case5:
 lw t0, (a1)
 andi t0, t0, 4
-beq t0, zero, case5
+beq t0, zero, case4
 lw t0, (a2)
 addi t1, zero, 255 # mask
 and t2, t0, t1
@@ -341,21 +340,15 @@ andi t0, t0, 4
 beq t0, zero, case6
 lw t1, (a2)
 andi t1, t1, 255 # a
-addi t3, zero, 8
-c6_loop:
-	andi t2, t1, 1
-	bne t2, zero, c6_loop_out
-	srli t1, t1, 1
-	addi t3, t3, -1
-	beq t3, zero, c6_no
-	beq zero, zero, c6_loop 
-
-c6_loop_out:
-srli t1, t1, 1
+beq t1, zero, c6_no # 0 is not the power of 2
+addi t1, t1, -1
+beq t1, zero, c6_yes # 1 is the power of 2
+andi t1, t1, 1
+addi t1, t1, -1
+beq t1, zero, c6_yes
 bne t1, zero, c6_no
-
 c6_yes:
-addi t3, zero, 1
+addi t3, zero, -1
 sw t3, (a0)
 beq zero, zero, ini
 c6_no:
@@ -365,10 +358,10 @@ beq zero, zero, ini
 
 # Fib
 case7:
-lw t0, (a1)
+lw t0, (a1) # load button
 andi t0, t0, 4
 beq t0, zero, case7
-lw t1, (a2)
+lw t1, (a2) # load switches
 
 andi t1, t1, 255 # t1: input
 addi t2, x0, 0 # t2: counter
@@ -406,7 +399,7 @@ jal fib
 sw t6, 8(t3)
 addi t2, t2, -1
 jal fib
-lw t2, 8(sp)
+lw t2, 8(t3)
 add t6, t6, t2
 
 lw ra, 0(t3)
@@ -418,13 +411,13 @@ jr ra
 
 out:
 addi t2, t2, -1
-sw t2, 0(a3)
+sw t2, 0(a3) # seg7
 
 waitconfirm: # print push & pop list
 lw t0, (a1)
-andi t1, t0, 1
+andi t1, t0, 1 # button 0
 bne t1, zero, ini
-andi t0, t0, 2
+andi t0, t0, 2 # button 1
 beq t0, zero, waitconfirm
 lw t1, (a2)
 and t1, t1, a7 # get switch 16
@@ -433,9 +426,9 @@ beq t1, zero, print_push # print push
 print_pop:
 add s4, x0, s1 # s4: pop begin
 pop_loop:
-beq s4, s3, waitconfirm
+beq s4, s3, clearseg7
 lw s5, 0(s4)
-sw s5, 0(a0) # to led
+sw s5, 0(a3) # to seg7
 addi s4, s4, 4
 
 # 40000 interval
@@ -449,9 +442,9 @@ beq x0, x0, pop_loop
 print_push:
 add s4, x0, s0 # s4: push begin
 push_loop:
-beq s4, s2, waitconfirm
+beq s4, s2, clearseg7
 lw s5, 0(s4)
-sw s5, 0(a0) # to led
+sw s5, 0(a3) # to seg7
 addi s4, s4, 4
 
 # 40000 interval
@@ -461,3 +454,8 @@ addi s6, s6, 1
 bne s6, s7, while_push
 
 beq x0, x0, push_loop
+
+clearseg7:
+addi t0, x0, 0
+sw t0, 0(a3)
+beq x0, x0, waitconfirm

@@ -37,8 +37,8 @@ case class GenConfig(
 }
 
 object GenConfig {
-  def s = forTest
-//  def s = onBoard
+//  def s = forTest
+  def s = onBoard
 
   private val onBoard = GenConfig(
     debugMode = false,

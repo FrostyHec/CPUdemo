@@ -13,7 +13,7 @@ class ClockSeparator extends Module {
   if (GenConfig.s.useIPClock) {
     val ip_clock = Module(new IPClock(GenConfig.s.ipClockName.get))
     ip_clock.io.clk_in1 := clock
-    ip_clock.io.reset:=reset
+    ip_clock.io.reset:=false.B
     io.cpuClock := ip_clock.io.clk_out2
   } else {
     io.cpuClock := clock
