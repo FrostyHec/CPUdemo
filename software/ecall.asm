@@ -22,6 +22,10 @@ addi a2, a1, 4      # 0xffff_ff04 -> btn * 5
 addi a3, a1, 8      # 0xffff_ff08 -> swi * 24
 addi a4, a1, 12     # 0xffff_ff0c -> 7seg
 
+addi t0, zero, 0
+lw t0, (a4)
+lw t0, (a1)
+
 # determine the cases
 addi t0, zero, 1
 beq a7, t0, sys_ecall_case1
@@ -61,6 +65,9 @@ sys_ecall_case3:
 
 
 sys_ecall_goBack:
+    addi t0, zero, 0
+    lw t0, (a4)
+    lw t0, (a1)
     csrrs t0, mepc, zero
     addi t0, t0, 4
     csrrw zero, mepc, t0
