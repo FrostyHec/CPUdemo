@@ -42,8 +42,8 @@ case class GenConfig(
 
 object GenConfig {
 //  def s = forTest
-//  def s = onBoard
-  def s = predictionCount
+  def s = onBoard
+//  def s = predictionCount
 
   private val onBoard = GenConfig(
     debugMode = false,
