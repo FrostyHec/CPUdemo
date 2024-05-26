@@ -31,6 +31,7 @@ class PredictionFailureBundle extends Bundle {
 
 class PCPrediction extends Module {
   val io = IO(new Bundle() {
+    val cpu_state_type = Input(CPUStateType.getWidth)
     val pc = Input(UInt(32.W))
     val instruction = Input(UInt(32.W))
 
@@ -66,6 +67,7 @@ class PCPrediction extends Module {
       GenConfig.s.prediction_n,
       min_weak_jump.U
     ))
+    cache.io.cpu_state_type:= io.cpu_state_type
     cache.io.addr_read := io.pc
     cache.io.read_en := false.B
 
@@ -95,12 +97,13 @@ class PCPrediction extends Module {
           cache.io.dataIn := cache.io.write_data_out - 1.U
         }
       }.otherwise { //success
+//        printf("cur wdout: %d\n",cache.io.write_data_out)
         when(cache.io.write_data_out <= min_weak_jump.U) { //predict jump and success
           when(cache.io.write_data_out > 0.U) {
             cache.io.dataIn := cache.io.write_data_out - 1.U
           }
         }.otherwise {
-          when(cache.io.write_en < max_strong_no_jump.U) {
+          when(cache.io.write_data_out < max_strong_no_jump.U) {
             cache.io.dataIn := cache.io.write_data_out + 1.U
           }
         }

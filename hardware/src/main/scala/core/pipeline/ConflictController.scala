@@ -2,8 +2,10 @@ package core.pipeline
 
 import chisel3._
 import chisel3.util._
+import configs.GenConfig
 import core.config.{BranchType, ForwardType, LayerControlSignal, NextPCControlSignal, ResultStageType}
 import core.insFetch.PredictionFailureBundle
+import utils.Logger
 
 class ConflictController extends Module {
   val io = IO(new Bundle() {
@@ -130,7 +132,6 @@ class ConflictController extends Module {
     switch(io.branch_type) {
       is(BranchType.BType.getUInt) {
         val correct_pc = Mux(io.cmp_result,io.pc + io.imm,io.pc+4.U)
-        printf("correct pc: %x,predict pc:%x",correct_pc,io.predict_next_pc)
         when(io.predict_next_pc =/= correct_pc) { //prediction failed
           io.prediction_failure.setFailed(io.pc)
           control_hazard:=true.B
@@ -142,6 +143,9 @@ class ConflictController extends Module {
           )
         }.otherwise{
           io.prediction_failure.setSuccess(io.pc)
+        }
+        if(GenConfig.s.logPrediction){
+          Logger.logPrediction(io.pc,io.predict_next_pc,io.predict_next_pc === correct_pc)
         }
       }
       is(BranchType.JALR.getUInt) {

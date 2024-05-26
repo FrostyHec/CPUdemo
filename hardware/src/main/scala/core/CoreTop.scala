@@ -62,6 +62,7 @@ class CoreTop extends Module {
   state.io.stall := io.external_signal.load_data_mode
 
   //IF wire
+  nextPCGen.io.cpu_state_type:= Mux(io.external_signal.load_data_mode,0.U,state.io.cpu_state)
   nextPCGen.io.prediction_failure<>conflictController.io.prediction_failure
   nextPCGen.io.nextPC_control_signal := conflictController.io.next_control_signal
   nextPCGen.io.pc := pc.io.addr // 当前的pc，下个上升沿写入pc+=4
@@ -268,8 +269,8 @@ class CoreTop extends Module {
   CSR.io.write := MEM_WB.io.out.wb_signal.csr_write
   CSR.io.csr_idx_write := MEM_WB.io.out.wb_signal.csr_idx
   CSR.io.write_data := MEM_WB.io.out.alu_out
-  printf("CSR write en: %d, csr_idx: %d, write_data: %d\n",
-    MEM_WB.io.out.wb_signal.csr_write, MEM_WB.io.out.wb_signal.csr_idx, MEM_WB.io.out.alu_out)
+//  printf("CSR write en: %d, csr_idx: %d, write_data: %d\n",
+//    MEM_WB.io.out.wb_signal.csr_write, MEM_WB.io.out.wb_signal.csr_idx, MEM_WB.io.out.alu_out)
 
   //wb_top selector
   wb_selector.io.au_type := MEM_WB.io.out.wb_signal.au_type

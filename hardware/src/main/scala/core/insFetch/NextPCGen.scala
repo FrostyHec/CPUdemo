@@ -6,6 +6,7 @@ import core.config._
 
 class NextPCGen extends Module{
   val io=IO(new Bundle() {
+    val cpu_state_type: UInt = Input(CPUStateType.getWidth)
     val nextPC_control_signal: UInt = Input(NextPCControlSignal.getWidth)
     val instruction = Input(UInt(32.W))
 
@@ -18,6 +19,7 @@ class NextPCGen extends Module{
   })
   //Ins can be used for prediction
   val predictor = Module(new PCPrediction())
+  predictor.io.cpu_state_type:=io.cpu_state_type
   predictor.io.pc:=io.pc
   predictor.io.instruction:=io.instruction
   predictor.io.prediction_failure<>io.prediction_failure

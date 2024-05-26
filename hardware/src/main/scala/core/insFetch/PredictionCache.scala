@@ -3,6 +3,7 @@ package core.insFetch
 import chisel3.util._
 import chisel3._
 import configs.GenConfig
+import core.config.CPUStateType
 import utils.PRNGWrapper
 
 class PredictionCacheRecord(val addrWidth: Int, val dataWidth: Int) extends Bundle {
@@ -14,6 +15,7 @@ class PredictionCacheRecord(val addrWidth: Int, val dataWidth: Int) extends Bund
 class PredictionCache(val cacheSize: Int, val addrWidth: Int,
                       val instructionWidth: Int, val dataWidth: Int, val default_data: UInt) extends Module {
   val io = IO(new Bundle {
+    val cpu_state_type = Input(CPUStateType.getWidth)
     val addr_read = Input(UInt(addrWidth.W))
     val read_en = Input(Bool())
 
@@ -29,7 +31,7 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
   val cache = RegInit(VecInit(Seq.fill(cacheSize)(0.U.asTypeOf(new PredictionCacheRecord(addrWidth, dataWidth)))))
   val random_gen = Module(new PRNGWrapper(log2Down(cacheSize))) // random replacement
 
-  io.write_data_out:=default_data
+  io.write_data_out := default_data
   io.dataOut := default_data // Default output values
 
   // Write logic
@@ -38,7 +40,7 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
     write_idx := random_gen.io.random
 
     val cache_hit = Wire(Bool())
-    cache_hit:=false.B
+    cache_hit := false.B
     (cacheSize - 1 to 0 by -1).foreach { i =>
       when(cache(i).address === io.addr_write) {
         //setting record as new value
@@ -54,21 +56,24 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
         }
       }
     }
-    when(cache_hit){
-      io.write_data_out:=cache(write_idx).data
-    }.otherwise{
-      io.write_data_out:=default_data
+    when(cache_hit) {
+      io.write_data_out := cache(write_idx).data
+    }.otherwise {
+      io.write_data_out := default_data
     }
-    cache(write_idx).valid := true.B
-    cache(write_idx).address := io.addr_write
-    cache(write_idx).data := io.dataIn
+    when(io.cpu_state_type === CPUStateType.cycle2_write.getUInt) {
+//      printf("updating cache:%d,address:%x,data:%x\n", write_idx, io.addr_write, io.dataIn)
+      cache(write_idx).valid := true.B
+      cache(write_idx).address := io.addr_write
+      cache(write_idx).data := io.dataIn
+    }
   }
   // read logic
   when(io.read_en) {
     val cache_hit_read = Wire(Bool())
     cache_hit_read := false.B
     for (i <- 0 until cacheSize) {
-      when(cache(i).valid && cache(i).address === io.addr_write) {
+      when(cache(i).valid && cache(i).address === io.addr_read) {
         io.dataOut := cache(i).data
         cache_hit_read := true.B
       }
@@ -83,9 +88,18 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
           write_idx_read := i.U
         }
       }
-      cache(write_idx_read).valid := true.B
-      cache(write_idx_read).address := io.addr_read
-      cache(write_idx_read).data := default_data
+      when(io.cpu_state_type === CPUStateType.cycle2_write.getUInt) {
+//        printf("Writing regs:%d\n",write_idx_read)
+        cache(write_idx_read).valid := true.B
+        cache(write_idx_read).address := io.addr_read
+        cache(write_idx_read).data := default_data
+      }
     }
   }
+
+//  for (i <- 0 until 3) {
+//    printf("cache[%d]: valid=%d, address=%x, data=%x\n",
+//      i.U, cache(i).valid, cache(i).address, cache(i).data)
+//  }
+//  printf("---\n")
 }

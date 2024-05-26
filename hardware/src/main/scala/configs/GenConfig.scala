@@ -22,11 +22,12 @@ case class GenConfig(
                       ramAddressWidth:Int = 14,
 
                       // for debug use
-                      debugMode: Boolean,
+                      debugMode: Boolean, // wire connecting reg to top
                       logDetails: Boolean = false,
                       var initInsFile: Option[String] = None,
 
                       //for pipeline prediction
+                      logPrediction:Boolean = false,
                       cache_prediction_enable:Boolean = true,
                       prediction_cache_size:Int = 16,
                       prediction_n:Int = 2,
@@ -40,8 +41,9 @@ case class GenConfig(
 }
 
 object GenConfig {
-  def s = forTest
+//  def s = forTest
 //  def s = onBoard
+  def s = predictionCount
 
   private val onBoard = GenConfig(
     debugMode = false,
@@ -54,5 +56,10 @@ object GenConfig {
     debugMode = true,
     useIPMemory = false,
     logDetails = true
+  )
+  private val predictionCount =GenConfig(
+    debugMode = true,
+    useIPMemory = false,
+    logPrediction = true
   )
 }
