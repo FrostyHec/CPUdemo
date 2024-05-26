@@ -62,6 +62,7 @@ class CoreTop extends Module {
   state.io.stall := io.external_signal.load_data_mode
 
   //IF wire
+  nextPCGen.io.prediction_failure<>conflictController.io.prediction_failure
   nextPCGen.io.nextPC_control_signal := conflictController.io.next_control_signal
   nextPCGen.io.pc := pc.io.addr // 当前的pc，下个上升沿写入pc+=4
   nextPCGen.io.new_pc := conflictController.io.new_pc

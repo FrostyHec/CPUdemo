@@ -9,6 +9,8 @@ class NextPCGen extends Module{
     val nextPC_control_signal: UInt = Input(NextPCControlSignal.getWidth)
     val instruction = Input(UInt(32.W))
 
+    val prediction_failure = new PredictionFailureBundle()
+
     val pc: UInt = Input(UInt(32.W))
     val new_pc = Input(UInt(32.W))
 
@@ -18,6 +20,8 @@ class NextPCGen extends Module{
   val predictor = Module(new PCPrediction())
   predictor.io.pc:=io.pc
   predictor.io.instruction:=io.instruction
+  predictor.io.prediction_failure<>io.prediction_failure
+
   io.nextPC:=io.pc
   switch(io.nextPC_control_signal){
     is(NextPCControlSignal.Normal.getUInt){

@@ -3,6 +3,7 @@ package core.pipeline
 import chisel3._
 import chisel3.util._
 import core.config.{BranchType, ForwardType, LayerControlSignal, NextPCControlSignal, ResultStageType}
+import core.insFetch.PredictionFailureBundle
 
 class ConflictController extends Module {
   val io = IO(new Bundle() {
@@ -53,6 +54,8 @@ class ConflictController extends Module {
     val IDEX_control_signal = Output(LayerControlSignal.getWidth)
     val EXMEM_control_signal = Output(LayerControlSignal.getWidth)
     val MEMWB_control_signal = Output(LayerControlSignal.getWidth)
+
+    val prediction_failure = Flipped(new PredictionFailureBundle())
   })
 
   def assign_one_val(target: UInt, value: UInt, default: UInt, ignore_when_default: Boolean): Unit = {
@@ -95,6 +98,8 @@ class ConflictController extends Module {
   io.new_pc:=0.U
   assign_output(ignore_default = false) //default output, no hazard
 
+  io.prediction_failure.setDefault()
+
   //TODO conflict controller
   //uard loader
   when(io.uart_loading) {
@@ -127,7 +132,8 @@ class ConflictController extends Module {
         val correct_pc = io.pc + io.imm
         printf("correct pc: %x,predict pc:%x",correct_pc,io.predict_next_pc)
         when(io.cmp_result
-          && io.predict_next_pc =/= correct_pc) {
+          && io.predict_next_pc =/= correct_pc) { //prediction failed
+          io.prediction_failure.setFailed(io.pc)
           control_hazard:=true.B
           io.new_pc := correct_pc
           assign_output(
@@ -135,6 +141,8 @@ class ConflictController extends Module {
             IFID_control_signal = LayerControlSignal.NOP.getUInt,
             IDEX_control_signal = LayerControlSignal.NOP.getUInt
           )
+        }.otherwise{
+          io.prediction_failure.setSuccess(io.pc)
         }
       }
       is(BranchType.JALR.getUInt) {

@@ -26,7 +26,10 @@ case class GenConfig(
                       logDetails: Boolean = false,
                       var initInsFile: Option[String] = None,
 
-
+                      //for pipeline prediction
+                      cache_prediction_enable:Boolean = false,
+                      prediction_cache_size:Int = 16,
+                      prediction_n:Int = 2,
 
                       //clock
                       useIPClock: Boolean = false,
