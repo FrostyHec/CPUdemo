@@ -27,7 +27,7 @@ case class GenConfig(
                       var initInsFile: Option[String] = None,
 
                       //for pipeline prediction
-                      cache_prediction_enable:Boolean = false,
+                      cache_prediction_enable:Boolean = true,
                       prediction_cache_size:Int = 16,
                       prediction_n:Int = 2,
 

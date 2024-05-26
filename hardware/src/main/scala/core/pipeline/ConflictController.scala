@@ -129,10 +129,9 @@ class ConflictController extends Module {
   when((!io.uart_loading)&&(!io.exception_occurs)) {
     switch(io.branch_type) {
       is(BranchType.BType.getUInt) {
-        val correct_pc = io.pc + io.imm
+        val correct_pc = Mux(io.cmp_result,io.pc + io.imm,io.pc+4.U)
         printf("correct pc: %x,predict pc:%x",correct_pc,io.predict_next_pc)
-        when(io.cmp_result
-          && io.predict_next_pc =/= correct_pc) { //prediction failed
+        when(io.predict_next_pc =/= correct_pc) { //prediction failed
           io.prediction_failure.setFailed(io.pc)
           control_hazard:=true.B
           io.new_pc := correct_pc

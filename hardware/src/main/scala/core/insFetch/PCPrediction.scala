@@ -59,13 +59,13 @@ class PCPrediction extends Module {
   } else { //using cache
     val max_strong_no_jump = (math.pow(2, GenConfig.s.prediction_n) - 1).toInt
     val min_weak_jump = (math.pow(2, GenConfig.s.prediction_n - 1) - 1).toInt //0-1 jump, 2-3, no jump
-    val cache = new PredictionCache(
+    val cache = Module(new PredictionCache(
       GenConfig.s.prediction_cache_size,
       GenConfig.s.addressWidth,
       32,
       GenConfig.s.prediction_n,
       min_weak_jump.U
-    )
+    ))
     cache.io.addr_read := io.pc
     cache.io.read_en := false.B
 

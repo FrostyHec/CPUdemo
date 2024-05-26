@@ -29,6 +29,7 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
   val cache = RegInit(VecInit(Seq.fill(cacheSize)(0.U.asTypeOf(new PredictionCacheRecord(addrWidth, dataWidth)))))
   val random_gen = Module(new PRNGWrapper(log2Down(cacheSize))) // random replacement
 
+  io.write_data_out:=default_data
   io.dataOut := default_data // Default output values
 
   // Write logic
@@ -37,6 +38,7 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
     write_idx := random_gen.io.random
 
     val cache_hit = Wire(Bool())
+    cache_hit:=false.B
     (cacheSize - 1 to 0 by -1).foreach { i =>
       when(cache(i).address === io.addr_write) {
         //setting record as new value
@@ -52,7 +54,11 @@ class PredictionCache(val cacheSize: Int, val addrWidth: Int,
         }
       }
     }
-    io.write_data_out:=Mux(cache_hit,cache(write_idx),default_data)
+    when(cache_hit){
+      io.write_data_out:=cache(write_idx).data
+    }.otherwise{
+      io.write_data_out:=default_data
+    }
     cache(write_idx).valid := true.B
     cache(write_idx).address := io.addr_write
     cache(write_idx).data := io.dataIn
