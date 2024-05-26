@@ -16,10 +16,13 @@ class NextPCGen extends Module{
   })
   //Ins can be used for prediction
   //TODO JAL UNCONDITIONAL BRANCH
+  val predictor = Module(new PCPrediction())
+  predictor.io.pc:=io.pc
+  predictor.io.instruction:=io.instruction
   io.nextPC:=io.pc
   switch(io.nextPC_control_signal){
     is(NextPCControlSignal.Normal.getUInt){
-      io.nextPC:=io.pc+4.U//TODO  prediction when j
+      io.nextPC:=predictor.io.predict_new_pc
     }
     is(NextPCControlSignal.Stall.getUInt){
       io.nextPC:=io.pc
