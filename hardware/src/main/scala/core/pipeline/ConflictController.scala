@@ -55,34 +55,49 @@ class ConflictController extends Module {
     val MEMWB_control_signal = Output(LayerControlSignal.getWidth)
   })
 
+  def assign_one_val(target: UInt, value: UInt, default: UInt, ignore_when_default: Boolean): Unit = {
+    if (ignore_when_default) {
+      when(value =/= default) {
+        target := value
+      }
+    } else {
+      target := value
+    }
+  }
   def assign_output(rs1_forward_type: UInt = ForwardType.No.getUInt,
                     rs2_forward_type: UInt = ForwardType.No.getUInt,
                     csr_forward_type: UInt = ForwardType.No.getUInt,
-                    new_pc: UInt = 0.U,
                     nextpc_control_signal: UInt = NextPCControlSignal.Normal.getUInt,
                     IFID_control_signal: UInt = LayerControlSignal.Normal.getUInt,
                     IDEX_control_signal: UInt = LayerControlSignal.Normal.getUInt,
                     EXMEM_control_signal: UInt = LayerControlSignal.Normal.getUInt,
-                    MEMWB_control_signal: UInt = LayerControlSignal.Normal.getUInt
+                    MEMWB_control_signal: UInt = LayerControlSignal.Normal.getUInt,
+                    ignore_default: Boolean = true
                    ): Unit = {
-    io.rs1_forward_type := rs1_forward_type
-    io.rs2_forward_type := rs2_forward_type
-    io.csr_forward_type := csr_forward_type
-    io.new_pc := new_pc
-    io.next_control_signal := nextpc_control_signal
-    io.IFID_control_signal := IFID_control_signal
-    io.IDEX_control_signal := IDEX_control_signal
-    io.EXMEM_control_signal := EXMEM_control_signal
-    io.MEMWB_control_signal := MEMWB_control_signal
+    assign_one_val(io.rs1_forward_type,rs1_forward_type,ForwardType.No.getUInt,ignore_default)
+    assign_one_val(io.rs2_forward_type,rs2_forward_type,ForwardType.No.getUInt,ignore_default)
+    assign_one_val(io.csr_forward_type,csr_forward_type,ForwardType.No.getUInt,ignore_default)
+    assign_one_val(io.next_control_signal,nextpc_control_signal,NextPCControlSignal.Normal.getUInt,ignore_default)
+    assign_one_val(io.IFID_control_signal,IFID_control_signal,LayerControlSignal.Normal.getUInt,ignore_default)
+    assign_one_val(io.IDEX_control_signal,IDEX_control_signal,LayerControlSignal.Normal.getUInt,ignore_default)
+    assign_one_val(io.EXMEM_control_signal,EXMEM_control_signal,LayerControlSignal.Normal.getUInt,ignore_default)
+    assign_one_val(io.MEMWB_control_signal,MEMWB_control_signal,LayerControlSignal.Normal.getUInt,ignore_default)
+//    io.rs1_forward_type := rs1_forward_type
+//    io.rs2_forward_type := rs2_forward_type
+//    io.csr_forward_type := csr_forward_type
+//    io.new_pc := new_pc
+//    io.next_control_signal := nextpc_control_signal
+//    io.IFID_control_signal := IFID_control_signal
+//    io.IDEX_control_signal := IDEX_control_signal
+//    io.EXMEM_control_signal := EXMEM_control_signal
+//    io.MEMWB_control_signal := MEMWB_control_signal
   }
-
-  assign_output() //default output, no hazard
+  io.new_pc:=0.U
+  assign_output(ignore_default = false) //default output, no hazard
 
   //TODO conflict controller
-  var previous_no_hazard = true
   //uard loader
   when(io.uart_loading) {
-    previous_no_hazard =false
     ///给所有夹层发STALL，TODO 注意global state machine也不能更新
     assign_output(
       nextpc_control_signal = NextPCControlSignal.Stall.getUInt,
@@ -93,26 +108,29 @@ class ConflictController extends Module {
     )
   }
   //exception hazard
-  when(io.exception_occurs) {
-    previous_no_hazard =false
+  when((!io.uart_loading)&&io.exception_occurs) {
+    io.new_pc:= io.exception_new_pc
     assign_output(
-      new_pc = io.exception_new_pc,
+      nextpc_control_signal = NextPCControlSignal.NewPC.getUInt,
       IFID_control_signal = LayerControlSignal.NOP.getUInt,
       IDEX_control_signal = LayerControlSignal.NOP.getUInt,
       EXMEM_control_signal = LayerControlSignal.NOP.getUInt,
     )
   }
-
+  val control_hazard = Wire(Bool())
+  control_hazard:=false.B
   //control hazard
-  if(previous_no_hazard) {
+  when((!io.uart_loading)&&(!io.exception_occurs)) {
     switch(io.branch_type) {
       is(BranchType.BType.getUInt) {
         val correct_pc = io.pc + io.imm
+        printf("correct pc: %x,predict pc:%x",correct_pc,io.predict_next_pc)
         when(io.cmp_result
           && io.predict_next_pc =/= correct_pc) {
-          previous_no_hazard =false
+          control_hazard:=true.B
+          io.new_pc := correct_pc
           assign_output(
-            new_pc = correct_pc,
+            nextpc_control_signal = NextPCControlSignal.NewPC.getUInt,
             IFID_control_signal = LayerControlSignal.NOP.getUInt,
             IDEX_control_signal = LayerControlSignal.NOP.getUInt
           )
@@ -121,9 +139,10 @@ class ConflictController extends Module {
       is(BranchType.JALR.getUInt) {
         val correct_pc = io.alu_result
         when(io.predict_next_pc =/= correct_pc) {
-          previous_no_hazard =false
+          control_hazard:=true.B
+          io.new_pc := correct_pc
           assign_output(
-            new_pc = correct_pc,
+            nextpc_control_signal = NextPCControlSignal.NewPC.getUInt,
             IFID_control_signal = LayerControlSignal.NOP.getUInt,
             IDEX_control_signal = LayerControlSignal.NOP.getUInt
           )
@@ -132,12 +151,14 @@ class ConflictController extends Module {
     }
   }
   //data hazard
-  if(previous_no_hazard) {
+  when((!io.uart_loading)
+    &&(!io.exception_occurs)
+    &&(!control_hazard)
+  ) {
     //两个rs1 use,前递EX的
     when(io.IDEX_write_reg
       && io.IDEX_reg_to_write =/= 0.U
       && io.rs1_use === io.IDEX_reg_to_write) {
-      previous_no_hazard =false
       when(io.IDEX_reg_result_stage === ResultStageType.EX.getUInt) { //检查结果的EX得到还是MEM得到
         assign_output(
           rs1_forward_type = ForwardType.EXForward.getUInt
@@ -152,16 +173,14 @@ class ConflictController extends Module {
     }.elsewhen(io.EXMEM_write_reg
       && io.EXMEM_reg_to_write =/= 0.U
       && io.rs1_use === io.EXMEM_reg_to_write) { //直接前递即可
-      previous_no_hazard =false
       assign_output(
-        rs1_forward_type = ForwardType.EXForward.getUInt
+        rs1_forward_type = ForwardType.MEMForward.getUInt
       )
     }
     //rs2
     when(io.IDEX_write_reg
       && io.IDEX_reg_to_write =/= 0.U
       && io.rs2_use === io.IDEX_reg_to_write) {
-      previous_no_hazard =false
       when(io.IDEX_reg_result_stage === ResultStageType.EX.getUInt) { //检查结果的EX得到还是MEM得到
         assign_output(
           rs2_forward_type = ForwardType.EXForward.getUInt
@@ -176,16 +195,14 @@ class ConflictController extends Module {
     }.elsewhen(io.EXMEM_write_reg
       && io.EXMEM_reg_to_write =/= 0.U
       && io.rs2_use === io.EXMEM_reg_to_write) { //直接前递即可
-      previous_no_hazard =false
       assign_output(
-        rs2_forward_type = ForwardType.EXForward.getUInt
+        rs2_forward_type = ForwardType.MEMForward.getUInt
       )
     }
     //csr
     when(io.IDEX_write_csr
       && io.IDEX_csr_to_write =/= 0.U
       && io.csr_use === io.IDEX_csr_to_write) {
-      previous_no_hazard =false
       when(io.IDEX_reg_result_stage === ResultStageType.EX.getUInt) { //检查结果的EX得到还是MEM得到
         assign_output(
           csr_forward_type = ForwardType.EXForward.getUInt
@@ -200,9 +217,8 @@ class ConflictController extends Module {
     }.elsewhen(io.EXMEM_write_csr
       && io.EXMEM_csr_to_write =/= 0.U
       && io.csr_use === io.EXMEM_csr_to_write) { //直接前递即可
-      previous_no_hazard =false
       assign_output(
-        csr_forward_type = ForwardType.EXForward.getUInt
+        csr_forward_type = ForwardType.MEMForward.getUInt
       )
     }
   }

@@ -63,17 +63,23 @@ class EXMEM extends Module {
   val regs = RegInit(init_val)
   io.out := regs
   when(io.cpu_state === CPUStateType.cycle3_layer.getUInt) {
-    switch(io.signal) {
-      is(LayerControlSignal.Normal.getUInt) {
-        regs := io.in
-      }
-      is(LayerControlSignal.Stall.getUInt) {
-        //no change
-      }
-      is(LayerControlSignal.NOP.getUInt) {
-        regs := init_val
+    when(io.in.IF_fault.IF_fault_type =/= IFFaultType.No.getUInt ||
+      io.in.ID_fault.ID_fault_type =/= IDFaultType.No.getUInt) { // when fault occurs, set other to 0 ,only forward err
+      regs := init_val
+      regs.IF_fault := io.in.IF_fault
+      regs.ID_fault := io.in.ID_fault
+    }.otherwise {
+      switch(io.signal) {
+        is(LayerControlSignal.Normal.getUInt) {
+          regs := io.in
+        }
+        is(LayerControlSignal.Stall.getUInt) {
+          //no change
+        }
+        is(LayerControlSignal.NOP.getUInt) {
+          regs := init_val
+        }
       }
     }
   }
-  //TODO while write
 }

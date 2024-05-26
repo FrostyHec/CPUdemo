@@ -18,9 +18,8 @@ object InsUtils {
   def run_instructions(cpu: Module, times: Int = 1): Unit = {
     for (i <- 1 to times) {
       println("============================Time " + i + "============================\n")
-      cpu.clock.step(INS_TIME)
+      cpu.clock.step(5*INS_TIME)
     }
-    cpu.clock.step(4*INS_TIME)
   }
 
   def checkRegsInCPU(cpu: CoreTop, targetReg: Int, targetValue: UInt): Unit = {

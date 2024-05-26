@@ -108,7 +108,6 @@ class CoreTop extends Module {
   rs1_forward_selector.io.origin_val := regs.io.rs1_val
   rs1_forward_selector.io.ex_forward := EXForwarding.io.write_data
   rs1_forward_selector.io.mem_forward := MEMForwarding.io.write_data
-
   rs2_forward_selector.io.forward_type := conflictController.io.rs2_forward_type
   rs2_forward_selector.io.origin_val := regs.io.rs2_val
   rs2_forward_selector.io.ex_forward := EXForwarding.io.write_data
@@ -116,8 +115,11 @@ class CoreTop extends Module {
 
   csr_forward_selector.io.forward_type := conflictController.io.csr_forward_type
   csr_forward_selector.io.origin_val := CSR.io.csr_val
-  csr_forward_selector.io.ex_forward := EXForwarding.io.write_data
-  csr_forward_selector.io.mem_forward := MEMForwarding.io.write_data
+  csr_forward_selector.io.ex_forward := ALU.io.result // csr的值永远从ALU来
+  csr_forward_selector.io.mem_forward := EX_MEM.io.out.alu_out
+
+  printf("csr_forward_type: %d, csr_val: %d, ex_forward: %d, mem_forward: %d\n",
+    conflictController.io.csr_forward_type, CSR.io.csr_val, EXForwarding.io.write_data, MEMForwarding.io.write_data)
 
   //operandSelector
   operandSelector.io.csr_val := csr_forward_selector.io.real_val
@@ -152,7 +154,7 @@ class CoreTop extends Module {
   ID_EX.io.in.wb_signal.imm := immGen.io.real_imm
   ID_EX.io.in.wb_signal.rd := CU.io.rd_out
   ID_EX.io.in.wb_signal.write_reg := CU.io.regs_write
-  ID_EX.io.in.wb_signal.csr_idx := CU.io.csr_write
+  ID_EX.io.in.wb_signal.csr_idx := CU.io.csr_out
   ID_EX.io.in.wb_signal.csr_write := CU.io.csr_write
 
   ID_EX.io.in.result_stage := CU.io.result_stage
@@ -173,8 +175,12 @@ class CoreTop extends Module {
   CMP.io.unsigned := ID_EX.io.out.unsigned
 
   //forwarding
+  printf("EXForwarding, au_type: %d, alu_result: %d, cmp_result: %d, write_back_type: %d, imm: %d, mem_out: %d, pc4: %d, pcImm: %d, csr_val: %d\n",
+    ID_EX.io.out.wb_signal.au_type, ALU.io.result, CMP.io.result, ID_EX.io.out.wb_signal.wb_type, ID_EX.io.out.wb_signal.imm, ID_EX.io.out.mem_signal.data_to_write,
+    ID_EX.io.out.pc + 4.U, ID_EX.io.out.pc + ID_EX.io.out.wb_signal.imm, ID_EX.io.out.csr_val_to_reg)
   EXForwarding.io.au_type := ID_EX.io.out.wb_signal.au_type
   EXForwarding.io.alu_result := ALU.io.result
+
   EXForwarding.io.cmp_result := CMP.io.result
   EXForwarding.io.write_back_type := ID_EX.io.out.wb_signal.wb_type
   EXForwarding.io.imm := ID_EX.io.out.wb_signal.imm
@@ -261,6 +267,8 @@ class CoreTop extends Module {
   CSR.io.write := MEM_WB.io.out.wb_signal.csr_write
   CSR.io.csr_idx_write := MEM_WB.io.out.wb_signal.csr_idx
   CSR.io.write_data := MEM_WB.io.out.alu_out
+  printf("CSR write en: %d, csr_idx: %d, write_data: %d\n",
+    MEM_WB.io.out.wb_signal.csr_write, MEM_WB.io.out.wb_signal.csr_idx, MEM_WB.io.out.alu_out)
 
   //wb_top selector
   wb_selector.io.au_type := MEM_WB.io.out.wb_signal.au_type
@@ -346,7 +354,7 @@ class CoreTop extends Module {
       //          CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
       //          CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
       //        printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
-      printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n", operandSelector.io.rs1_val, operandSelector.io.rs2_val, operandSelector.io.real_imm)
+      printf("OPselector out : op1_val: %d op2_val: %d imm: %d\n", operandSelector.io.operand1, operandSelector.io.operand2, operandSelector.io.real_imm)
       //              printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
 
       printf("--EX stage--\n")
