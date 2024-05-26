@@ -115,6 +115,7 @@ class ConflictController extends Module {
       IFID_control_signal = LayerControlSignal.NOP.getUInt,
       IDEX_control_signal = LayerControlSignal.NOP.getUInt,
       EXMEM_control_signal = LayerControlSignal.NOP.getUInt,
+      MEMWB_control_signal = LayerControlSignal.NOP.getUInt
     )
   }
   val control_hazard = Wire(Bool())

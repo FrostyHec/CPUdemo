@@ -70,6 +70,20 @@ class CoreTopCSRTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
   it should "avoid illegal mem access" in {
+    // addi x1,x0,12
+    // csrrw x0,mtvec,x1
+    // beq x0,x0,28
+    // addi x3,x0,20
+    // csrrs x9,mepc,x0
+    // addi x9,x9,4
+    // csrrw x0,mepc,x9
+    // mret
+    // beq x0,x0,4
+
+    // addi x4,x0,100 // jump到这里06400213
+    // addi x5,x0,-1000
+    // lw x4,0(x5) // fault ,0002a203
+    // addi x6,x0,1000
     load_instructions("fault/memFault.txt")
     test(new CoreTop){cpu=>
       run_instructions(cpu,12)

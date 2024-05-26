@@ -28,20 +28,21 @@ class IFID extends Module {
   val regs = RegInit(init_val)
   io.out := regs
   when(io.cpu_state === CPUStateType.cycle3_layer.getUInt) {
-    when(io.in.IF_fault.IF_fault_type =/= IFFaultType.No.getUInt) { // when fault occurs, set other to 0 ,only forward err
-      regs := init_val
-      regs.IF_fault := io.in.IF_fault
-    }.otherwise {
-      switch(io.signal) {
-        is(LayerControlSignal.Normal.getUInt) {
+    switch(io.signal) {
+      is(LayerControlSignal.Normal.getUInt) {
+        when(io.in.IF_fault.IF_fault_type =/= IFFaultType.No.getUInt) { // when fault occurs, set other to 0 ,only forward err
+          regs := init_val
+          regs.IF_fault := io.in.IF_fault
+          regs.pc := io.in.pc
+        }.otherwise {
           regs := io.in
         }
-        is(LayerControlSignal.Stall.getUInt) {
-          //no change
-        }
-        is(LayerControlSignal.NOP.getUInt) {
-          regs := init_val
-        }
+      }
+      is(LayerControlSignal.Stall.getUInt) {
+        //no change
+      }
+      is(LayerControlSignal.NOP.getUInt) {
+        regs := init_val
       }
     }
   }
