@@ -40,6 +40,11 @@ lw t0, (a1)
 andi t0, t0, 4
 bne t0, zero, check0
 
+# clear the outputs
+addi t0, zero, 0
+sw t0, (a3)
+sw t0, (a0)
+
 beq a5, t1, case0
 addi a5, a5, 1
 beq a5, t1, case1
@@ -66,7 +71,8 @@ andi t0, t0, 4
 beq t0, zero, case0
 lw t0, (a2)
 andi t0, t0, 255
-addi t2, zero, 8 # counter
+srli t0, t0, 1
+addi t2, zero, 7 # counter
 c0_loop:
 	beq t0, zero, c0_out
 	srli t0, t0, 1
@@ -286,16 +292,24 @@ beq zero, zero, ini
 
 # Add two numbers
 case4:
+# 7seg -> a
+addi t5, zero, 10
+sw t5, (a3)
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case4
 lw t1, (a2)
 andi t1, t1, 255 # a
 check0c4:
+# 7seg -> number of a
+sw t1, (a3)
 lw t0, (a1)
 andi t0, t0, 4
 bne t0, zero, check0c4
 	case41:
+	# 7seg -> b
+	addi t5, zero, 11
+	sw t5, (a3)
 	lw t0, (a1)
 	andi t0, t0, 4
 	beq t0, zero, case41
@@ -316,6 +330,7 @@ beq zero, zero, ini
 
 
 # little-endian -> big endian
+# 这里要支持 16bit
 case5:
 lw t0, (a1)
 andi t0, t0, 4
@@ -325,8 +340,20 @@ addi t1, zero, 255 # mask
 and t2, t0, t1
 slli t1, t1, 8
 and t3, t0, t1
+slli t1, t1, 8
+and t4, t0, t1
+srli t4, t4, 16
+addi t4, t4, -1
+beq t4, zero, case5_16bit
 slli t2, t2, 4
 srli t3, t3, 12
+or t0, t2, t3
+sw t0, (a0)
+sw t0, (a3)
+beq zero, zero, ini
+case5_16bit:
+slli t2, t2, 8
+srli t3, t3, 8
 or t0, t2, t3
 sw t0, (a0)
 sw t0, (a3)

@@ -1102,6 +1102,28 @@ class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "pass test case 5 _ v1.0.3 - 16 bit version" in {
+    load_instructions("software2.txt")
+    test(new Top) { total =>
+      run_instructions(total, 50)
+      // 选择 case
+      total.io.switch.switches.poke("h_50_cd_34".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      // 拨码开关输入
+      total.io.switch.switches.poke("h_01_53_ac".U)
+      run_instructions(total, 50)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 50)
+      total.io.led.led.expect("h_ac_53".U)
+    }
+  }
+
   // case6: is power of 2
   it should "pass test case 6 _ v1.0.1" in {
     load_instructions("software2.txt")

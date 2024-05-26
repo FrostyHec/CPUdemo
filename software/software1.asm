@@ -30,9 +30,10 @@ lw t0, (a1)
 andi t0, t0, 4
 bne t0, zero, check0
 
-# make the led to off state
-addi t6, zero, 0
-sw t6, (a0)
+# clear the outputs
+addi t0, zero, 0
+sw t0, (a3)
+sw t0, (a0)
 
 beq a5, t1, case0
 addi a5, a5, 1
@@ -52,6 +53,9 @@ beq a5, t1, case7
 beq zero, zero, ini
 
 case0:
+# 7seg -> a
+addi t5, zero, 10
+sw t5, (a3)
 lw t0, (a1)
 andi t0, t0, 4
 beq t0, zero, case0
@@ -65,6 +69,9 @@ lw t0, (a1)
 andi t0, t0, 4
 bne t0, zero, check0c1
 	case01:
+	# 7seg -> b
+	addi t5, zero, 11
+	sw t5, (a3)
 	lw t0, (a1)
 	andi t0, t0, 4
 	beq t0, zero, case01
