@@ -56,7 +56,7 @@ class MemoryDispatch extends Module {
   val data_out = Wire(UInt(32.W))
 
   //判断是否是写周期
-  val is_write_clk = io.cpu_state === CPUStateType.cycle2_write.getUInt
+  val is_write_clk = (io.cpu_state === CPUStateType.cycle2_write.getUInt)||io.uart_load
 
   //Ins read
   insRAM.io2.read_addr := read_ins_addr
