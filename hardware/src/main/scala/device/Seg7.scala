@@ -35,6 +35,17 @@ class Seg7 extends Module {
     // do nothing
   }
 
+  val special = RegInit(0.U(2.W))
+  // 10: Inf; 11: NaN; 01: error
+  when(io.mmio.seg7 === "h_00_80_00_00".U) {
+    special := "b10".U // Inf
+  }.elsewhen(io.mmio.seg7 === "h_00_c0_00_00".U) {
+    special := "b11".U // NaN
+  }.elsewhen(io.mmio.seg7 === "h_00_40_00_00".U) {
+    special := "b01".U // error
+  }.otherwise {
+    special := 0.U
+  }
   //  val digits_low = VecInit((0 until 4).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
   val digits = VecInit((0 until 8).map(i => io.mmio.seg7(4 * i + 3, 4 * i)))
 
@@ -44,6 +55,8 @@ class Seg7 extends Module {
 
   val seg7Module = Module(new HexToSeg7())
   seg7Module.io.hexDigit := digits(counter)
+  seg7Module.io.special := special
+  seg7Module.io.counter := counter
   io.board.seg7 := seg7Module.io.seg7
 
   io.board.an := MuxLookup(counter, "b1111_1111".U, Seq(
@@ -61,7 +74,7 @@ class Seg7 extends Module {
 class HexToSeg7 extends Module {
   def hexTo7Seg(hex: UInt): UInt = {
     val seg7 = Wire(UInt(8.W))
-    seg7 := MuxLookup(hex, "b1111111".U,
+    seg7 := MuxLookup(hex, "b11111111".U,
       Array(
         "h0".U -> "b00000011".U, // 0
         "h1".U -> "b10011111".U, // 1
@@ -84,10 +97,50 @@ class HexToSeg7 extends Module {
     seg7 // 返回值
   }
 
+  def speTo7Seg(counter: UInt, special: UInt): UInt = {
+    val seg7 = Wire(UInt(8.W))
+
+    when(special === "b10".U) { // Inf
+      seg7 := MuxLookup(counter, "b11111111".U,
+        Array(
+          "b000".U -> "b01110001".U, // F
+          "b001".U -> "b11010101".U, // n
+          "b010".U -> "b00001111".U // I
+        )
+      )
+    }.elsewhen(special === "b11".U) { // NaN
+      seg7 := MuxLookup(counter, "b11111111".U,
+        Array(
+          "b000".U -> "b11010101".U, // n
+          "b001".U -> "b00010001".U, // a
+          "b010".U -> "b11010101".U // n
+        )
+      )
+    }.otherwise { // error
+      seg7 := MuxLookup(counter, "b11111111".U,
+        Array(
+          "b000".U -> "b01110011".U, // r
+          "b001".U -> "b11000101".U, // o
+          "b010".U -> "b01110011".U, // r
+          "b011".U -> "b01110011".U, // r
+          "b100".U -> "b01100001".U, // e
+        )
+      )
+    }
+    seg7
+  }
+
   val io = IO(new Bundle {
     val hexDigit = Input(UInt(4.W))
+    val special = Input(UInt(2.W))
+    val counter = Input(UInt(3.W))
     val seg7 = Output(UInt(8.W))
   })
 
-  io.seg7 := hexTo7Seg(io.hexDigit)
+  when (io.special === 0.U) {
+    io.seg7 := hexTo7Seg(io.hexDigit)
+  }.otherwise {
+    io.seg7 := speTo7Seg(io.counter, io.special)
+  }
+
 }
