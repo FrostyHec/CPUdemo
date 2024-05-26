@@ -8,6 +8,9 @@ class PCPrediction extends Module {
   val io = IO(new Bundle() {
     val pc = Input(UInt(32.W))
     val instruction = Input(UInt(32.W))
+
+    //1. 连线 prediction false&ins pc&ins ins
+
     val predict_new_pc = Output(UInt(32.W))
   })
   io.predict_new_pc := io.pc + 4.U
@@ -19,4 +22,7 @@ class PCPrediction extends Module {
     io.predict_new_pc := io.pc + (raw_imm << 1)
   }
   //TODO predict table
+  //参考 https://www.cnblogs.com/arthurzyc/p/16895277.html
+  // table: valid, pc, ins , previous (B type prediction)
+
 }

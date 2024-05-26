@@ -15,7 +15,6 @@ class NextPCGen extends Module{
     val nextPC: UInt = Output(UInt(32.W))
   })
   //Ins can be used for prediction
-  //TODO JAL UNCONDITIONAL BRANCH
   val predictor = Module(new PCPrediction())
   predictor.io.pc:=io.pc
   predictor.io.instruction:=io.instruction
