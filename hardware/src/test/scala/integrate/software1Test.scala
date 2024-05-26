@@ -751,6 +751,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "perform good in case 3 twice" in {
     load_instructions("software1_final.txt")
     test(new Top) { total =>
+      total.clock.setTimeout(0)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_10_12_34".U)
@@ -893,6 +894,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "perform good in case 4 twice" in {
     load_instructions("software1_final.txt")
     test(new Top) { total =>
+      total.clock.setTimeout(0)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_10_12_34".U)
@@ -1035,6 +1037,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "perform good in case 5 twice" in {
     load_instructions("software1_final.txt")
     test(new Top) { total =>
+      total.clock.setTimeout(0)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_10_12_cd".U)
@@ -1177,6 +1180,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "perform good in case 6 twice" in {
     load_instructions("software1_final.txt")
     test(new Top) { total =>
+      total.clock.setTimeout(0)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_10_12_34".U)
@@ -1319,6 +1323,7 @@ class software1Test extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "perform good in case 7 twice" in {
     load_instructions("software1_final.txt")
     test(new Top) { total =>
+      total.clock.setTimeout(0)
       run_instructions(total, 30)
       checkRegsInTop(total, 15, 0.U)
       total.io.switch.switches.poke("h_10_12_cd".U)
