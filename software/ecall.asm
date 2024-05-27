@@ -5,6 +5,7 @@
 # |   1  | switch |    a0    |
 # |   2  |   a0   |   7seg   |
 # |   3  |   a0   |   led    |
+# |   4  |  exit  |   ---    |
 #
 
 sys_ecall:
@@ -33,6 +34,8 @@ addi t0, t0, 1
 beq a7, t0, sys_ecall_case2
 addi t0, t0, 1
 beq a7, t0, sys_ecall_case3
+addi t0, t0, 1
+beq a7, t0, sys_ecall_case4
 # if no cases satisfy, then output error
 addi t0, zero, 1
 slli t0, t0, 22
@@ -62,6 +65,12 @@ sys_ecall_case3:
     bne t0, zero, sys_ecall_case3
     sw a0, (a1)
     jal sys_ecall_goBack
+
+sys_ecall_case4:
+    lw t0, (a2)
+    andi t0, t0, 4
+    bne t0, zero, sys_ecall_case4
+    jal sys_boot
 
 
 sys_ecall_goBack:
