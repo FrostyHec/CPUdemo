@@ -7,6 +7,11 @@
 # |   3  |   a0   |   led    |
 # |   4  |  exit  |   ---    |
 #
+sys_boot:
+la x1, sys_ecall
+csrrw x0, mtvec, x1
+addi x1, x0, 0
+jal app
 
 sys_ecall:
 # 前面需要把用过的寄存器全部存进内存里面，然后后面统一恢复
@@ -87,5 +92,16 @@ sys_ecall_goBack:
     lw t0, 20(sp)
     addi sp, sp, 24
     mret
-    
 
+
+
+
+app:
+addi a7, zero, 1
+ecall
+addi a7, zero, 2
+ecall
+addi a7, zero, 3
+ecall
+addi a7, zero, 4
+ecall

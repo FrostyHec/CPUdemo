@@ -1,230 +1,3 @@
-sys_boot:
-la x1, sys_interrupt
-csrrw x0, mtvec, x1
-
-
-addi a0, zero, -236 # ffff_ff14 -> uart
-addi a1, zero, -232 # ffff_ff18 -> uart_valid
-addi a2, zero, -228 # ffff_ff1c -> uart_ready
-addi ra, zero, 1000 # start of the program
-addi a3, ra, 0      # pointer
-
-sys_getIns_ready:
-    addi t1, zero, 4
-
-sys_uart_wait:
-    lw t0, (a1)
-    andi t0, t0, 1
-    # reset uart_ready to 0
-    addi t5, zero, 0
-    sw t5, (a2)
-    beq t0, zero, sys_uart_wait
-    beq zero, zero, sys_uart_read
-
-sys_uart_read:
-    lw t0, (a1)
-    andi t0, t0, 1
-    beq t0, zero, sys_uart_prewait
-    lw t2, (a0)
-    slli t2, t2, 24
-    or t3, t3, t2
-    # set uart_ready to 1
-    addi t5, zero, 1
-    sw t5, (a2)
-    beq zero, zero, sys_uart_read
-
-sys_uart_prewait:
-    addi t1, t1, -1
-    beq t1, zero, sys_uart_write
-    srli t3, t3, 8
-    beq t0, zero, sys_uart_wait
-
-sys_uart_write:
-    not t5, t3
-    beq t5, zero, sys_run
-    sw t3, (a3)
-    addi a3, a3, 4
-    beq zero, zero, sys_getIns_ready
-
-sys_run:
-    addi a0, zero, 0
-    addi a1, zero, 0
-    addi a2, zero, 0
-    addi a3, zero, 0
-    addi ra, zero, 0
-    addi t0, zero, 0
-    addi t1, zero, 0
-    addi t2, zero, 0
-    addi t3, zero, 0
-    addi t4, zero, 0
-    addi t5, zero, 0
-    jalr ra, 0
-
-
-
-
-
-
-sys_interrupt:
-
-addi sp, sp, -24
-sw a1, 4(sp)
-sw a2, 8(sp)
-sw a3, 12(sp)
-sw a4, 16(sp)
-sw t0, 20(sp)
-
-csrrw t0, mcause, zero
-addi a1, zero, 11 # ecall
-addi a2, zero, 3  # ebreak
-beq t0, a1, sys_ecall
-beq t0, a2, sys_ebreak
-beq zero, zero, sys_other_cause
-
-
-
-
-
-
-#           ecall
-# 
-# |  a7  |  load  |    to    |
-# |------|--------|----------|
-# |   1  | switch |    a0    |
-# |   2  |   a0   |   7seg   |
-# |   3  |   a0   |   led    |
-# |   4  |  exit  |   ---    |
-#
-
-sys_ecall:
-# 前面需要把用过的寄存器全部存进内存里面，然后后面统一恢复
-# addi sp, sp, -24
-# sw a1, 4(sp)
-# sw a2, 8(sp)
-# sw a3, 12(sp)
-# sw a4, 16(sp)
-# sw t0, 20(sp)
-
-
-addi a1, zero, -256 # 0xffff_ff00 -> led * 24
-addi a2, a1, 4      # 0xffff_ff04 -> btn * 5
-addi a3, a1, 8      # 0xffff_ff08 -> swi * 24
-addi a4, a1, 12     # 0xffff_ff0c -> 7seg
-
-addi t0, zero, 0
-lw t0, (a4)
-lw t0, (a1)
-
-# determine the cases
-addi t0, zero, 1
-beq a7, t0, sys_ecall_case1
-addi t0, t0, 1
-beq a7, t0, sys_ecall_case2
-addi t0, t0, 1
-beq a7, t0, sys_ecall_case3
-addi t0, t0, 1
-beq a7, t0, sys_ecall_case4
-# if no cases satisfy, then output error
-addi t0, zero, 1
-slli t0, t0, 22
-sw t0, (a1)
-jal sys_ecall_goBack
-
-
-sys_ecall_case1:
-    lw t0, (a2)
-    andi t0, t0, 4
-    bne t0, zero, sys_ecall_case1
-    lw a0, (a3)
-    jal sys_ecall_goBack
-
-
-sys_ecall_case2:
-    lw t0, (a2)
-    andi t0, t0, 4
-    bne t0, zero, sys_ecall_case2
-    sw a0, (a4)
-    jal sys_ecall_goBack
-
-
-sys_ecall_case3:
-    lw t0, (a2)
-    andi t0, t0, 4
-    bne t0, zero, sys_ecall_case3
-    sw a0, (a1)
-    jal sys_ecall_goBack
-
-sys_ecall_case4:
-    lw t0, (a2)
-    andi t0, t0, 4
-    bne t0, zero, sys_ecall_case4
-    jal sys_boot
-
-
-sys_ecall_goBack:
-    addi t0, zero, 0
-    lw t0, (a4)
-    lw t0, (a1)
-    csrrs t0, mepc, zero
-    addi t0, t0, 4
-    csrrw zero, mepc, t0
-    lw a1, 4(sp)
-    lw a2, 8(sp)
-    lw a3, 12(sp)
-    lw a4, 16(sp)
-    lw t0, 20(sp)
-    addi sp, sp, 24
-    mret
-    
-
-
-
-
-
-
-sys_other_cause:
-# 前面需要把用过的寄存器全部存进内存里面，然后后面统一恢复
-# addi sp, sp, -24
-# sw a1, 4(sp)
-# sw a2, 8(sp)
-# sw a3, 12(sp)
-# sw a4, 16(sp)
-# sw t0, 20(sp)
-
-addi a1, zero, -256 # 0xffff_ff00 -> led * 24
-addi a2, a1, 4      # 0xffff_ff04 -> btn * 5
-addi a3, a1, 8      # 0xffff_ff08 -> swi * 24
-addi a4, a1, 12     # 0xffff_ff0c -> 7seg
-
-addi t0, zero, 0
-lw t0, (a1)
-
-csrrw t0, mtval, zero
-sw t0, (a4)
-sys_other_wait:
-lw t0, (a2)
-andi t0, t0, 12
-beq t0, zero, sys_other_wait
-
-addi t0, zero, 0
-sw t0, (a4)
-csrrs t0, mepc, zero
-addi t0, t0, 4
-csrrw zero, mepc, t0
-lw a1, 4(sp)
-lw a2, 8(sp)
-lw a3, 12(sp)
-lw a4, 16(sp)
-lw t0, 20(sp)
-addi sp, sp, 24
-mret
-
-
-
-
-
-
-
 #           ebreak
 # 
 # |  button  |    function    |
@@ -233,7 +6,11 @@ mret
 # |    b4    |     go back    |
 # 
 #
-
+sys_boot:
+la x1, sys_ebreak
+csrrw x0, mtvec, x1
+addi x1, x0, 0
+jal app
 
 
 sys_ebreak:
@@ -479,3 +256,12 @@ sys_ebreak_case2: # go back
     addi sp, sp, 24
     mret
 
+
+
+app:
+addi t0,  zero, 1
+addi t1,  zero, 2
+addi t2,  zero, 3
+addi t3,  zero, 4
+addi t4,  zero, 5
+ebreak

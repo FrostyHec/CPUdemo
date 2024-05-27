@@ -32,6 +32,7 @@ class WriteDataSelector extends Module{
       io.write_data := io.pc4
     }
     is(WriteBackType.PCImm.getUInt) {
+
       io.write_data := io.pcImm
     }
     is(WriteBackType.CSR.getUInt) {
