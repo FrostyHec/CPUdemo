@@ -40,13 +40,13 @@ wire [9:0] x_pix;
 wire [9:0] y_pix;
 wire [11:0] pix_data;
 
-assign  rst_n = (rst && locked);
+assign  rst_n = (~rst && locked);
 
 // get CLK_25M
 clk_vga clk_vga_0
 (
   .clk_out1(vga_clk),      
-  .reset(~rst), 
+  .reset(rst),
   .locked(locked),
   .clk_in1(clk)
 );
