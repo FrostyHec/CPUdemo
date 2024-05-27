@@ -1,3 +1,7 @@
+addi sp, x0, 511
+slli sp, sp, 8
+addi sp, sp, 252 # 0x0001_fffc -> stack
+
 sys_boot:
 la x1, sys_other_cause
 csrrw x0, mtvec, x1
@@ -6,7 +10,7 @@ jal app
 
 
 sys_other_cause:
-# 前面需要把用过的寄存器全部存进内存里面，然后后面统一恢复
+# 前面�?要把用过的寄存器全部存进内存里面，然后后面统�?恢复
 addi sp, sp, -24
 sw a1, 4(sp)
 sw a2, 8(sp)

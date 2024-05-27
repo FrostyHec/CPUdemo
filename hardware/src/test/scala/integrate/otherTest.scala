@@ -33,13 +33,15 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 10)
       total.io.switch.switches.poke("h_00_12_34".U)
       total.io.btn.button.poke(4.U)
-      run_instructions(total, 20)
+      run_instructions(total, 40)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 40)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 40)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 20)
       total.io.btn.button.poke(4.U)
-      run_instructions(total, 20)
-//      total.io.btn.button.poke(0.U)
-//      run_instructions(total, 20)
+      run_instructions(total, 40)
       total.io.led.led.expect("h_00_12_34".U)
     }
   }
@@ -103,6 +105,24 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
       checkRegsInTop(total, 5, 852.U)
       run_instructions(total, 7)
       checkRegsInTop(total, 14, 20.U)
+    }
+  }
+
+  it should "pass other exception" in {
+    load_instructions("test_otherFault.txt")
+    test(new Top) { total =>
+      run_instructions(total, 3) // initial sp
+
+      run_instructions(total, 4)
+      checkRegsInTop(total, 1, 0.U)
+
+      // begin app
+      run_instructions(total, 2) // load wrong address
+      checkRegsInTop(total, 1, 9.U)
+
+      // begin sys_other_cause
+      run_instructions(total, 8)
+      checkRegsInTop(total, 31, 100.U)
     }
   }
 
