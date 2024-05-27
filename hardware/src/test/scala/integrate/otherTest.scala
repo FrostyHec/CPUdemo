@@ -15,6 +15,7 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Top) { total =>
       run_instructions(total, 10)
       checkRegsInTop(total, 1, "h_30_00".U) // led
+      total.io.led.led.expect("h_30_00".U)
     }
   }
 
@@ -22,7 +23,25 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
     load_instructions("test_auipc.txt")
     test(new Top) { total =>
       run_instructions(total, 10)
-      checkRegsInTop(total, 1, "h_10_10".U) // led
+      checkRegsInTop(total, 1, "h_1".U) // led
+//      total.io.led.led.expect("h_10_10".U)
+    }
+  }
+
+  it should "ecall" in {
+    load_instructions("test_ecall.txt")
+    test(new Top) { total =>
+      run_instructions(total, 10)
+      total.io.switch.switches.poke("h_00_12_34".U)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 20)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 20)
+//      total.io.btn.button.poke(0.U)
+//      run_instructions(total, 20)
+      total.io.led.led.expect("h_00_12_34".U)
     }
   }
 
