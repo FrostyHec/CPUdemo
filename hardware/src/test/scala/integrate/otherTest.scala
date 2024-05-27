@@ -44,4 +44,66 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
   }
 
+  it should "ebreak" in {
+    load_instructions("test_ebreak.txt")
+    test(new Top) { total =>
+      run_instructions(total, 3) // initialize sp
+      checkRegsInTop(total, 2, "h0001_fffc".U)
+
+      run_instructions(total, 11)
+      checkRegsInTop(total, 14, 20.U)
+      checkRegsInTop(total, 5, 1.U)
+      checkRegsInTop(total, 6, 2.U)
+      checkRegsInTop(total, 7, 3.U)
+      checkRegsInTop(total, 28, 4.U)
+      checkRegsInTop(total, 29, 5.U)
+
+      // begin sys_ebreak
+      run_instructions(total, 6)
+      checkRegsInTop(total, 14, 20.U)
+      run_instructions(total, 4)
+      checkRegsInTop(total, 11, "hffff_ff00".U)
+      checkRegsInTop(total, 12, "hffff_ff04".U)
+      checkRegsInTop(total, 13, "hffff_ff08".U)
+      checkRegsInTop(total, 14, "hffff_ff0c".U)
+      run_instructions(total, 5)
+
+      // begin sys_break_cases
+      total.io.btn.button.poke("b00100".U) //  sys_ebreak_case1
+      run_instructions(total, 6)
+
+      // begin sys_ebreak_case1
+      total.io.switch.switches.poke("h_00_00_1F".U) // sys_ebreak_x31
+      run_instructions(total, 4)
+      checkRegsInTop(total, 5, 0.U);
+
+      // begin sys_ebreak_x31
+      run_instructions(total, 4)
+      checkRegsInTop(total, 31, 10.U)
+
+      // back to sys_ebreak_cases
+      total.io.btn.button.poke("b00100".U) //  sys_ebreak_case1
+      run_instructions(total, 6)
+
+      // begin sys_ebreak_case1
+      total.io.switch.switches.poke("h_00_00_0E".U) // sys_ebreak_x14
+      run_instructions(total, 38)
+      checkRegsInTop(total, 5, 0.U)
+
+      // begin sys_ebreak_x14
+      run_instructions(total, 3)
+      checkRegsInTop(total, 5, 20.U)
+
+      // back to sys_ebreak_cases
+      total.io.btn.button.poke("b01000".U)
+      run_instructions(total, 5)
+
+      // begin sys_ebreak_cases2
+      run_instructions(total, 5)
+      checkRegsInTop(total, 5, 852.U)
+      run_instructions(total, 7)
+      checkRegsInTop(total, 14, 20.U)
+    }
+  }
+
 }
