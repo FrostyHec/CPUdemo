@@ -3,9 +3,12 @@ package core.decode
 import chisel3._
 import core.config._
 import chisel3.util._
+import core.csr.InsFault
+
 
 class ControlUnit extends Module {
   val io = IO(new Bundle {
+    val instruction = Input(UInt(32.W)) //used only for generating mtval
     val opcode = Input(UInt(7.W))
     val func3 = Input(UInt(3.W))
     val func7 = Input(UInt(7.W))
@@ -13,12 +16,17 @@ class ControlUnit extends Module {
     val rs2 = Input(UInt(5.W))
     val rd = Input(UInt(5.W))
     val raw_imm = Input(UInt(20.W))
+    val csr = Input(UInt(12.W))
+
+    //privilege
+    val cur_privilege = Input(UInt(2.W))
 
     //output vals(direct in direct out)
     val rs1_out = Output(UInt(5.W))
     val rs2_out = Output(UInt(5.W))
     val rd_out = Output(UInt(5.W))
     val raw_imm_out = Output(UInt(20.W))
+    val csr_out = Output(UInt(12.W))
 
     // output signals
     val alu_type = Output(ALUType.getWidth)
@@ -33,8 +41,18 @@ class ControlUnit extends Module {
     val memory_read = Output(Bool())
     val memory_write = Output(Bool())
     val data_width = Output(DataWidth.getWidth)
-  })
+    val csr_write = Output(Bool())
+    val operand1_type = Output(Bool())
 
+    //fault
+    val fault = new InsFault
+  })
+  //fault置为0
+  //TODO 我都懒得搞illegal instruction的判断了，开摆
+  io.fault.ins_fault_type := InsFaultType.No.getUInt
+  io.fault.mtval := 0.U
+
+  io.csr_out := io.csr
   io.rs1_out := io.rs1
   io.rs2_out := io.rs2
   io.rd_out := io.rd
@@ -49,9 +67,13 @@ class ControlUnit extends Module {
   io.operand2_type := DontCare
   io.au_type := DontCare
   io.write_back_type := DontCare
-  io.memory_read := DontCare
-  io.memory_write := DontCare
+  io.memory_read := false.B //important! dont set as dont care
+  io.memory_write := false.B
   io.data_width := DontCare
+
+  //csr
+  io.csr_write := false.B
+  io.operand1_type := Operand1Type.Reg1.getUInt
 
   switch(io.opcode) {
     is("b011_0011".U) { // R-type
@@ -99,7 +121,6 @@ class ControlUnit extends Module {
         }
       }
     }
-
     is("b001_0011".U) { // I-type
       io.nextPC_type := NextPCType.PC4.getUInt
       io.regs_write := "b1".U
@@ -288,14 +309,108 @@ class ControlUnit extends Module {
       io.au_type := DontCare
       io.alu_type := DontCare
     }
+    is("b111_0011".U) { //csr
+      io.unsigned := true.B
+      io.nextPC_type := NextPCType.PC4.getUInt
+      io.au_type := AUType.ALU.getUInt
+      io.imm_width_type := ImmWidthType.Eleven.getUInt
+      io.regs_write := true.B
+      io.write_back_type := WriteBackType.CSR.getUInt
+      io.memory_write := false.B
+      io.csr_write := true.B
+      io.operand1_type := Operand1Type.CSR.getUInt
+      io.rs2_out := io.rs1
+
+      switch(io.func3) {
+        is("b001".U) { //csrrw
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.operand1_type := Operand1Type.Reg1.getUInt
+            io.rs1_out := 0.U
+            io.alu_type := ALUType.ADD.getUInt
+            io.operand2_type := Operand2Type.Reg2.getUInt
+          }
+        }
+        is("b010".U) { //csrrs
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.alu_type := ALUType.OR.getUInt
+            io.operand2_type := Operand2Type.Reg2.getUInt
+          }
+        }
+        is("b011".U) { //csrrc
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.alu_type := ALUType.Not2And.getUInt
+            io.operand2_type := Operand2Type.Reg2.getUInt
+          }
+        }
+        is("b101".U) { //csrrwi
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.operand1_type := Operand1Type.Reg1.getUInt
+            io.rs1_out := 0.U
+            io.raw_imm_out:= Cat(0.U(27.W),io.rs1) //在那个指令字段rs1其实存的是imm......
+            io.alu_type := ALUType.ADD.getUInt
+            io.operand2_type := Operand2Type.Imm.getUInt
+          }
+        }
+        is("b110".U) { //csrrsi\
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
+            io.alu_type := ALUType.OR.getUInt
+            io.operand2_type := Operand2Type.Imm.getUInt
+          }
+        }
+        is("b111".U) { //csrrci
+          when(io.cur_privilege === "b00".U) { // User无权限
+            io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+            io.fault.mtval := io.instruction
+          }.otherwise {
+            io.raw_imm_out:= Cat(0.U(27.W),io.rs1)
+            io.alu_type := ALUType.Not2And.getUInt
+            io.operand2_type := Operand2Type.Imm.getUInt
+          }
+        }
+        is("b000".U) { //ecall/ebreak
+          switch(io.raw_imm) {
+            is(0.U) { //ecall
+              io.fault.ins_fault_type := InsFaultType.EcallM.getUInt
+            }
+            is(1.U) { //ebreak
+              io.fault.ins_fault_type := InsFaultType.BreakPoint.getUInt
+            }
+            is("b0011000_00010".U) { //mret
+              when(io.cur_privilege === "b00".U) { // User无权限
+                io.fault.ins_fault_type := InsFaultType.IllegalIns.getUInt
+                io.fault.mtval := io.instruction
+              }.otherwise {
+                io.fault.ins_fault_type := InsFaultType.Mret.getUInt
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
-object ControlUnit extends App { //name had better to be same as class name, put under the class file
+object ControlUnit extends App {//name had better to be same as class name, put under the class file
   // These lines generate the Verilog output
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
-      new ControlUnit(), //use your module class
+      new ControlUnit(),//use your module class
       Array(
         "--target-dir", "generated_dut/"
       )
