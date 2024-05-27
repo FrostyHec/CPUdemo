@@ -33,14 +33,27 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
       run_instructions(total, 10)
       total.io.switch.switches.poke("h_00_12_34".U)
       total.io.btn.button.poke(4.U)
-      run_instructions(total, 20)
+      run_instructions(total, 40)
+      total.io.btn.button.poke(0.U)
+      run_instructions(total, 40)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 40)
       total.io.btn.button.poke(0.U)
       run_instructions(total, 20)
       total.io.btn.button.poke(4.U)
-      run_instructions(total, 20)
-//      total.io.btn.button.poke(0.U)
-//      run_instructions(total, 20)
+      run_instructions(total, 40)
       total.io.led.led.expect("h_00_12_34".U)
+    }
+  }
+
+  it should "pass other exception" in {
+    load_instructions("test_otherFault.txt")
+    test(new Top) { total =>
+      run_instructions(total, 40)
+      total.io.led.led.expect("h_9".U)
+      total.io.btn.button.poke(4.U)
+      run_instructions(total, 40)
+
     }
   }
 

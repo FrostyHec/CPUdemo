@@ -81,7 +81,7 @@ sys_ecall_case4:
 sys_ecall_goBack:
     lw t0, (a2)
     andi t0, t0, 4
-    beq t0, zero, sys_ecall_goBack
+    bne t0, zero, sys_ecall_goBack
     csrrs t0, mepc, zero
     addi t0, t0, 4
     csrrw zero, mepc, t0
