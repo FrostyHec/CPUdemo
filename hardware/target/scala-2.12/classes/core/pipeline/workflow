@@ -1,7 +1,0 @@
-1. 各个模块的定义，完成接线
-    ->MEM的fault
-    ->NextPCGen的接线
-    ->GlobalStateMachine
-    ->PC删线
-2. 完成ConfController判断，将UART中断线记得连入处理
-3. 修正Memory,PC,reg,CSR，GlobalMachine这几个模块内部的更新机制
