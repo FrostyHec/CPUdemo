@@ -35,4 +35,6 @@ class VGABlackBox extends BlackBox with HasBlackBoxResource {
   override def desiredName: String = "vga"
 
   addResource("/verilog/vga.v")
+  addResource("/verilog/vga_ctrl.v")
+  addResource("/verilog/vga_disp.v")
 }
