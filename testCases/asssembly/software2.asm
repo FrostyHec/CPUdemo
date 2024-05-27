@@ -343,7 +343,6 @@ and t3, t0, t1
 slli t1, t1, 8
 and t4, t0, t1
 srli t4, t4, 16
-andi t4, t4, 1
 addi t4, t4, -1
 beq t4, zero, case5_16bit
 slli t2, t2, 4

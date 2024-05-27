@@ -251,14 +251,17 @@ end
 reg [9:0] x_pos;
 reg [9:0] y_pos;
 
+reg [3:0] x_num;
+
 always@ (posedge vga_clk, negedge rst) begin
     if (rst == 1'b0) begin
         pix_data <= black;
     end
     else if(x_pix >= x_begin && x_pix <= x_end && y_pix >= y_begin && y_pix <= y_end) begin
-        x_pos <= x_rel - x_rel / char_wid * char_wid;
+        x_num <= x_rel / char_wid;
+        x_pos <= x_rel - x_num * char_wid;
         y_pos <= y_pix - y_begin;
-        if(char[x_pos + y_pos * char_wid]) begin
+        if(char[32'd2047 - y_pos * char_wid - x_pos]) begin
             pix_data <= white;
         end
         else begin

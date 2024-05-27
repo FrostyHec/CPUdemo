@@ -8,7 +8,7 @@ import utils.InsUtils._
 import chisel3._
 
 class software2Test extends FlatSpec with ChiselScalatestTester with Matchers {
-  behavior of "Software1 Test"
+  behavior of "Software2 Test"
   /* the following tests are for the software1, assembly code can be found in software */
 
   it should "correctly initialize the data address" in {

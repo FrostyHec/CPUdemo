@@ -19,6 +19,8 @@ class VGA extends Module {
     val mmio = new MMIOVGABundle
   })
   val vga = Module(new VGABlackBox())
+  vga.io.clk:=clock
+  vga.io.rst:=reset
   vga.io.digit := io.mmio.value
   io.board.hsync := vga.io.hsync
   io.board.vsync := vga.io.vsync
@@ -26,6 +28,8 @@ class VGA extends Module {
 }
 class VGABlackBox extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle() {
+    val clk = Input(Clock())
+    val rst = Input(Bool())
     val digit = Input(UInt(32.W))
     val hsync = Output(Bool())
     val vsync = Output(Bool())

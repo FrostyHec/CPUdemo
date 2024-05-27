@@ -208,11 +208,6 @@ class CoreTop extends Module {
 
   //MEM stage
   //data access wire
-  //UART load data mode
-  uartLoader.io.uart_load := io.external_signal.load_data_mode
-  uartLoader.io.rxValid := io.external.uart.rxValid
-  uartLoader.io.rxData := io.external.uart.rxData
-  io.external.uart.rxReady := uartLoader.io.rxReady
 
   //mem in selector
   memInSelector.io.uart_load := io.external_signal.load_data_mode
@@ -318,6 +313,12 @@ class CoreTop extends Module {
   //exception hazard
   conflictController.io.exception_occurs := CSR.io.fault_occurs
   conflictController.io.exception_new_pc := CSR.io.fault_new_PC
+
+  //UART load data mode
+  uartLoader.io.uart_load := io.external_signal.load_data_mode
+  uartLoader.io.rxValid := io.external.uart.rxValid
+  uartLoader.io.rxData := io.external.uart.rxData
+  io.external.uart.rxReady := uartLoader.io.rxReady
 
   //  when(state.io.cpu_state === CPUStateType.sLoadMode.getUInt) { //TODO 检查load模式
   //    //因为output reg那里会赋值把前面的抵消掉，所以这里要再赋值一次
