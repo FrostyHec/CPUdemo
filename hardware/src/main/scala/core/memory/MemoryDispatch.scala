@@ -4,11 +4,14 @@ import chisel3.util._
 import chisel3._
 import configs.GenConfig
 import core.config._
+import core.csr.MemFault
 import device._
+import utils.ExtendEnum
 
 class MemoryDispatch extends Module {
   val io = IO(new Bundle {
     val cpu_state = Input(CPUStateType.getWidth)
+    val fault_occurs = Input(Bool())
     //ins mem io
     val ins_addr = Input(UInt(32.W))
     val ins_out = Output(UInt(32.W))
@@ -26,7 +29,14 @@ class MemoryDispatch extends Module {
 
     //连接board需要external连接outregs
     val external = Flipped(new MMIOOutBundle())
+
+    //fault
+    val fault = new MemFault()
+    val pc = Input(UInt(32.W)) // to generate mtval
   })
+  //fault
+  io.fault.mem_fault_type := MemFaultType.No.getUInt
+  io.fault.mtval := DontCare
 
   //32读取深度导致的
   val rw_mem_addr = io.data_addr >> 2
@@ -42,7 +52,7 @@ class MemoryDispatch extends Module {
   val data_out = Wire(UInt(32.W))
 
   //判断是否是写周期
-  val is_write_clk = io.cpu_state === CPUStateType.sWriteRegs.getUInt || io.cpu_state === CPUStateType.sLoadMode.getUInt
+  val is_write_clk = (io.cpu_state === CPUStateType.sWriteRegs.getUInt || io.cpu_state === CPUStateType.sLoadMode.getUInt)&&(!io.fault_occurs)
 
   //Ins read
   insRAM.io2.read_addr := read_ins_addr
@@ -72,6 +82,18 @@ class MemoryDispatch extends Module {
   )
   outRegisters.io.external <> io.external
 
+  //如果探测到错误，一定要屏蔽写操作，其它无所谓
+  //注意优先级：必须是MEM先IF后
+  //MEM错误
+  def setFault(faultType: MemFaultType.Value, mtval: UInt): Unit = {
+    //只有在非loadMode才能触发中断
+    when(io.cpu_state=/=CPUStateType.sLoadMode.getUInt) {
+      io.fault.mem_fault_type := faultType.getUInt
+      io.fault.mtval := mtval
+    }
+  }
+
+
   //第二套io:各个RAM的读写操作
   //第二个RAM读
   data_out := DontCare
@@ -81,7 +103,6 @@ class MemoryDispatch extends Module {
     when(io.write_data) {
       insRAM.io.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
-
     }.otherwise {
       //do nothing
     }
@@ -104,6 +125,7 @@ class MemoryDispatch extends Module {
     when(io.write_data) {
       outRegisters.io.mem.write := is_write_clk && io.write_data
     }.elsewhen(io.read_data) {
+      data_out := outRegisters.io.mem.read_data
       //      printf("get from out regs %d \n",outRegisters.io.mem.read_data)
       //      printf("From addr: %d\n",outRegisters.io.mem.read_addr)
       //      printf("DATA OUT%d\n",data_out)
@@ -111,7 +133,15 @@ class MemoryDispatch extends Module {
       //do nothing
     }
   }.otherwise {
-    printf("Unexpected address!") //TODO throw err
+    when(io.read_data) {
+      printf("Unexpected Mem address %x", io.data_addr)
+      setFault(MemFaultType.LoadFault, io.data_addr)
+    }.elsewhen(io.write_data) {
+      printf("Unexpected Mem address %x", io.data_addr)
+      setFault(MemFaultType.StoreFault, io.data_addr)
+    }.otherwise {
+      //do nothing
+    }
   }
   //依据位宽生成data_in
   data_in := DontCare
@@ -147,6 +177,7 @@ class MemoryDispatch extends Module {
   }
   //最后，依据data_width对读到的结果做处理
   //不支持非对齐内存
+  //检查misAligned并且报错
   io.data_out := DontCare
   switch(io.data_width) {
     is(DataWidth.Byte.getUInt) {
@@ -171,22 +202,52 @@ class MemoryDispatch extends Module {
     }
     is(DataWidth.HalfWord.getUInt) {
       //doesn't support unaligned memory access
-      switch(io.data_addr(1, 0)) {
-        is("b00".U) {
-          val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
-          io.data_out := Cat(high_bit, data_out(15, 0))
+      when(io.data_addr(0) === 0.U) {
+        switch(io.data_addr(1, 0)) {
+          is("b00".U) {
+            val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(15)))
+            io.data_out := Cat(high_bit, data_out(15, 0))
+          }
+          is("b10".U) {
+            val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(31)))
+            io.data_out := Cat(high_bit, data_out(31, 16))
+          }
         }
-        is("b10".U) {
-          val high_bit = Fill(16, Mux(io.unsigned, 0.U, data_out(31)))
-          io.data_out := Cat(high_bit, data_out(31, 16))
+      }.otherwise { //misAligned
+        when(io.read_data) {
+          setFault(MemFaultType.LoadMisaligned, io.data_addr)
+        }
+        when(io.write_data) {
+          setFault(MemFaultType.StoreMisaligned, io.data_addr)
         }
       }
     }
     is(DataWidth.Word.getUInt) {
-      io.data_out := data_out
+      when(io.data_addr(1, 0) === 0.U) {
+        io.data_out := data_out
+      }.otherwise {
+        //misAligned
+        when(io.read_data) {
+          setFault(MemFaultType.LoadMisaligned, io.data_addr)
+        }
+        when(io.write_data) {
+          setFault(MemFaultType.StoreMisaligned, io.data_addr)
+        }
+      }
     }
   }
+
+  //IF的中断的优先级要排在最后面
+  //IF 错误
+  when(io.ins_addr(1, 0) =/= 0.U) {
+    io.fault.mem_fault_type := MemFaultType.InsMisaligned.getUInt
+    io.fault.mtval := io.pc
+  }.elsewhen(io.ins_addr > GenConfig.s.insEnd) {
+    io.fault.mem_fault_type := MemFaultType.InsFault.getUInt
+    io.fault.mtval := io.pc
+  }
 }
+
 
 object MemoryDispatch extends App {
   println(

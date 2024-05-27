@@ -6,7 +6,8 @@ addi a3, a0, 12     # 0xffff_ff0c -> 7seg
 addi a6, zero, 1
 slli a6, a6, 16
 srli t0, a0, 16
-add a6, a6, t0		# 0x0001_ffff -> stack
+add a6, a6, t0		
+addi a6, a6, -3	    # 0x0001_fffc -> stack
 addi a4, zero, 7
 slli a4, a4, 20     # mask of the cases
 addi t0, zero, -1

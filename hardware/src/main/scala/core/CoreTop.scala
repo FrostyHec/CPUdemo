@@ -3,6 +3,7 @@ package core
 import chisel3._
 import configs.GenConfig
 import core.config._
+import core.csr._
 import core.memory._
 import core.insFetch._
 import core.writeBack._
@@ -16,12 +17,22 @@ class CoreTop extends Module {
     val external = Flipped(new MMIOOutBundle())
     val external_signal = Flipped(new ExternalSignalBundle)
   })
+  //CSR
+  val CSR = Module(new CSR)
+
+  //PLIC
+  val PLIC = Module(new PLIC)
+
   //Memory
   val memory = Module(new MemoryDispatch())
   val uartLoader = Module(new UARTLoader())
   val memInSelector = Module(new MemWriteSelector())
   //clock FSM
+  //  val state = withClock((!clock.asBool).asClock) {//TODO 要不要下降沿有待商榷
+  //    Module(new CPUState())
+  //  }
   val state = Module(new CPUState())
+
 
   //ins fetch
   val pc = Module(new PC())
@@ -42,7 +53,8 @@ class CoreTop extends Module {
   uartLoader.io.cpu_state := state.io.cpu_state
   uartLoader.io.rxValid := io.external.uart.rxValid
   uartLoader.io.rxData := io.external.uart.rxData
-  io.external.uart.rxReady:=uartLoader.io.rxReady
+  io.external.uart.rxReady := uartLoader.io.rxReady
+
 
   //data access
   //TODO WIRES ON DATA ACCESS,from 2 select 1
@@ -62,13 +74,31 @@ class CoreTop extends Module {
   //Load data mode
   state.io.load_mode := io.external_signal.load_data_mode
 
+  //fault detect wire
+  CSR.io.mem_fault <> memory.io.fault
+  CSR.io.ins_fault <> CU.io.fault
+  CSR.io.io_interruption <> PLIC.io.interruption
+  CSR.io.pc := pc.io.addr
+  //fault write PC and global state machine
+  state.io.fault_state := CSR.io.fault_state
+  pc.io.fault_write_PC := CSR.io.fault_write_PC
+  //mtval generation
+  CU.io.instruction := memory.io.ins_out
+  memory.io.pc := pc.io.addr
+  pc.io.fault_occurs := CSR.io.fault_state
+  memory.io.fault_occurs := CSR.io.fault_state
+  regs.io.fault_occurs := CSR.io.fault_state
+
+
   //ins fetch wire
   pc.io.cpu_state := state.io.cpu_state
   pc.io.next_addr := nextPCGen.io.nextPC
+  pc.io.fault_write_PC := CSR.io.fault_write_PC
   memory.io.ins_addr := pc.io.addr
 
   //ins decode wire
   insDecode.io.instruction := memory.io.ins_out
+  CU.io.csr := insDecode.io.csr
   CU.io.opcode := insDecode.io.opcode
   CU.io.func3 := insDecode.io.func3
   CU.io.func7 := insDecode.io.func7
@@ -76,8 +106,12 @@ class CoreTop extends Module {
   CU.io.rs2 := insDecode.io.rs2
   CU.io.rd := insDecode.io.rd
   CU.io.raw_imm := insDecode.io.raw_imm
-
+  CU.io.cur_privilege := CSR.io.cur_privilege
   //execute wire
+  //csr
+  CSR.io.cpu_state := state.io.cpu_state
+  CSR.io.csr := CU.io.csr_out
+
   //register
   regs.io.cpu_state := state.io.cpu_state
   regs.io.rs1 := CU.io.rs1_out
@@ -92,10 +126,12 @@ class CoreTop extends Module {
   immGen.io.imm_width := CU.io.imm_width_type
 
   //operandSelector
+  operandSelector.io.csr_val := CSR.io.csr_val
   operandSelector.io.rs1_val := regs.io.rs1_val
   operandSelector.io.rs2_val := regs.io.rs2_val
   operandSelector.io.real_imm := immGen.io.real_imm
   operandSelector.io.operand2Type := CU.io.operand2_type
+  operandSelector.io.operand1Type := CU.io.operand1_type
 
   //ALU
   ALU.io.operand1 := operandSelector.io.operand1
@@ -127,6 +163,10 @@ class CoreTop extends Module {
   memory.io.external <> io.external //board
 
   //write back wire
+  //csr
+  CSR.io.write := CU.io.csr_write
+  CSR.io.write_data := ALU.io.result
+
   //au selector
   auSelector.io.alu_result := ALU.io.result
   auSelector.io.cmp_result := CMP.io.result
@@ -137,27 +177,32 @@ class CoreTop extends Module {
   writeDataSelector.io.mem_out := memory.io.data_out
   writeDataSelector.io.au_out := auSelector.io.au_out
   writeDataSelector.io.pc4 := nextPCGen.io.pc4
+  printf("AAAA pcImm: %d\n", nextPCGen.io.pcImm)
   writeDataSelector.io.pcImm := nextPCGen.io.pcImm
   writeDataSelector.io.write_back_type := CU.io.write_back_type
+  writeDataSelector.io.csr := CSR.io.csr_val
 
   //regs
   regs.io.write := CU.io.regs_write
   regs.io.write_data := writeDataSelector.io.write_data
 
-  when(state.io.cpu_state===CPUStateType.sLoadMode.getUInt){
+  when(state.io.cpu_state === CPUStateType.sLoadMode.getUInt) {
     //因为output reg那里会赋值把前面的抵消掉，所以这里要再赋值一次
     //本来应该用一个mux的
-    io.external.uart.rxReady:=uartLoader.io.rxReady
+    io.external.uart.rxReady := uartLoader.io.rxReady
   }
 
   //--------------------debugging code----------------------------
   // expose reg value to outside
   val debug_io = if (GenConfig.s.debugMode) Some(IO(new CoreDebugIO)) else None
-  debug_io.foreach(coe_dbg =>
+  debug_io.foreach(coe_dbg => {
     regs.debug_io.foreach(reg_dbg =>
       coe_dbg.reg_vals <> reg_dbg
     )
-  )
+    CSR.debug_io.foreach(csr_dbg =>
+      coe_dbg.csr_vals <> csr_dbg
+    )
+  })
   when(state.io.cpu_state =/= CPUStateType.sLoadMode.getUInt || memInSelector.io.write_data) {
     if (GenConfig.s.logDetails) {
       //print all output signal for each module
@@ -165,15 +210,15 @@ class CoreTop extends Module {
       printf("pc: %d\n", pc.io.addr)
       printf("instructions: %x\n", memory.io.ins_out)
       printf("reg operating rs_1:%d,rs_2:%d real_imm:%d\n", CU.io.rs1_out, CU.io.rs2_out, immGen.io.real_imm)
-      //        printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
-      //          "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +
-      //          " au_type: %d, write_back_type: %d, memory_read: %d, memory_write: %d, data_width: %d\n",
-      //          CU.io.rs1_out, CU.io.rs2_out, CU.io.rd_out, CU.io.raw_imm_out,
-      //          CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
-      //          CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
-      //        printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
-      //        printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
-      //        printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
+//              printf("CU with rs1_out: %d, rs2_out: %d, rd_out: %d, raw_imm_out: %d\n" +
+//                "alu_type : %d  cmp_type: %d, unsigned: %d, nextPC_type: %d, regs_write: %d, imm_width_type: %d, operand2_type: %d,\n" +
+//                " au_type: %d, write_back_type: %d, memory_read: %d, memory_write: %d, data_width: %d\n",
+//                CU.io.rs1_out, CU.io.rs2_out, CU.io.rd_out, CU.io.raw_imm_out,
+//                CU.io.alu_type, CU.io.cmp_type, CU.io.unsigned, CU.io.nextPC_type, CU.io.regs_write, CU.io.imm_width_type, CU.io.operand2_type,
+//                CU.io.au_type, CU.io.write_back_type, CU.io.memory_read, CU.io.memory_write, CU.io.data_width)
+//              printf("ALU with input: op1: %d, op2 : %d\n",ALU.io.operand1,ALU.io.operand2)
+              printf("OPselector inout : rs1_val: %d rs2_val: %d imm: %d\n",operandSelector.io.rs1_val,operandSelector.io.rs2_val,operandSelector.io.real_imm)
+//              printf("Reg inout: rs1_val: %d, rs1_idx: %d\n",regs.io.rs1_val,regs.io.rs1)
       printf("ALU with result: %d,", ALU.io.result)
       printf("CMP with result: %d\n", CMP.io.result)
       printf("nextPCGen with nextPC: %d\n", nextPCGen.io.nextPC)
