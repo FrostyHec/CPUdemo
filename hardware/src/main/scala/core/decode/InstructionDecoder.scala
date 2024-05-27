@@ -2,7 +2,6 @@ package core.decode
 
 import chisel3._
 import chisel3.util._
-import configs.GenConfig
 class InstructionDecoder extends Module {
   val io = IO(new Bundle {
     val instruction = Input(UInt(32.W))
@@ -13,6 +12,7 @@ class InstructionDecoder extends Module {
     val func3=Output(UInt(3.W))
     val func7=Output(UInt(7.W))
     val raw_imm = Output(UInt(20.W))
+    val csr = Output(UInt(12.W))
   })
   io.opcode := io.instruction(6, 0)
   io.rd := io.instruction(11, 7)
@@ -20,6 +20,7 @@ class InstructionDecoder extends Module {
   io.rs1 := io.instruction(19, 15)
   io.rs2 := io.instruction(24, 20)
   io.func7 := io.instruction(31, 25)
+  io.csr := io.instruction(31, 20)
 
   io.raw_imm := 0.U
 
@@ -37,7 +38,7 @@ class InstructionDecoder extends Module {
       io.raw_imm := Cat(0.U(8.W), io.instruction(31, 20))
     }
     is("b111_0011".U) { // I-type system call
-      io.raw_imm := io.func7
+      io.raw_imm := Cat(0.U(8.W), io.instruction(31, 20))
     }
     is("b010_0011".U) { // S-type
       io.raw_imm := Cat(io.instruction(31, 25), io.instruction(11, 7))

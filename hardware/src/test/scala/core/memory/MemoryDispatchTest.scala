@@ -22,6 +22,7 @@ class MemoryDispatchTest extends FlatSpec with ChiselScalatestTester with Matche
             data_write: Int,
             withStep: Boolean
            ): Unit = {
+    dut.io.fault_occurs.poke(false.B)
     dut.io.cpu_state.poke(cpu_state.getUInt)
     dut.io.ins_addr.poke(ins_addr)
     dut.io.read_data.poke(read_data.B)

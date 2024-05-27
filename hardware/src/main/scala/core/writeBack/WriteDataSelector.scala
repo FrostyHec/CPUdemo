@@ -11,6 +11,7 @@ class WriteDataSelector extends Module{
     val au_out=Input(UInt(32.W))
     val pc4=Input(UInt(32.W))
     val pcImm=Input(UInt(32.W))
+    val csr = Input(UInt(32.W))
 
     val write_data=Output(UInt(32.W))
   })
@@ -32,6 +33,9 @@ class WriteDataSelector extends Module{
     }
     is(WriteBackType.PCImm.getUInt) {
       io.write_data := io.pcImm
+    }
+    is(WriteBackType.CSR.getUInt) {
+      io.write_data := io.csr
     }
   }
 }

@@ -3,16 +3,17 @@ package core.execute
 import chisel3._
 import chisel3.util._
 import core.config._
+
 class ALU extends Module {
   val io = IO(new Bundle {
     val operand1 = Input(UInt(32.W))
     val operand2 = Input(UInt(32.W))
     val alu_op: UInt = Input(ALUType.getWidth)
-    val unsigned: Bool =Input(Bool())
+    val unsigned: Bool = Input(Bool())
     val result: UInt = Output(UInt(32.W))
   })
   io.result := DontCare
-  switch (io.alu_op) {
+  switch(io.alu_op) {
     is(ALUType.ADD.getUInt) {
       io.result := io.operand1 + io.operand2
     }
@@ -41,15 +42,18 @@ class ALU extends Module {
     is(ALUType.SRL.getUInt) { // shift right logical
       io.result := (io.operand1 >> io.operand2(4, 0)).asUInt
     }
+    is(ALUType.Not2And.getUInt) {
+      io.result := (!io.operand2) & io.operand1
+    }
   }
 }
 
 
-object ALU extends App {//name had better to be same as class name, put under the class file
+object ALU extends App { //name had better to be same as class name, put under the class file
   // These lines generate the Verilog output
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
-      new ALU(),//use your module class
+      new ALU(), //use your module class
       Array(
         "--target-dir", "generated_dut/"
       )

@@ -37,6 +37,7 @@ class Top extends Module {
 }
 
 object Top extends App {
+  // Remember to change GenConfig at first!
   println(
     new(chisel3.stage.ChiselStage).emitVerilog(
       new Top,
