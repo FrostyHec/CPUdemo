@@ -6,6 +6,12 @@
 # |    b4    |     go back    |
 # 
 #
+sys_boot:
+la x1, sys_ebreak
+csrrw x0, mtvec, x1
+addi x1, x0, 0
+jal app
+
 
 sys_ebreak:
 # 前面需要把用过的寄存器全部存进内存里面，然后后面统一恢复
@@ -249,3 +255,13 @@ sys_ebreak_case2: # go back
     lw t0, 20(sp)
     addi sp, sp, 24
     mret
+
+
+
+app:
+addi t0,  zero, 1
+addi t1,  zero, 2
+addi t2,  zero, 3
+addi t3,  zero, 4
+addi t4,  zero, 5
+ebreak
