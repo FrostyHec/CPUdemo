@@ -31,7 +31,7 @@ class BoardBundle extends Bundle {
 
   val uart = new BoardUARTBundle
 
-  val vga = new MMIOVGABundle
+  val vga = new BoardVGABundle
 }
 
 class DeviceTop extends Module {
@@ -55,15 +55,15 @@ class DeviceTop extends Module {
   btn.io.mmio <> io.mmio.btn
   switches.io.mmio <> io.mmio.switches
   uart.io.mmio <> io.mmio.uart
-  vga.io.mmio <> io.mmio.vga
-
+//  vga.io.mmio <> io.mmio.vga
+  vga.io.mmio.value:=io.mmio.seg7.seg7
   //board
   led.io.board <> io.board.led
   seg7.io.board <> io.board.seg7
   btn.io.board <> io.board.btn
   switches.io.board <> io.board.switch
   uart.io.board <> io.board.uart
-//  vga.io.board <> io.board.vga //TODO  VGA ENABLE
+  vga.io.board <> io.board.vga
 
   //external signal TODO set it
   io.external_signal.load_data_mode := io.board.switch.switches(23)
