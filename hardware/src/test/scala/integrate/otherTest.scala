@@ -23,8 +23,7 @@ class otherTest extends FlatSpec with ChiselScalatestTester with Matchers {
     load_instructions("test_auipc.txt")
     test(new Top) { total =>
       run_instructions(total, 10)
-      checkRegsInTop(total, 1, "h_1".U) // led
-//      total.io.led.led.expect("h_10_10".U)
+      checkRegsInTop(total, 1, "h_64000".U) // led
     }
   }
 
