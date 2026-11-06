@@ -1,0 +1,4 @@
+- software1
+- software2
+- lui, auipc
+- ecall, ebreak

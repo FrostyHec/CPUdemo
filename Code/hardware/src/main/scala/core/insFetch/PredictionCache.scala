@@ -1,0 +1,105 @@
+package core.insFetch
+
+import chisel3.util._
+import chisel3._
+import configs.GenConfig
+import core.config.CPUStateType
+import utils.PRNGWrapper
+
+class PredictionCacheRecord(val addrWidth: Int, val dataWidth: Int) extends Bundle {
+  val valid = Bool()
+  val address = UInt(addrWidth.W)
+  val data = UInt(dataWidth.W)
+}
+
+class PredictionCache(val cacheSize: Int, val addrWidth: Int,
+                      val instructionWidth: Int, val dataWidth: Int, val default_data: UInt) extends Module {
+  val io = IO(new Bundle {
+    val cpu_state_type = Input(CPUStateType.getWidth)
+    val addr_read = Input(UInt(addrWidth.W))
+    val read_en = Input(Bool())
+
+    val addr_write = Input(UInt(addrWidth.W))
+    val dataIn = Input(UInt(dataWidth.W))
+    val write_en = Input(Bool())
+    val write_data_out = Output(UInt(dataWidth.W))
+
+    val dataOut = Output(UInt(dataWidth.W)) //output the prediction
+  })
+
+  // cache array
+  val cache = RegInit(VecInit(Seq.fill(cacheSize)(0.U.asTypeOf(new PredictionCacheRecord(addrWidth, dataWidth)))))
+  val random_gen = Module(new PRNGWrapper(log2Down(cacheSize))) // random replacement
+
+  io.write_data_out := default_data
+  io.dataOut := default_data // Default output values
+
+  // Write logic
+  when(io.write_en) {
+    val write_idx = Wire(UInt(log2Up(cacheSize).W))
+    write_idx := random_gen.io.random
+
+    val cache_hit = Wire(Bool())
+    cache_hit := false.B
+    (cacheSize - 1 to 0 by -1).foreach { i =>
+      when(cache(i).address === io.addr_write) {
+        //setting record as new value
+        write_idx := i.U
+        cache_hit := true.B
+      }
+    }
+    when(!cache_hit) {
+      (cacheSize - 1 to 0 by -1).foreach { i =>
+        //otherwise using a new place to store record
+        when(!cache(i).valid) {
+          write_idx := i.U
+        }
+      }
+    }
+    when(cache_hit) {
+      io.write_data_out := cache(write_idx).data
+    }.otherwise {
+      io.write_data_out := default_data
+    }
+    when(io.cpu_state_type === CPUStateType.cycle2_write.getUInt) {
+//      printf("updating cache:%d,address:%x,data:%x\n", write_idx, io.addr_write, io.dataIn)
+      cache(write_idx).valid := true.B
+      cache(write_idx).address := io.addr_write
+      cache(write_idx).data := io.dataIn
+    }
+  }
+  // read logic
+  when(io.read_en) {
+    val cache_hit_read = Wire(Bool())
+    cache_hit_read := false.B
+    for (i <- 0 until cacheSize) {
+      when(cache(i).valid && cache(i).address === io.addr_read) {
+        io.dataOut := cache(i).data
+        cache_hit_read := true.B
+      }
+    }
+    when(!cache_hit_read) {
+      //finding a new place and store the record as default
+      val write_idx_read = Wire(UInt(log2Up(cacheSize).W))
+      write_idx_read := random_gen.io.random
+      (cacheSize - 1 to 0 by -1).foreach { i =>
+        //otherwise using a new place to store record
+        when(!cache(i).valid) {
+          write_idx_read := i.U
+        }
+      }
+      when(io.cpu_state_type === CPUStateType.cycle2_write.getUInt) {
+//        printf("Writing regs:%d\n",write_idx_read)
+        cache(write_idx_read).valid := true.B
+        cache(write_idx_read).address := io.addr_read
+        cache(write_idx_read).data := default_data
+      }
+    }
+  }
+
+//  for (i <- 0 until 3) {
+//    printf("cache[%d]: valid=%d, address=%x, data=%x\n",
+//      i.U, cache(i).valid, cache(i).address, cache(i).data)
+//  }
+//  printf("---\n")
+}

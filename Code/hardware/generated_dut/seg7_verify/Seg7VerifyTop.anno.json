@@ -1,0 +1,17 @@
+[
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"generated_dut/"
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~Seg7VerifyTop|Seg7VerifyTop>io_seg7_out_seg7",
+    "sources":[
+      "~Seg7VerifyTop|Seg7VerifyTop>io_seg7_in"
+    ]
+  }
+]

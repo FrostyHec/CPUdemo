@@ -1,3 +1,18 @@
+*/.non_public
+/.idea
+
+### IntelliJ IDEA ###
+*/.idea/modules.xml
+*/.idea/jarRepositories.xml
+*/.idea/compiler.xml
+*/.idea/libraries/
+*.iws
+*.iml
+*.ipr
+
+
+### Code Specific ###
+
 ##ignore this file##
 /target/
 /.idea/
@@ -145,3 +160,9 @@ Thumbs.db
 !*.bmm
 !*.xmp
 
+
+# Local project video
+/Docs/Report/报告视频.mp4
+
+# Private project materials
+/.non_public/

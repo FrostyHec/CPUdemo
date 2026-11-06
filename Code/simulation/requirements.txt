@@ -1,0 +1,7 @@
+# Exported from archived .venv package metadata; Python 3.9.13.
+# Includes installed packaging tools. unicorn is imported by scripts but was not found in this environment.
+pip==23.2.1
+PyVerilator==0.7.0
+setuptools==68.2.0
+tclwrapper==0.0.1
+wheel==0.41.2
