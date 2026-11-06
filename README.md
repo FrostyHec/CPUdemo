@@ -1,6 +1,6 @@
 <div align="center">
 
-# CPUdemo：从 Chisel 到 FPGA 的 RISC-V CPU
+# CPUdemo：五级流水 + BHT 分支预测 + CSR中断处理支持 的 RISC-V CPU 
 
 南方科技大学 **CS202 计算机组成原理**课程项目
 
@@ -158,7 +158,7 @@ Vivado 工程位于 `Code/compiled_cpu/project_1/project_1.xpr`，并引用相�
 
 <div align="center">
 
-# CPUdemo: A RISC-V CPU from Chisel to FPGA
+# CPUdemo: A RISC-V CPU with a Five-Stage Pipeline, BHT Branch Prediction, and CSR Interrupt Handling
 
 A course project for **CS202 Computer Organization** at Southern University of Science and Technology
 
